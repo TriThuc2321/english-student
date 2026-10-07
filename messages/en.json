@@ -1,0 +1,27 @@
+{
+  "locale": {
+    "en": "English",
+    "vi": "Tiếng Việt"
+  },
+  "common": {
+    "appName": "MyEnglish Back Office",
+    "welcome": "Welcome back"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "loginTitle": "Sign in to your account",
+    "loginButton": "Sign in",
+    "welcomeBack": "Welcome back",
+    "welcomeSubtitle": "Streamline your English classes with our comprehensive management platform",
+    "continueWithGoogle": "Continue with Google",
+    "loginFooter": "Sign in to access My English management dashboard and tools",
+    "errors": {
+      "cms_access_denied": "Your account does not have access to the back office.",
+      "google_login_failed": "Google sign-in failed. Please try again."
+    }
+  }
+}
