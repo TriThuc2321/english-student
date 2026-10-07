@@ -1,26 +1,24 @@
 'use server';
 
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import { getClientIp, withClientIp } from './client-ip';
 import { AUTH_CLIENT, LOGIN_PATH } from './constants';
 import { callBe, clearSession, SESSION_COOKIE } from './session';
 
 export async function logout() {
   const store = await cookies();
-  const accessToken = store.get(SESSION_COOKIE.ACCESS)?.value;
+  const refreshToken = store.get(SESSION_COOKIE.REFRESH)?.value;
 
-  if (accessToken) {
+  if (refreshToken) {
     await callBe('/auth/logout', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        client: AUTH_CLIENT,
-        refreshToken: store.get(SESSION_COOKIE.REFRESH)?.value,
-      }),
+      headers: withClientIp(
+        { 'Content-Type': 'application/json' },
+        getClientIp(await headers()),
+      ),
+      body: JSON.stringify({ client: AUTH_CLIENT, refreshToken }),
     }).catch(() => {});
   }
 

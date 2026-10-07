@@ -20,7 +20,6 @@
     "continueWithGoogle": "Tiếp tục với Google",
     "loginFooter": "Đăng nhập để truy cập bảng điều khiển quản trị My English",
     "errors": {
-      "cms_access_denied": "Tài khoản của bạn không có quyền truy cập trang quản trị.",
       "google_login_failed": "Đăng nhập Google thất bại. Vui lòng thử lại."
     }
   }

@@ -7,8 +7,7 @@ import { FaGoogle } from 'react-icons/fa';
 
 import { LogoIcon } from '@/assets/icons';
 import { SwitchLocale, ThemeSwitch } from '@/components/layouts';
-import ENV from '@/configs/env';
-import { AUTH_CLIENT, isLoginError } from '@/lib/auth/constants';
+import { GOOGLE_LOGIN_START_PATH, isLoginError } from '@/lib/auth/constants';
 
 export default async function Page({ searchParams }: PageProps<'/login'>) {
   const t = await getTranslations('auth');
@@ -44,7 +43,8 @@ export default async function Page({ searchParams }: PageProps<'/login'>) {
       )}
 
       <Link
-        href={`${ENV.API_URL}/api/auth/google?client=${AUTH_CLIENT}`}
+        href={GOOGLE_LOGIN_START_PATH}
+        prefetch={false}
         className={buttonVariants({ size: 'lg', fullWidth: true })}
       >
         <FaGoogle className="h-5 w-5 text-white" />

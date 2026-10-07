@@ -20,7 +20,6 @@
     "continueWithGoogle": "Continue with Google",
     "loginFooter": "Sign in to access My English management dashboard and tools",
     "errors": {
-      "cms_access_denied": "Your account does not have access to the back office.",
       "google_login_failed": "Google sign-in failed. Please try again."
     }
   }
