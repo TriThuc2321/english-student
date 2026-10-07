@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  allowedDevOrigins: ['backoffice.myenglish.com'],
+  allowedDevOrigins: ['student.myenglish.com'],
 };
 
 const withBundleAnalyzer = bundleAnalyzer({

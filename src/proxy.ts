@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import ENV from '@/configs/env';
+import { getClientIp } from '@/lib/auth/client-ip';
 import { LOGIN_PATH } from '@/lib/auth/constants';
 import {
   applySession,
@@ -16,12 +17,13 @@ export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   let accessToken = request.cookies.get(SESSION_COOKIE.ACCESS)?.value;
   const refreshToken = request.cookies.get(SESSION_COOKIE.REFRESH)?.value;
+  const clientIp = getClientIp(request.headers);
 
   let issued: SessionTokens | undefined;
   let expired = false;
 
   if (!accessToken && refreshToken) {
-    const result = await refreshSession(refreshToken);
+    const result = await refreshSession(refreshToken, clientIp);
     if (result.ok) {
       issued = result.tokens;
       accessToken = result.tokens.access_token;
@@ -52,6 +54,9 @@ export async function proxy(request: NextRequest) {
     const headers = new Headers(request.headers);
     headers.delete('cookie');
     headers.set('Authorization', `Bearer ${accessToken}`);
+    if (clientIp) {
+      headers.set('X-Forwarded-For', clientIp);
+    }
     const target = new URL(
       `/api/${pathname.slice(BFF_PREFIX.length)}${search}`,
       ENV.API_URL,

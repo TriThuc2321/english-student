@@ -1,5 +1,6 @@
 import ENV from '@/configs/env';
 
+import { withClientIp } from './client-ip';
 import { AUTH_CLIENT } from './constants';
 
 export const SESSION_COOKIE = {
@@ -71,12 +72,15 @@ export function clearSession(target: CookieWriter) {
   target.delete(SESSION_COOKIE.REFRESH);
 }
 
-async function requestRefresh(refreshToken: string): Promise<RefreshResult> {
+async function requestRefresh(
+  refreshToken: string,
+  clientIp?: string,
+): Promise<RefreshResult> {
   let res: Response;
   try {
     res = await callBe('/auth/refresh', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: withClientIp({ 'Content-Type': 'application/json' }, clientIp),
       body: JSON.stringify({ client: AUTH_CLIENT, refreshToken }),
     });
   } catch {
@@ -97,11 +101,14 @@ async function requestRefresh(refreshToken: string): Promise<RefreshResult> {
 }
 
 const globalForRefresh = globalThis as typeof globalThis & {
-  __boRefresh?: Map<string, { promise: Promise<RefreshResult>; at: number }>;
+  __sessionRefresh?: Map<
+    string,
+    { promise: Promise<RefreshResult>; at: number }
+  >;
 };
-const refreshes = (globalForRefresh.__boRefresh ??= new Map());
+const refreshes = (globalForRefresh.__sessionRefresh ??= new Map());
 
-export function refreshSession(refreshToken: string) {
+export function refreshSession(refreshToken: string, clientIp?: string) {
   const now = Date.now();
   for (const [token, entry] of refreshes) {
     if (now - entry.at > REFRESH_DEDUPE_MS) {
@@ -113,7 +120,7 @@ export function refreshSession(refreshToken: string) {
   if (pending) {
     return pending.promise;
   }
-  const promise = requestRefresh(refreshToken);
+  const promise = requestRefresh(refreshToken, clientIp);
   refreshes.set(refreshToken, { promise, at: now });
   return promise;
 }
