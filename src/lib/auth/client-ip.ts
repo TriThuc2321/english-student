@@ -1,17 +1,32 @@
-// The BE throttles per IP and sees this server as the caller, so forward the
-// browser's IP; BE only honours it when TRUST_PROXY covers this server.
+import ENV from '@/configs/env';
+
 export function getClientIp(headers: Headers) {
-  return (
-    headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-    headers.get('x-real-ip') ||
-    undefined
-  );
+  const { HEADER, HOPS } = ENV.CLIENT_IP;
+
+  if (HEADER) {
+    return headers.get(HEADER)?.trim() || undefined;
+  }
+  if (HOPS <= 0) {
+    return undefined;
+  }
+
+  const chain = headers
+    .get('x-forwarded-for')
+    ?.split(',')
+    .map((ip) => ip.trim())
+    .filter(Boolean);
+  if (!chain || chain.length < HOPS) {
+    return undefined;
+  }
+  return chain[chain.length - HOPS];
 }
 
 export function withClientIp(headers: HeadersInit | undefined, ip?: string) {
   const result = new Headers(headers);
   if (ip) {
     result.set('X-Forwarded-For', ip);
+  } else {
+    result.delete('X-Forwarded-For');
   }
   return result;
 }

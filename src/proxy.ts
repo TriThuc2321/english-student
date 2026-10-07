@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 import ENV from '@/configs/env';
-import { getClientIp } from '@/lib/auth/client-ip';
+import { getClientIp, withClientIp } from '@/lib/auth/client-ip';
 import { LOGIN_PATH } from '@/lib/auth/constants';
 import {
   applySession,
@@ -51,12 +51,9 @@ export async function proxy(request: NextRequest) {
         NextResponse.json({ message: 'Unauthorized' }, { status: 401 }),
       );
     }
-    const headers = new Headers(request.headers);
+    const headers = withClientIp(request.headers, clientIp);
     headers.delete('cookie');
     headers.set('Authorization', `Bearer ${accessToken}`);
-    if (clientIp) {
-      headers.set('X-Forwarded-For', clientIp);
-    }
     const target = new URL(
       `/api/${pathname.slice(BFF_PREFIX.length)}${search}`,
       ENV.API_URL,
