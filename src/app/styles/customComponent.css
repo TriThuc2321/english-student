@@ -21,6 +21,11 @@
   }
 
   &:focus-within {
-    @apply ring-accent! border! ring-1!;
+    @apply ring-accent! border-accent! ring-1! ring-inset!;
   }
+}
+
+/* Button component — match field radius */
+.button {
+  @apply rounded-field;
 }
