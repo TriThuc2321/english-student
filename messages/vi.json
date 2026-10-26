@@ -4,7 +4,7 @@
     "vi": "Tiếng Việt"
   },
   "common": {
-    "appName": "MyEnglish Quản trị",
+    "appName": "MyEnglish",
     "welcome": "Chào mừng trở lại"
   },
   "auth": {
@@ -15,10 +15,10 @@
     "forgotPassword": "Quên mật khẩu?",
     "loginTitle": "Đăng nhập vào tài khoản",
     "loginButton": "Đăng nhập",
-    "welcomeBack": "Chào mừng trở lại",
-    "welcomeSubtitle": "Quản lý lớp học tiếng Anh dễ dàng với nền tảng quản trị toàn diện của chúng tôi",
+    "welcomeBack": "Sẵn sàng làm bài kiểm tra?",
+    "welcomeSubtitle": "Đăng nhập để làm bài kiểm tra tiếng Anh, xem điểm số và theo dõi sự tiến bộ của bạn",
     "continueWithGoogle": "Tiếp tục với Google",
-    "loginFooter": "Đăng nhập để truy cập bảng điều khiển quản trị My English",
+    "loginFooter": "Sử dụng tài khoản Google mà giáo viên đã đăng ký cho lớp của bạn",
     "errors": {
       "google_login_failed": "Đăng nhập Google thất bại. Vui lòng thử lại."
     }

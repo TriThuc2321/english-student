@@ -4,7 +4,7 @@
     "vi": "Tiếng Việt"
   },
   "common": {
-    "appName": "MyEnglish Back Office",
+    "appName": "MyEnglish",
     "welcome": "Welcome back"
   },
   "auth": {
@@ -15,10 +15,10 @@
     "forgotPassword": "Forgot password?",
     "loginTitle": "Sign in to your account",
     "loginButton": "Sign in",
-    "welcomeBack": "Welcome back",
-    "welcomeSubtitle": "Streamline your English classes with our comprehensive management platform",
+    "welcomeBack": "Ready for your test?",
+    "welcomeSubtitle": "Sign in to take your English tests, track your scores and see how you're improving",
     "continueWithGoogle": "Continue with Google",
-    "loginFooter": "Sign in to access My English management dashboard and tools",
+    "loginFooter": "Use the Google account your teacher registered for your class",
     "errors": {
       "google_login_failed": "Google sign-in failed. Please try again."
     }
