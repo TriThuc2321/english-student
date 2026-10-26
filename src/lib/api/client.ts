@@ -1,16 +1,34 @@
-import axios, { isAxiosError } from 'axios';
-
 import { LOGIN_PATH } from '@/lib/auth/constants';
 
-export const api = axios.create({ baseURL: '/api/bff' });
+const BASE_URL = '/api/bff';
 
-api.interceptors.response.use(undefined, (error) => {
-  if (
-    isAxiosError(error) &&
-    error.response?.status === 401 &&
-    typeof window !== 'undefined'
+export class ApiError extends Error {
+  constructor(
+    public status: number,
+    public data: unknown,
   ) {
-    window.location.href = LOGIN_PATH;
+    super(`Request failed with status ${status}`);
   }
-  return Promise.reject(error);
-});
+}
+
+export async function api<T = unknown>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const headers = new Headers(init.headers);
+  if (init.body && !(init.body instanceof FormData)) {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  const res = await fetch(`${BASE_URL}${path}`, { ...init, headers });
+  const data = res.status === 204 ? null : await res.json().catch(() => null);
+
+  if (!res.ok) {
+    if (res.status === 401 && typeof window !== 'undefined') {
+      window.location.href = LOGIN_PATH;
+    }
+    throw new ApiError(res.status, data);
+  }
+
+  return data as T;
+}

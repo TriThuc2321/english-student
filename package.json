@@ -5,7 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "dev-ssl": "HTTPS=true NODE_EXTRA_CA_CERTS=$(mkcert -CAROOT)/rootCA.pem next dev --turbopack -p 3400 & local-ssl-proxy --key student.myenglish.com-key.pem --cert student.myenglish.com.pem --source 443 --target 3400",
+    "dev-ssl": "HTTPS=true NODE_EXTRA_CA_CERTS=$(mkcert -CAROOT)/rootCA.pem next dev -p 3400 & local-ssl-proxy --key student.myenglish.com-key.pem --cert student.myenglish.com.pem --source 443 --target 3400",
     "format": "oxfmt --write",
     "format:check": "oxfmt --check",
     "lint": "oxlint",
@@ -21,7 +21,6 @@
     "@heroui/react": "^3.2.5",
     "@heroui/styles": "^3.2.5",
     "@tanstack/react-query": "^5.102.8",
-    "axios": "^1.20.0",
     "dayjs": "^1.11.23",
     "next": "16.3.5",
     "next-intl": "^4.14.5",

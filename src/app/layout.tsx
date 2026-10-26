@@ -5,7 +5,7 @@ import { getLocale } from 'next-intl/server';
 import { Inter } from 'next/font/google';
 
 import './globals.css';
-import { ThemeProviders } from '@/providers';
+import { QueryProviders, ThemeProviders } from '@/providers';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -23,7 +23,9 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
-          <ThemeProviders>{children}</ThemeProviders>
+          <QueryProviders>
+            <ThemeProviders>{children}</ThemeProviders>
+          </QueryProviders>
         </NextIntlClientProvider>
       </body>
     </html>
