@@ -22,6 +22,8 @@
     "build/**",
     "next-env.d.ts",
     ".claude",
-    ".agents"
+    ".agents",
+    "playwright-report/**",
+    "test-results/**"
   ]
 }
