@@ -1,14 +1,55 @@
 import { describe, expect, it } from 'vitest';
 
-import type { StudentTestSectionDetail } from '@/types/student-test';
+import type {
+  StudentQuestion,
+  StudentQuestionGroup,
+  StudentTestPart,
+  StudentTestSectionDetail,
+} from '@/types/student-test';
 
 import { countSectionQuestions } from './structure';
 
-const question = (n: number, numberTo = n) => ({
+const question = (n: number, numberTo = n): StudentQuestion => ({
   id: n,
   numberFrom: n,
   numberTo,
   order: n,
+  prompt: null,
+  content: null,
+  audioStartMs: null,
+  audio: null,
+  image: null,
+});
+
+const group = (
+  id: number,
+  questions: StudentQuestion[],
+): StudentQuestionGroup => ({
+  id,
+  order: id,
+  questionType: 'SHORT_ANSWER',
+  instruction: null,
+  wordLimit: null,
+  content: null,
+  audio: null,
+  image: null,
+  passages: [],
+  questions,
+});
+
+const part = (
+  id: number,
+  questionGroups: StudentQuestionGroup[],
+): StudentTestPart => ({
+  id,
+  order: id,
+  title: `Part ${id}`,
+  instruction: null,
+  audio: null,
+  audioStartMs: null,
+  audioEndMs: null,
+  passage: null,
+  questionGroups,
 });
 
 const range = (from: number, to: number) =>
@@ -28,21 +69,8 @@ describe('countSectionQuestions', () => {
   it('sums question number ranges across parts', () => {
     const result = countSectionQuestions(
       section([
-        {
-          id: 1,
-          order: 1,
-          title: 'Part 1',
-          questionGroups: [{ id: 1, order: 1, questions: range(1, 10) }],
-        },
-        {
-          id: 2,
-          order: 2,
-          title: 'Part 2',
-          questionGroups: [
-            { id: 2, order: 1, questions: range(11, 18) },
-            { id: 3, order: 2, questions: [question(19, 20)] },
-          ],
-        },
+        part(1, [group(1, range(1, 10))]),
+        part(2, [group(2, range(11, 18)), group(3, [question(19, 20)])]),
       ]),
     );
     expect(result).toBe(20);
