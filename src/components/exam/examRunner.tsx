@@ -120,7 +120,13 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
         }}
         exitHref={ROUTES.test(test.slug)}
       />
-      {part && <PartBanner part={part} index={partIndex} />}
+      {part && (
+        <PartBanner
+          key={`${section.id}-${part.id}`}
+          part={part}
+          index={partIndex}
+        />
+      )}
       <div className="flex min-h-0 flex-1 flex-col">
         <PartView
           key={`${section.id}-${part?.id ?? 'none'}`}

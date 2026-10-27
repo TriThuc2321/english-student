@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import type { ExamState } from '@/lib/exam/reducer';
 
@@ -19,42 +19,55 @@ export function useExamPersistence(
   });
 
   const prevRef = useRef<ExamState | null>(null);
-  const { answers, flagged, partId, sectionId } = state;
+  const prevSectionRef = useRef<number | null>(null);
+  const dirtyRef = useRef(false);
+  const { answers, flagged, partId, sectionId, remaining } = state;
+
+  // Only changed state is written, so an idle second tab never overwrites a newer draft with stale state.
+  const writeIfDirty = useCallback(() => {
+    if (!dirtyRef.current) return;
+    dirtyRef.current = false;
+    saveExamDraft(slug, stateRef.current);
+  }, [slug]);
 
   useEffect(() => {
     if (!enabled) {
       prevRef.current = null;
+      dirtyRef.current = false;
       return;
     }
-    const prev = prevRef.current;
-    prevRef.current = stateRef.current;
     // First run after enabling holds the restored/initial state; saving it would create a draft nobody asked for.
-    if (!prev) return;
+    if (prevRef.current) dirtyRef.current = true;
+    prevRef.current = stateRef.current;
+  }, [enabled, answers, flagged, partId, sectionId, remaining]);
 
-    if (prev.sectionId !== sectionId) {
-      saveExamDraft(slug, stateRef.current);
+  useEffect(() => {
+    const prevSection = prevSectionRef.current;
+    prevSectionRef.current = sectionId;
+    if (!enabled || !dirtyRef.current) return;
+
+    if (prevSection !== sectionId) {
+      writeIfDirty();
       return;
     }
-    const timer = setTimeout(
-      () => saveExamDraft(slug, stateRef.current),
-      DEBOUNCE_MS,
-    );
+    const timer = setTimeout(writeIfDirty, DEBOUNCE_MS);
     return () => clearTimeout(timer);
-  }, [slug, enabled, answers, flagged, partId, sectionId]);
+  }, [enabled, writeIfDirty, answers, flagged, partId, sectionId]);
 
   useEffect(() => {
     if (!enabled) return;
-    const flush = () => saveExamDraft(slug, stateRef.current);
     const onVisibility = () => {
-      if (document.visibilityState === 'hidden') flush();
+      if (document.visibilityState === 'hidden') writeIfDirty();
     };
-    const interval = setInterval(flush, INTERVAL_MS);
-    window.addEventListener('pagehide', flush);
+    const interval = setInterval(writeIfDirty, INTERVAL_MS);
+    window.addEventListener('pagehide', writeIfDirty);
     document.addEventListener('visibilitychange', onVisibility);
     return () => {
       clearInterval(interval);
-      window.removeEventListener('pagehide', flush);
+      window.removeEventListener('pagehide', writeIfDirty);
       document.removeEventListener('visibilitychange', onVisibility);
+      // In-app navigation (Exit) fires neither pagehide nor visibilitychange.
+      writeIfDirty();
     };
-  }, [slug, enabled]);
+  }, [enabled, writeIfDirty]);
 }

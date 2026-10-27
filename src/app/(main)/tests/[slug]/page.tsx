@@ -46,26 +46,28 @@ export default async function TestIntroPage({
       <section className="flex flex-col gap-3">
         <h2 className="text-lg font-semibold">{t('taking.intro.sections')}</h2>
         <ul className="divide-separator border-separator divide-y rounded-3xl border">
-          {test.testSections.map((section) => {
-            const seconds = sectionDurationSeconds(test, section);
-            return (
-              <li
-                key={section.id}
-                className="flex flex-wrap items-center justify-between gap-2 px-4 py-3"
-              >
-                <span className="font-medium">
-                  {t(`exam.skill.${section.skill}`)}
-                </span>
-                <span className="text-muted text-sm">
-                  {t('taking.intro.questionCount', {
-                    count: countSectionQuestions(section),
-                  })}
-                  {seconds !== null &&
-                    ` · ${t('tests.minutes', { count: seconds / 60 })}`}
-                </span>
-              </li>
-            );
-          })}
+          {[...test.testSections]
+            .sort((a, b) => a.order - b.order)
+            .map((section) => {
+              const seconds = sectionDurationSeconds(test, section);
+              return (
+                <li
+                  key={section.id}
+                  className="flex flex-wrap items-center justify-between gap-2 px-4 py-3"
+                >
+                  <span className="font-medium">
+                    {t(`exam.skill.${section.skill}`)}
+                  </span>
+                  <span className="text-muted text-sm">
+                    {t('taking.intro.questionCount', {
+                      count: countSectionQuestions(section),
+                    })}
+                    {seconds !== null &&
+                      ` · ${t('tests.minutes', { count: seconds / 60 })}`}
+                  </span>
+                </li>
+              );
+            })}
         </ul>
       </section>
       <StartExamButton slug={test.slug} />

@@ -120,4 +120,29 @@ describe('ExamRunner', () => {
     });
     expect(scrollIntoView).toHaveBeenCalledTimes(1);
   });
+
+  it('remounts the part banner audio when stepping to another part', async () => {
+    const shared = test.testSections[0].testParts[0];
+    const withAudio = {
+      ...test,
+      testSections: test.testSections.map((section, i) =>
+        i === 0
+          ? {
+              ...section,
+              testParts: section.testParts.map((p, j) =>
+                j === 1 ? { ...p, audio: shared.audio, audioStartMs: 1000 } : p,
+              ),
+            }
+          : section,
+      ),
+    };
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const { container } = renderWithIntl(<ExamRunner test={withAudio} />);
+    const first = container.querySelector('audio');
+    expect(first).not.toBeNull();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const second = container.querySelector('audio');
+    expect(second).not.toBeNull();
+    expect(second).not.toBe(first);
+  });
 });

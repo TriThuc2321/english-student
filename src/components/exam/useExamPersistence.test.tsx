@@ -72,4 +72,32 @@ describe('useExamPersistence', () => {
     });
     expect(loadExamDraft('t')).toBeNull();
   });
+
+  it('saves pending changes when unmounted before the debounce fires', () => {
+    const { rerender, unmount } = setup();
+    rerender({ state: { ...base, answers: { 1: { 1: 'C' } } }, enabled: true });
+    act(() => vi.advanceTimersByTime(100));
+    unmount();
+    expect(loadExamDraft('t')?.answers).toEqual({ 1: { 1: 'C' } });
+  });
+
+  it('writes nothing without changes, on the interval or pagehide', () => {
+    const { unmount } = setup();
+    act(() => {
+      vi.advanceTimersByTime(6000);
+      window.dispatchEvent(new Event('pagehide'));
+    });
+    expect(loadExamDraft('t')).toBeNull();
+    unmount();
+    expect(loadExamDraft('t')).toBeNull();
+  });
+
+  it('does not rewrite an unchanged draft on later intervals', () => {
+    const { rerender } = setup();
+    rerender({ state: { ...base, answers: { 1: { 1: 'A' } } }, enabled: true });
+    act(() => vi.advanceTimersByTime(5000));
+    localStorage.clear();
+    act(() => vi.advanceTimersByTime(5000));
+    expect(loadExamDraft('t')).toBeNull();
+  });
 });
