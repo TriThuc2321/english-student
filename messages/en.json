@@ -33,5 +33,21 @@
     "errors": {
       "google_login_failed": "Google sign-in failed. Please try again."
     }
+  },
+  "exam": {
+    "IELTS_ACADEMIC": "IELTS Academic",
+    "IELTS_GENERAL": "IELTS General",
+    "TOEIC_LR": "TOEIC Listening & Reading",
+    "TOEIC_SW": "TOEIC Speaking & Writing",
+    "skill": {
+      "LISTENING": "Listening",
+      "READING": "Reading",
+      "WRITING": "Writing",
+      "SPEAKING": "Speaking"
+    }
+  },
+  "tests": {
+    "minutes": "{count} min",
+    "publishedOn": "Published {date}"
   }
 }

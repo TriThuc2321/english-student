@@ -33,5 +33,21 @@
     "errors": {
       "google_login_failed": "Đăng nhập Google thất bại. Vui lòng thử lại."
     }
+  },
+  "exam": {
+    "IELTS_ACADEMIC": "IELTS Academic",
+    "IELTS_GENERAL": "IELTS General",
+    "TOEIC_LR": "TOEIC Nghe & Đọc",
+    "TOEIC_SW": "TOEIC Nói & Viết",
+    "skill": {
+      "LISTENING": "Nghe",
+      "READING": "Đọc",
+      "WRITING": "Viết",
+      "SPEAKING": "Nói"
+    }
+  },
+  "tests": {
+    "minutes": "{count} phút",
+    "publishedOn": "Đăng ngày {date}"
   }
 }
