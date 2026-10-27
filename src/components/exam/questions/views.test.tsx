@@ -32,6 +32,7 @@ function setup(
   { answers = {}, readOnly = false } = {},
 ) {
   const setAnswer = vi.fn();
+  const toggleFlag = vi.fn();
   renderWithIntl(
     <GroupView
       group={group}
@@ -39,10 +40,10 @@ function setup(
       setAnswer={setAnswer}
       readOnly={readOnly}
       flagged={[]}
-      toggleFlag={vi.fn()}
+      toggleFlag={toggleFlag}
     />,
   );
-  return { setAnswer };
+  return { setAnswer, toggleFlag };
 }
 
 describe('question views', () => {
@@ -130,5 +131,44 @@ describe('question views', () => {
     await userEvent.type(screen.getByLabelText('Answer 1'), 'one two three');
     expect(screen.getByText(/3 words/)).toBeInTheDocument();
     expect(screen.getByText(/minimum 300/)).toBeInTheDocument();
+  });
+
+  it('inline blanks are the q-<n> anchor and carry the flag toggle', async () => {
+    const { toggleFlag } = setup(fixtureGroup(3000));
+    expect(document.getElementById('q-1')).toBe(
+      screen.getByLabelText('Answer 1'),
+    );
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Flag question 1 for review' }),
+    );
+    expect(toggleFlag).toHaveBeenCalledWith(1);
+  });
+
+  it('speaking questions have an anchor and a flag toggle', () => {
+    setup(
+      inlineGroup({
+        questionType: 'READ_ALOUD',
+        content: null,
+        questions: [{ ...fixtureGroup(3000).questions[0], prompt: 'Read.' }],
+      }),
+    );
+    expect(document.getElementById('q-1')).not.toBeNull();
+    expect(
+      screen.getByRole('button', { name: 'Flag question 1 for review' }),
+    ).toBeInTheDocument();
+  });
+
+  it('shows the recording tooltip from the keyboard', async () => {
+    setup(
+      inlineGroup({
+        questionType: 'READ_ALOUD',
+        content: null,
+        questions: [{ ...fixtureGroup(3000).questions[0], prompt: 'Read.' }],
+      }),
+    );
+    await userEvent.tab();
+    expect(
+      await screen.findByText('Voice recording is coming soon.'),
+    ).toBeVisible();
   });
 });

@@ -76,6 +76,7 @@
   },
   "taking": {
     "flag": "Đánh dấu xem lại",
+    "flagN": "Đánh dấu câu {n} để xem lại",
     "answerLabel": "Đáp án {n}",
     "chooseN": "Chọn {count} đáp án.",
     "allowReuse": "Có thể dùng một chữ cái nhiều lần.",

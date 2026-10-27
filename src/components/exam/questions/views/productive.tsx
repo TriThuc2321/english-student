@@ -1,4 +1,4 @@
-import { Button, Tooltip } from '@heroui/react';
+import { Tooltip } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { LuMic } from 'react-icons/lu';
 
@@ -6,7 +6,7 @@ import type { QuestionView } from '@/lib/exam/group-view';
 
 import { useExamGroup } from '../context';
 import { ExamImage } from '../media';
-import { Hint, mmss, Prompt } from '../parts';
+import { Hint, mmss, Prompt, QRow } from '../parts';
 import { GroupAudio } from './groupMedia';
 
 const Task = ({ children }: { children: React.ReactNode }) => (
@@ -23,19 +23,11 @@ const Recorder = ({ q }: { q: QuestionView }) => {
   return (
     <div className="bg-default rounded-field mt-3 flex flex-wrap items-center gap-3 px-3 py-2 text-sm">
       <Tooltip delay={0}>
-        {/* A disabled button gets no hover events, so the span is the trigger */}
-        {/* oxlint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- keyboard users need to reach the tooltip */}
-        <span tabIndex={0} className="inline-flex">
-          <Button
-            isIconOnly
-            isDisabled
-            size="sm"
-            variant="danger"
-            aria-label={t('recordSoon')}
-          >
+        <Tooltip.Trigger aria-label={t('recordSoon')} tabIndex={0}>
+          <span className="bg-danger text-danger-foreground grid size-8 place-items-center rounded-full opacity-50">
             <LuMic className="size-4" />
-          </Button>
-        </span>
+          </span>
+        </Tooltip.Trigger>
         <Tooltip.Content>
           <p>{t('recordSoon')}</p>
         </Tooltip.Content>
@@ -75,20 +67,22 @@ export const SpeakView = () => {
         const image = q.image ?? group.image;
         return (
           <Task key={q.n}>
-            <Hint>{t('questionN', { n: q.n })}</Hint>
-            {image && <ExamImage media={image} className="mb-2 max-w-md" />}
-            {group.type === 'READ_ALOUD' ? (
-              <div className="bg-default/50 rounded-field p-3 leading-7">
-                {q.prompt}
-              </div>
-            ) : (
-              q.prompt && (
-                <Prompt>
-                  <b>{q.prompt}</b>
-                </Prompt>
-              )
-            )}
-            <Recorder q={q} />
+            <QRow n={q.n}>
+              <Hint>{t('questionN', { n: q.n })}</Hint>
+              {image && <ExamImage media={image} className="mb-2 max-w-md" />}
+              {group.type === 'READ_ALOUD' ? (
+                <div className="bg-default/50 rounded-field p-3 leading-7">
+                  {q.prompt}
+                </div>
+              ) : (
+                q.prompt && (
+                  <Prompt>
+                    <b>{q.prompt}</b>
+                  </Prompt>
+                )
+              )}
+              <Recorder q={q} />
+            </QRow>
           </Task>
         );
       })}
@@ -142,7 +136,7 @@ export const WriteView = () => {
     const image = q.image ?? group.image;
     return (
       <Task key={q.n}>
-        <div id={`q-${q.n}`}>
+        <QRow n={q.n}>
           <Hint>
             {t('questionN', { n: q.n })}
             {seconds != null &&
@@ -164,7 +158,7 @@ export const WriteView = () => {
             {group.minWords != null &&
               ` · ${t('minWords', { count: group.minWords })}`}
           </div>
-        </div>
+        </QRow>
       </Task>
     );
   });

@@ -2,7 +2,7 @@
 
 import { cn, Tabs } from '@heroui/react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentTestPart } from '@/types/student-test';
@@ -20,7 +20,12 @@ type PartViewProps = {
   readOnly: boolean;
   flagged: number[];
   onToggleFlag: (n: number) => void;
+  focusRequest?: FocusRequest | null;
 };
+
+export type FocusRequest = { n: number; seq: number };
+
+const FOCUSABLE = 'input, select, textarea, button, [tabindex]';
 
 export function PartView({
   part,
@@ -30,9 +35,33 @@ export function PartView({
   readOnly,
   flagged,
   onToggleFlag,
+  focusRequest = null,
 }: PartViewProps) {
   const t = useTranslations('taking');
   const [tab, setTab] = useState<'passage' | 'questions'>('questions');
+
+  const [seenSeq, setSeenSeq] = useState(focusRequest?.seq);
+  if (focusRequest && focusRequest.seq !== seenSeq) {
+    setSeenSeq(focusRequest.seq);
+    setTab('questions');
+  }
+
+  const seq = focusRequest?.seq;
+  const target = focusRequest?.n;
+  useEffect(() => {
+    if (seq === undefined || target === undefined) return;
+    // The questions column is hidden while the passage tab is active; wait for it to show
+    const frame = requestAnimationFrame(() => {
+      const el = document.getElementById(`q-${target}`);
+      if (!el) return;
+      el.scrollIntoView({ block: 'center' });
+      const focusable = el.matches(FOCUSABLE)
+        ? el
+        : el.querySelector<HTMLElement>(FOCUSABLE);
+      focusable?.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [seq, target]);
 
   const groups = part
     ? [...part.questionGroups].sort((a, b) => a.order - b.order)

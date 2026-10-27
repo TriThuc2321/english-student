@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 import { useExamGroup } from '../context';
-import { Hint, KeySelect, OptionsBox, QRow } from '../parts';
+import { FlagBadge, Hint, KeySelect, OptionsBox, QRow } from '../parts';
 import { GroupAudio, GroupImage } from './groupMedia';
 
 export const MatchingView = () => {
@@ -71,7 +71,7 @@ export const MapView = () => {
             {group.questions.map((q) => (
               <tr key={q.n} id={`q-${q.n}`}>
                 <td className="border-border border p-2">
-                  <b>{q.n}</b> {q.prompt}
+                  <FlagBadge n={q.n} /> {q.prompt}
                 </td>
                 {options.map((o) => (
                   <td

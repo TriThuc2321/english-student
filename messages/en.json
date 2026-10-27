@@ -76,6 +76,7 @@
   },
   "taking": {
     "flag": "Flag for review",
+    "flagN": "Flag question {n} for review",
     "answerLabel": "Answer {n}",
     "chooseN": "Choose {count} letters.",
     "allowReuse": "You may use any letter more than once.",

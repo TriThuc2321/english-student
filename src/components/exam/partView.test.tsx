@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { makeTest } from '@/test/fixtures/student-test';
@@ -37,5 +37,19 @@ describe('PartView', () => {
     expect(
       screen.getByText('This part has no questions yet.'),
     ).toBeInTheDocument();
+  });
+});
+
+describe('PartView focus requests', () => {
+  it('scrolls to and focuses the requested question', async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    renderWithIntl(
+      <PartView part={parts[0]} {...props} focusRequest={{ n: 1, seq: 1 }} />,
+    );
+    await waitFor(() =>
+      expect(screen.getByLabelText('Answer 1')).toHaveFocus(),
+    );
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: 'center' });
   });
 });

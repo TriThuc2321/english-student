@@ -42,7 +42,7 @@ export const QRow = ({ n, label, children }: QRowProps) => {
         isIconOnly
         size="sm"
         variant="ghost"
-        aria-label={t('flag')}
+        aria-label={t('flagN', { n })}
         isSelected={isFlagged}
         onChange={() => toggleFlag(n)}
       >
@@ -85,6 +85,28 @@ const keyOptions = (options: Option[], disabledKeys?: string[]) =>
     </option>
   ));
 
+export const FlagBadge = ({ n }: { n: number }) => {
+  const t = useTranslations('taking');
+  const { flagged, toggleFlag } = useExamGroup();
+  const isFlagged = flagged.includes(n);
+  return (
+    <button
+      type="button"
+      aria-pressed={isFlagged}
+      aria-label={t('flagN', { n })}
+      onClick={() => toggleFlag(n)}
+      className={cn(
+        'rounded-field grid h-6.5 min-w-7 place-items-center px-1.5 text-[13px] font-bold',
+        isFlagged
+          ? 'bg-warning text-warning-foreground'
+          : 'bg-accent-soft text-accent-soft-foreground',
+      )}
+    >
+      {n}
+    </button>
+  );
+};
+
 export const Blank = ({ n, options }: { n: number; options?: Option[] }) => {
   const t = useTranslations('taking');
   const { answers, setAnswer, readOnly } = useExamGroup();
@@ -93,9 +115,10 @@ export const Blank = ({ n, options }: { n: number; options?: Option[] }) => {
 
   return (
     <span className="mx-0.5 inline-flex items-center gap-1 align-baseline">
-      <b className="text-sm">{n}</b>
+      <FlagBadge n={n} />
       {options ? (
         <select
+          id={`q-${n}`}
           aria-label={label}
           className={fieldClass}
           value={value}
@@ -107,6 +130,7 @@ export const Blank = ({ n, options }: { n: number; options?: Option[] }) => {
         </select>
       ) : (
         <input
+          id={`q-${n}`}
           aria-label={label}
           autoComplete="off"
           spellCheck={false}
