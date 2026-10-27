@@ -1,7 +1,7 @@
 'use client';
 
 import { Skeleton } from '@heroui/react';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentTestDetail } from '@/types/student-test';
@@ -63,7 +63,11 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
       timeUpOpen: false,
     }),
   );
-  const [focusRequest, setFocusRequest] = useState<FocusRequest | null>(null);
+  const [focus, setFocus] = useState<
+    (FocusRequest & { sectionId: number; partId: number | null }) | null
+  >(null);
+  // Never reset: PartView only re-triggers on a new seq, even after the request was cleared.
+  const focusSeq = useRef(0);
 
   // localStorage is unavailable during SSR, so the draft can only be read after mount.
   useEffect(() => {
@@ -110,7 +114,10 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
         test={test}
         sectionId={section.id}
         remaining={remaining}
-        onSelectSection={(id) => dispatch({ type: 'goTo', sectionId: id })}
+        onSelectSection={(id) => {
+          setFocus(null);
+          dispatch({ type: 'goTo', sectionId: id });
+        }}
         exitHref={ROUTES.test(test.slug)}
       />
       {part && <PartBanner part={part} index={partIndex} />}
@@ -126,7 +133,11 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
           readOnly={locked}
           flagged={state.flagged[section.id] ?? []}
           onToggleFlag={(n) => dispatch({ type: 'toggleFlag', n })}
-          focusRequest={focusRequest}
+          focusRequest={
+            focus?.sectionId === section.id && focus.partId === state.partId
+              ? focus
+              : null
+          }
         />
       </div>
       <QuestionNavigator
@@ -136,9 +147,17 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
         flagged={state.flagged[section.id] ?? []}
         onSelect={(partId, from) => {
           dispatch({ type: 'goTo', sectionId: section.id, partId });
-          setFocusRequest((prev) => ({ n: from, seq: (prev?.seq ?? 0) + 1 }));
+          setFocus({
+            n: from,
+            seq: ++focusSeq.current,
+            sectionId: section.id,
+            partId,
+          });
         }}
-        onStep={(dir) => dispatch({ type: 'step', dir })}
+        onStep={(dir) => {
+          setFocus(null);
+          dispatch({ type: 'step', dir });
+        }}
         canPrev={position > 0}
         canNext={position !== -1 && position < sequence.length - 1}
       />
@@ -148,6 +167,7 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
         onNextSection={
           nextSection
             ? () => {
+                setFocus(null);
                 dispatch({ type: 'closeTimeUp' });
                 dispatch({ type: 'goTo', sectionId: nextSection.id });
               }

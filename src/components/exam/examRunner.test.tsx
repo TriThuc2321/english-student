@@ -100,4 +100,24 @@ describe('ExamRunner', () => {
     expect(screen.getByLabelText('Answer 1')).toBeDisabled();
     expect(screen.queryByText('Time is up')).not.toBeInTheDocument();
   });
+
+  it('does not refocus a previously selected question after stepping parts', async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    saveDraft({ sectionId: 31, partId: 310 });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    renderWithIntl(<ExamRunner test={test} />);
+    await user.click(screen.getByRole('button', { name: '2' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(50);
+    });
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    await user.click(screen.getByRole('button', { name: 'Previous' }));
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(50);
+    });
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+  });
 });
