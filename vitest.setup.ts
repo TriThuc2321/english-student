@@ -17,3 +17,8 @@ globalThis.ResizeObserver ??= class {
 Object.assign(globalThis, {
   jest: { advanceTimersByTime: (ms: number) => vi.advanceTimersByTime(ms) },
 });
+
+// jsdom lacks the Web Animations API that React Aria's SharedElementTransition (Tabs indicator) calls.
+if (typeof Element !== 'undefined' && !Element.prototype.getAnimations) {
+  Element.prototype.getAnimations = () => [];
+}
