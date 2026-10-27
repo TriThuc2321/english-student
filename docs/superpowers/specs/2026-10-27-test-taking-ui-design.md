@@ -130,8 +130,8 @@ Changes:
 - `QRow` gets `id="q-<n>"` and a flag toggle; no correct/incorrect border.
 - Every input/select/radio honors `readOnly`.
 - `QUESTION_VIEWS: Record<QuestionType, { view; variant?; ... }>` replaces `findSample()` — only the hints the views read (`view`, `variant`, `boxTitle`, `email`, `rows`, `minWords`).
-- `toGroupView(group, partPassage)` in `src/lib/exam/group-view.ts` (pure) replaces `toSample`:
-  - passage: `group.passages` if non-empty, else `part.passage`;
+- `toGroupView(group)` in `src/lib/exam/group-view.ts` (pure) replaces `toSample`:
+  - only the group's own `passages` (the shared `part.passage` is rendered once by `PartView`);
   - text completion: passage text with `{{n}}` → `[[n]]`;
   - paragraph labels from `markedBy` (port `paragraphLabel`);
   - questions sorted by `order`.
@@ -141,7 +141,7 @@ Changes:
 - `ExamAudio` (practice player): play/pause, seek bar, speed 0.75/1/1.25, clamped to `audioStartMs`–`audioEndMs`. Questions with `audioStartMs` get a "play this question" button seeking the nearest audio.
 - Speaking: prompt, image/info table, prep/response time shown; record button disabled with a "Coming soon" tooltip.
 - Writing: textarea with live word count; text stored as the answer.
-- i18n: backoffice `tests.editor.typePreview.*` strings move to an `exam.*` namespace in `messages/vi.json` and `messages/en.json`.
+- i18n: backoffice `tests.editor.typePreview.*` strings move to a `taking.*` namespace (`exam.*` already holds exam type and skill labels) in `messages/vi.json` and `messages/en.json`.
 
 ## 5. Testing
 
