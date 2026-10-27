@@ -5,7 +5,18 @@
   },
   "common": {
     "appName": "MyEnglish",
-    "welcome": "Chào mừng trở lại"
+    "welcome": "Chào mừng trở lại",
+    "nav": {
+      "home": "Trang chủ",
+      "tests": "Đề thi",
+      "openMenu": "Mở menu"
+    },
+    "userMenu": "Menu tài khoản",
+    "error": {
+      "title": "Đã có lỗi xảy ra",
+      "description": "Không thể tải trang này. Vui lòng thử lại.",
+      "retry": "Thử lại"
+    }
   },
   "auth": {
     "login": "Đăng nhập",

@@ -5,7 +5,18 @@
   },
   "common": {
     "appName": "MyEnglish",
-    "welcome": "Welcome back"
+    "welcome": "Welcome back",
+    "nav": {
+      "home": "Home",
+      "tests": "Tests",
+      "openMenu": "Open menu"
+    },
+    "userMenu": "Account menu",
+    "error": {
+      "title": "Something went wrong",
+      "description": "We couldn't load this page. Please try again.",
+      "retry": "Try again"
+    }
   },
   "auth": {
     "login": "Login",

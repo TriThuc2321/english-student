@@ -1,24 +1,21 @@
-import { Button } from '@heroui/react';
-import { getTranslations } from 'next-intl/server';
+import { unstable_rethrow } from 'next/navigation';
 
-import { logout } from '@/lib/auth/actions';
+import { Header } from '@/components/layouts';
+import { getProfile } from '@/lib/api/profile';
 
-type MainLayoutProps = {
-  children: React.ReactNode;
-};
-
-export default async function MainLayout({ children }: MainLayoutProps) {
-  const t = await getTranslations('auth');
+export default async function MainLayout({ children }: LayoutProps<'/'>) {
+  // Let the 401 redirect through; any other profile failure must not break the layout.
+  const profile = await getProfile().catch((error: unknown) => {
+    unstable_rethrow(error);
+    return null;
+  });
 
   return (
-    <div className="bg-background flex h-screen w-screen items-center justify-center">
-      <p>Main layout</p>
-      <form action={logout}>
-        <Button type="submit" variant="secondary">
-          {t('logout')}
-        </Button>
-      </form>
-      {children}
-    </div>
+    <>
+      <Header profile={profile} />
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6">
+        {children}
+      </main>
+    </>
   );
 }
