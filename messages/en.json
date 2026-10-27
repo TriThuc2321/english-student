@@ -73,5 +73,56 @@
       "title": "No tests yet",
       "description": "New tests will appear here once they are published."
     }
+  },
+  "taking": {
+    "flag": "Flag for review",
+    "answerLabel": "Answer {n}",
+    "chooseN": "Choose {count} letters.",
+    "allowReuse": "You may use any letter more than once.",
+    "photoHint": "Choose the statement that best describes the picture.",
+    "questionN": "Question {n}",
+    "timing": "Preparation {prep} · Response {response}",
+    "timeAllowed": "time allowed {time}",
+    "typeAnswer": "Type your answer…",
+    "minWords": "minimum {count}",
+    "wordCount": "{count, plural, one {# word} other {# words}}",
+    "recordSoon": "Voice recording is coming soon.",
+    "boxTitle": {
+      "headings": "List of Headings",
+      "people": "List of People",
+      "endings": "Sentence Endings",
+      "categories": "Categories",
+      "wordBank": "Word Bank"
+    },
+    "audio": {
+      "label": "Audio",
+      "play": "Play",
+      "pause": "Pause",
+      "speed": "Playback speed",
+      "playQuestion": "Play this question",
+      "seek": "Seek"
+    },
+    "exit": "Exit",
+    "partFallback": "Part {n}",
+    "questionsRange": "Questions {range}",
+    "answeredCount": "{answered} / {total} answered",
+    "prev": "Previous",
+    "next": "Next",
+    "passage": "Passage",
+    "questions": "Questions",
+    "emptyPart": "This part has no questions yet.",
+    "timeUp": {
+      "title": "Time is up",
+      "body": "Your time for this section has ended.",
+      "review": "Review answers",
+      "nextSection": "Next section"
+    },
+    "intro": {
+      "start": "Start",
+      "continue": "Continue",
+      "restart": "Start over",
+      "sections": "Sections",
+      "questionCount": "{count, plural, one {# question} other {# questions}}"
+    }
   }
 }
