@@ -21,7 +21,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
       suppressHydrationWarning
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">
+      <body className="bg-background flex min-h-full flex-col">
         <NextIntlClientProvider>
           <QueryProviders>
             <ThemeProviders>{children}</ThemeProviders>

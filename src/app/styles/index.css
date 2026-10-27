@@ -37,6 +37,23 @@
   --warning: oklch(78.48% 0.159 72.51);
   --warning-foreground: oklch(15% 0.03 72.51);
 
+  /* Logo navy is #2f338a; each exam/skill hue is a text-on-soft pair kept at AA contrast. */
+  --brand-navy: oklch(27.316% 0.11948 273.367);
+  --brand-navy-foreground: oklch(99% 0 0);
+  --brand-navy-soft: oklch(93.5% 0.03 274);
+  --exam-ielts: oklch(50% 0.2 27.5);
+  --exam-ielts-soft: oklch(94.5% 0.03 27.5);
+  --exam-toeic: oklch(40% 0.15 274);
+  --exam-toeic-soft: oklch(94% 0.03 274);
+  --skill-listening: oklch(48% 0.11 230);
+  --skill-listening-soft: oklch(94.5% 0.035 230);
+  --skill-reading: oklch(47% 0.12 155);
+  --skill-reading-soft: oklch(94.5% 0.045 155);
+  --skill-writing: oklch(50% 0.12 60);
+  --skill-writing-soft: oklch(95% 0.05 75);
+  --skill-speaking: oklch(48% 0.17 300);
+  --skill-speaking-soft: oklch(94.5% 0.035 300);
+
   --radius: 0.25rem;
   --field-radius: 0.5rem;
 
@@ -53,29 +70,63 @@
   --danger: oklch(52% 0.2 28.56);
   --danger-foreground: oklch(98% 0.015 28.56);
   --default: oklch(26% 0.028 268);
-  --default-foreground: oklch(94% 0.008 55);
+  --default-foreground: oklch(95% 0.006 265);
   --field-background: oklch(19% 0.024 266);
-  --field-foreground: oklch(94% 0.008 55);
-  --field-placeholder: oklch(58% 0.012 50);
-  --focus: oklch(58.14% 0.2349 27.99);
-  --foreground: oklch(94% 0.008 55);
-  --muted: oklch(60% 0.014 48);
+  --field-foreground: oklch(95% 0.006 265);
+  --field-placeholder: oklch(58% 0.018 265);
+  --focus: oklch(62% 0.2 25);
+  --foreground: oklch(95% 0.006 265);
+  --muted: oklch(68% 0.02 265);
   --overlay: oklch(19% 0.024 266);
-  --overlay-foreground: oklch(94% 0.008 55);
+  --overlay-foreground: oklch(95% 0.006 265);
   --scrollbar: oklch(35% 0.028 266);
   --segment: oklch(30% 0.03 267);
-  --segment-foreground: oklch(94% 0.008 55);
+  --segment-foreground: oklch(95% 0.006 265);
   --separator: oklch(23% 0.026 267);
   --success: oklch(68% 0.172 148);
   --success-foreground: oklch(14% 0.04 148);
   --surface: oklch(19.5% 0.026 270);
-  --surface-foreground: oklch(94% 0.008 55);
+  --surface-foreground: oklch(95% 0.006 265);
   --surface-secondary: oklch(23.5% 0.029 269);
-  --surface-secondary-foreground: oklch(94% 0.008 55);
+  --surface-secondary-foreground: oklch(95% 0.006 265);
   --surface-tertiary: oklch(21.5% 0.027 268);
-  --surface-tertiary-foreground: oklch(94% 0.008 55);
+  --surface-tertiary-foreground: oklch(95% 0.006 265);
   --warning: oklch(76% 0.148 68);
   --warning-foreground: oklch(14% 0.04 68);
+
+  --brand-navy: oklch(31% 0.11 274);
+  --brand-navy-foreground: oklch(97% 0.01 270);
+  --brand-navy-soft: oklch(28% 0.07 274);
+  --exam-ielts: oklch(74% 0.13 25);
+  --exam-ielts-soft: oklch(30% 0.08 25);
+  --exam-toeic: oklch(76% 0.1 274);
+  --exam-toeic-soft: oklch(40% 0.1 274);
+  --skill-listening: oklch(80% 0.1 230);
+  --skill-listening-soft: oklch(30% 0.06 230);
+  --skill-reading: oklch(80% 0.12 155);
+  --skill-reading-soft: oklch(30% 0.06 155);
+  --skill-writing: oklch(84% 0.12 75);
+  --skill-writing-soft: oklch(31% 0.06 70);
+  --skill-speaking: oklch(80% 0.1 300);
+  --skill-speaking-soft: oklch(30% 0.08 300);
+}
+
+@theme inline {
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-navy-foreground: var(--brand-navy-foreground);
+  --color-brand-navy-soft: var(--brand-navy-soft);
+  --color-exam-ielts: var(--exam-ielts);
+  --color-exam-ielts-soft: var(--exam-ielts-soft);
+  --color-exam-toeic: var(--exam-toeic);
+  --color-exam-toeic-soft: var(--exam-toeic-soft);
+  --color-skill-listening: var(--skill-listening);
+  --color-skill-listening-soft: var(--skill-listening-soft);
+  --color-skill-reading: var(--skill-reading);
+  --color-skill-reading-soft: var(--skill-reading-soft);
+  --color-skill-writing: var(--skill-writing);
+  --color-skill-writing-soft: var(--skill-writing-soft);
+  --color-skill-speaking: var(--skill-speaking);
+  --color-skill-speaking-soft: var(--skill-speaking-soft);
 }
 
 [data-theme='dark'] [data-hide-on-theme='dark'],

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import type { Profile } from '@/types/student-test';
 
-import { LogoHorizontalIcon } from '@/assets/icons';
+import { LogoIcon } from '@/assets/icons';
 import { ROUTES } from '@/constants/routes';
 
 import MobileNav from './mobileNav';
@@ -20,10 +20,10 @@ export default function Header({ profile }: HeaderProps) {
   const t = useTranslations('common');
 
   return (
-    <header className="border-separator bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
+    <header className="border-separator bg-surface sticky top-0 z-40 border-b">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-6 px-4 md:px-6">
         <Link href={ROUTES.HOME} aria-label={t('appName')}>
-          <LogoHorizontalIcon className="h-7 w-auto" />
+          <LogoIcon className="h-7 w-auto" />
         </Link>
         <div className="hidden md:flex">
           <NavLinks orientation="horizontal" />

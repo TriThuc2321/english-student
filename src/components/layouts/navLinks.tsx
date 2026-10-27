@@ -43,7 +43,10 @@ export default function NavLinks({ orientation, onNavigate }: NavLinksProps) {
             aria-current={active ? 'page' : undefined}
             className={cn(
               'text-muted hover:text-foreground hover:bg-surface-secondary rounded-xl px-3 py-2 text-sm font-medium transition-colors',
-              { 'text-foreground bg-surface-secondary': active },
+              {
+                'text-accent-soft-foreground bg-accent-soft hover:text-accent-soft-foreground hover:bg-accent-soft':
+                  active,
+              },
             )}
           >
             {t(label)}

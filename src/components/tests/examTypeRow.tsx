@@ -8,6 +8,7 @@ import type {
   StudentTestListItem,
 } from '@/types/student-test';
 
+import { EXAM_CLASSES } from '@/constants/exam';
 import { buildTestsHref } from '@/lib/tests/catalogue-params';
 
 import TestCard from './testCard';
@@ -34,7 +35,14 @@ export default async function ExamTypeRow({
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-3">
       <div className="flex items-center justify-between gap-4">
-        <h2 id={headingId} className="text-lg font-semibold">
+        <h2
+          id={headingId}
+          className="flex items-center gap-2.5 text-lg font-semibold"
+        >
+          <span
+            aria-hidden
+            className={`h-5 w-1.5 rounded-full ${EXAM_CLASSES[examType].bar}`}
+          />
           {t(`exam.${examType}`)}
         </h2>
         <Link
