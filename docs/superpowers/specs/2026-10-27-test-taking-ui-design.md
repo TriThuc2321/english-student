@@ -57,7 +57,7 @@ type Answer = string | string[];
 type ExamState = {
   answers: Record<number, Record<number, Answer>>; // sectionId → question number → answer
   sectionId: number;
-  partId: number;
+  partId: number | null; // null when a section has no parts
   remaining: Record<number, number>; // sectionId → seconds left
   flagged: Record<number, number[]>; // sectionId → question numbers
 };
