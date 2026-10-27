@@ -1,0 +1,25 @@
+import type { ExamType, SkillType } from '@/types/student-test';
+
+export const EXAM_TYPES: readonly ExamType[] = [
+  'IELTS_ACADEMIC',
+  'IELTS_GENERAL',
+  'TOEIC_LR',
+  'TOEIC_SW',
+];
+
+const IELTS_SKILLS: readonly SkillType[] = [
+  'LISTENING',
+  'READING',
+  'WRITING',
+  'SPEAKING',
+];
+
+export const EXAM_SKILLS: Record<ExamType, readonly SkillType[]> = {
+  IELTS_ACADEMIC: IELTS_SKILLS,
+  IELTS_GENERAL: IELTS_SKILLS,
+  TOEIC_LR: ['LISTENING', 'READING'],
+  TOEIC_SW: ['SPEAKING', 'WRITING'],
+};
+
+export const isExamType = (value: unknown): value is ExamType =>
+  (EXAM_TYPES as readonly unknown[]).includes(value);

@@ -5,7 +5,18 @@
   },
   "common": {
     "appName": "MyEnglish",
-    "welcome": "Welcome back"
+    "welcome": "Welcome back",
+    "nav": {
+      "home": "Home",
+      "tests": "Tests",
+      "openMenu": "Open menu"
+    },
+    "userMenu": "Account menu",
+    "error": {
+      "title": "Something went wrong",
+      "description": "We couldn't load this page. Please try again.",
+      "retry": "Try again"
+    }
   },
   "auth": {
     "login": "Login",
@@ -21,6 +32,46 @@
     "loginFooter": "Use the Google account your teacher registered for your class",
     "errors": {
       "google_login_failed": "Google sign-in failed. Please try again."
+    }
+  },
+  "exam": {
+    "IELTS_ACADEMIC": "IELTS Academic",
+    "IELTS_GENERAL": "IELTS General",
+    "TOEIC_LR": "TOEIC Listening & Reading",
+    "TOEIC_SW": "TOEIC Speaking & Writing",
+    "skill": {
+      "LISTENING": "Listening",
+      "READING": "Reading",
+      "WRITING": "Writing",
+      "SPEAKING": "Speaking"
+    }
+  },
+  "tests": {
+    "minutes": "{count} min",
+    "publishedOn": "Published {date}",
+    "title": "Tests",
+    "all": "All",
+    "searchLabel": "Search tests",
+    "searchPlaceholder": "Search by title or source",
+    "summary": "Showing {from}–{to} of {total}",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "empty": {
+      "title": "No matching tests",
+      "clear": "Clear filters"
+    }
+  },
+  "home": {
+    "greeting": "Hi {name}",
+    "greetingFallback": "Hi there",
+    "subtitle": "Pick an exam and start practising.",
+    "seeAll": "See all →",
+    "rowError": "Couldn't load",
+    "retry": "Try again",
+    "empty": {
+      "title": "No tests yet",
+      "description": "New tests will appear here once they are published."
     }
   }
 }

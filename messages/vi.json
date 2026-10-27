@@ -5,7 +5,18 @@
   },
   "common": {
     "appName": "MyEnglish",
-    "welcome": "Chào mừng trở lại"
+    "welcome": "Chào mừng trở lại",
+    "nav": {
+      "home": "Trang chủ",
+      "tests": "Đề thi",
+      "openMenu": "Mở menu"
+    },
+    "userMenu": "Menu tài khoản",
+    "error": {
+      "title": "Đã có lỗi xảy ra",
+      "description": "Không thể tải trang này. Vui lòng thử lại.",
+      "retry": "Thử lại"
+    }
   },
   "auth": {
     "login": "Đăng nhập",
@@ -21,6 +32,46 @@
     "loginFooter": "Sử dụng tài khoản Google mà giáo viên đã đăng ký cho lớp của bạn",
     "errors": {
       "google_login_failed": "Đăng nhập Google thất bại. Vui lòng thử lại."
+    }
+  },
+  "exam": {
+    "IELTS_ACADEMIC": "IELTS Academic",
+    "IELTS_GENERAL": "IELTS General",
+    "TOEIC_LR": "TOEIC Nghe & Đọc",
+    "TOEIC_SW": "TOEIC Nói & Viết",
+    "skill": {
+      "LISTENING": "Nghe",
+      "READING": "Đọc",
+      "WRITING": "Viết",
+      "SPEAKING": "Nói"
+    }
+  },
+  "tests": {
+    "minutes": "{count} phút",
+    "publishedOn": "Đăng ngày {date}",
+    "title": "Đề thi",
+    "all": "Tất cả",
+    "searchLabel": "Tìm đề thi",
+    "searchPlaceholder": "Tìm theo tên hoặc nguồn",
+    "summary": "Hiển thị {from}–{to} trên {total}",
+    "pagination": "Phân trang",
+    "previous": "Trước",
+    "next": "Sau",
+    "empty": {
+      "title": "Không có đề thi phù hợp",
+      "clear": "Xoá bộ lọc"
+    }
+  },
+  "home": {
+    "greeting": "Chào {name}",
+    "greetingFallback": "Xin chào",
+    "subtitle": "Chọn kỳ thi và bắt đầu luyện tập.",
+    "seeAll": "Xem tất cả →",
+    "rowError": "Không thể tải",
+    "retry": "Thử lại",
+    "empty": {
+      "title": "Chưa có đề thi",
+      "description": "Đề thi mới sẽ xuất hiện ở đây khi được đăng."
     }
   }
 }
