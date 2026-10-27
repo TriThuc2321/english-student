@@ -73,5 +73,57 @@
       "title": "Chưa có đề thi",
       "description": "Đề thi mới sẽ xuất hiện ở đây khi được đăng."
     }
+  },
+  "taking": {
+    "flag": "Đánh dấu xem lại",
+    "flagN": "Đánh dấu câu {n} để xem lại",
+    "answerLabel": "Đáp án {n}",
+    "chooseN": "Chọn {count} đáp án.",
+    "allowReuse": "Có thể dùng một chữ cái nhiều lần.",
+    "photoHint": "Chọn câu mô tả đúng nhất bức ảnh.",
+    "questionN": "Câu {n}",
+    "timing": "Chuẩn bị {prep} · Trả lời {response}",
+    "timeAllowed": "thời gian {time}",
+    "typeAnswer": "Nhập câu trả lời…",
+    "minWords": "tối thiểu {count}",
+    "wordCount": "{count} từ",
+    "recordSoon": "Tính năng ghi âm sẽ sớm có.",
+    "boxTitle": {
+      "headings": "Danh sách tiêu đề",
+      "people": "Danh sách người",
+      "endings": "Phần kết câu",
+      "categories": "Danh mục",
+      "wordBank": "Kho từ"
+    },
+    "audio": {
+      "label": "Âm thanh",
+      "play": "Phát",
+      "pause": "Tạm dừng",
+      "speed": "Tốc độ phát",
+      "playQuestion": "Phát câu này",
+      "seek": "Tua"
+    },
+    "exit": "Thoát",
+    "partFallback": "Phần {n}",
+    "questionsRange": "Câu {range}",
+    "answeredCount": "Đã trả lời {answered} / {total}",
+    "prev": "Trước",
+    "next": "Tiếp",
+    "passage": "Bài đọc",
+    "questions": "Câu hỏi",
+    "emptyPart": "Phần này chưa có câu hỏi.",
+    "timeUp": {
+      "title": "Đã hết giờ",
+      "body": "Thời gian làm phần này đã kết thúc.",
+      "review": "Xem lại đáp án",
+      "nextSection": "Phần tiếp theo"
+    },
+    "intro": {
+      "start": "Bắt đầu",
+      "continue": "Tiếp tục",
+      "restart": "Làm lại từ đầu",
+      "sections": "Các phần",
+      "questionCount": "{count} câu"
+    }
   }
 }
