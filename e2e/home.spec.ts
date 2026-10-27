@@ -62,7 +62,7 @@ test('opens a test from a card', async ({ page, signIn }) => {
   await page.goto('/');
   await page.getByRole('link', { name: /Academic Test 14/ }).click();
 
-  await expect(page).toHaveURL(/\/tests\/14$/);
+  await expect(page).toHaveURL(/\/tests\/academic-test-14-14$/);
 });
 
 test('isolates a failing row', async ({ page, signIn }) => {

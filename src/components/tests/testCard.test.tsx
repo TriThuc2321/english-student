@@ -10,6 +10,7 @@ import TestCard from './testCard';
 
 const test: StudentTestListItem = {
   id: 12,
+  slug: 'practice-test-1',
   examType: 'IELTS_ACADEMIC',
   title: 'Practice Test 1',
   source: 'Cambridge IELTS 18',
@@ -25,7 +26,10 @@ describe('TestCard', () => {
   it('links to the overview', () => {
     renderWithIntl(<TestCard test={test} />);
 
-    expect(screen.getByRole('link')).toHaveAttribute('href', '/tests/12');
+    expect(screen.getByRole('link')).toHaveAttribute(
+      'href',
+      '/tests/practice-test-1',
+    );
   });
 
   it('shows exam, title, source, skills with minutes, duration and date', () => {
