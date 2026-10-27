@@ -49,5 +49,17 @@
   "tests": {
     "minutes": "{count} min",
     "publishedOn": "Published {date}"
+  },
+  "home": {
+    "greeting": "Hi {name}",
+    "greetingFallback": "Hi there",
+    "subtitle": "Pick an exam and start practising.",
+    "seeAll": "See all →",
+    "rowError": "Couldn't load",
+    "retry": "Try again",
+    "empty": {
+      "title": "No tests yet",
+      "description": "New tests will appear here once they are published."
+    }
   }
 }

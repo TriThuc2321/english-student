@@ -49,5 +49,17 @@
   "tests": {
     "minutes": "{count} phút",
     "publishedOn": "Đăng ngày {date}"
+  },
+  "home": {
+    "greeting": "Chào {name}",
+    "greetingFallback": "Xin chào",
+    "subtitle": "Chọn kỳ thi và bắt đầu luyện tập.",
+    "seeAll": "Xem tất cả →",
+    "rowError": "Không thể tải",
+    "retry": "Thử lại",
+    "empty": {
+      "title": "Chưa có đề thi",
+      "description": "Đề thi mới sẽ xuất hiện ở đây khi được đăng."
+    }
   }
 }
