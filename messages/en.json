@@ -48,7 +48,19 @@
   },
   "tests": {
     "minutes": "{count} min",
-    "publishedOn": "Published {date}"
+    "publishedOn": "Published {date}",
+    "title": "Tests",
+    "all": "All",
+    "searchLabel": "Search tests",
+    "searchPlaceholder": "Search by title or source",
+    "summary": "Showing {from}–{to} of {total}",
+    "pagination": "Pagination",
+    "previous": "Previous",
+    "next": "Next",
+    "empty": {
+      "title": "No matching tests",
+      "clear": "Clear filters"
+    }
   },
   "home": {
     "greeting": "Hi {name}",

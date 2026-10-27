@@ -14,13 +14,16 @@ export function renderWithIntl(
   ui: ReactElement,
   { locale = LOCALE.EN }: { locale?: Locale } = {},
 ) {
-  return render(
-    <NextIntlClientProvider
-      locale={locale}
-      messages={MESSAGES[locale]}
-      timeZone="UTC"
-    >
-      {ui}
-    </NextIntlClientProvider>,
-  );
+  // A wrapper (not wrapping `ui` directly) keeps the provider on `rerender`.
+  return render(ui, {
+    wrapper: ({ children }) => (
+      <NextIntlClientProvider
+        locale={locale}
+        messages={MESSAGES[locale]}
+        timeZone="UTC"
+      >
+        {children}
+      </NextIntlClientProvider>
+    ),
+  });
 }

@@ -48,7 +48,19 @@
   },
   "tests": {
     "minutes": "{count} phút",
-    "publishedOn": "Đăng ngày {date}"
+    "publishedOn": "Đăng ngày {date}",
+    "title": "Đề thi",
+    "all": "Tất cả",
+    "searchLabel": "Tìm đề thi",
+    "searchPlaceholder": "Tìm theo tên hoặc nguồn",
+    "summary": "Hiển thị {from}–{to} trên {total}",
+    "pagination": "Phân trang",
+    "previous": "Trước",
+    "next": "Sau",
+    "empty": {
+      "title": "Không có đề thi phù hợp",
+      "clear": "Xoá bộ lọc"
+    }
   },
   "home": {
     "greeting": "Chào {name}",
