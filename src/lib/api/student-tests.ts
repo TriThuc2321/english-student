@@ -34,9 +34,11 @@ export function getStudentTests({
 }
 
 export const getStudentTest = cache(
-  async (id: number): Promise<StudentTestDetail | null> => {
+  async (slug: string): Promise<StudentTestDetail | null> => {
     try {
-      return await apiGet<StudentTestDetail>(`/student/tests/${id}`);
+      return await apiGet<StudentTestDetail>(
+        `/student/tests/${encodeURIComponent(slug)}`,
+      );
     } catch (error) {
       if (error instanceof ApiError && error.status === 404) return null;
       throw error;

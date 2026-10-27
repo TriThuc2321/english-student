@@ -22,7 +22,7 @@ export default function TestCard({ test }: TestCardProps) {
 
   return (
     <Link
-      href={ROUTES.test(test.id)}
+      href={ROUTES.test(test.slug)}
       className="focus-visible:ring-focus block h-full rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
     >
       <Card className="relative h-full overflow-hidden transition-[translate,box-shadow] hover:-translate-y-0.5 hover:shadow-lg">

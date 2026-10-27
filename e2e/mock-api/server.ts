@@ -7,6 +7,7 @@ type SkillType = 'LISTENING' | 'READING' | 'WRITING' | 'SPEAKING';
 
 type ListItem = {
   id: number;
+  slug: string;
   examType: ExamType;
   title: string;
   source: string | null;
@@ -49,6 +50,7 @@ function makeTest(
 ): ListItem {
   return {
     id,
+    slug: `${title.toLowerCase().replaceAll(' ', '-')}-${id}`,
     examType,
     title,
     source,
@@ -227,8 +229,8 @@ const server = createServer((req, res) => {
       );
     }
 
-    const id = pathname.match(/^\/api\/student\/tests\/(\d+)$/)?.[1];
-    const test = id && TESTS.find((t) => t.id === Number(id));
+    const slug = pathname.match(/^\/api\/student\/tests\/([^/]+)$/)?.[1];
+    const test = slug && TESTS.find((t) => t.slug === slug);
     if (!test) return error(res, 404, 'Not found');
     return send(res, 200, toDetail(test));
   }

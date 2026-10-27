@@ -17,8 +17,8 @@ beforeEach(() => {
 });
 
 describe('NavLinks', () => {
-  it('marks Tests active on /tests/12', () => {
-    onPath('/tests/12');
+  it('marks Tests active on /tests/practice-test-1', () => {
+    onPath('/tests/practice-test-1');
     renderWithIntl(<NavLinks orientation="horizontal" />);
 
     expect(screen.getByRole('link', { name: 'Tests' })).toHaveAttribute(

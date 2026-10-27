@@ -51,13 +51,13 @@ describe('getStudentTest', () => {
   it('returns null on 404', async () => {
     respond(404, { message: 'Not found', statusCode: 404 });
 
-    await expect(getStudentTest(404)).resolves.toBeNull();
+    await expect(getStudentTest('missing-test')).resolves.toBeNull();
   });
 
   it('rethrows other errors', async () => {
     respond(500, { message: 'boom' });
 
-    const error = await getStudentTest(500).catch((e: unknown) => e);
+    const error = await getStudentTest('broken-test').catch((e: unknown) => e);
     expect(error).toBeInstanceOf(ApiError);
     expect(error).toMatchObject({ status: 500 });
   });

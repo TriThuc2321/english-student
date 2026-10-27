@@ -20,6 +20,7 @@ export type StudentTestSection = {
 
 export type StudentTestListItem = {
   id: number;
+  slug: string;
   examType: ExamType;
   title: string;
   source: string | null;

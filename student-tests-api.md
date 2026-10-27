@@ -10,7 +10,7 @@ The full schema is in `openapi.json` (Swagger UI at `/docs`).
 1. [Conventions](#1-conventions)
 2. [Auth](#2-auth)
 3. [Test catalogue](#3-get-studenttests--test-catalogue)
-4. [Test content](#4-get-studenttestsid--test-content)
+4. [Test content](#4-get-studenttestsslug--test-content)
 5. [Question `content` formats](#5-question-content-formats)
 6. [Enums](#6-enums)
 
@@ -143,6 +143,7 @@ Lists published tests, newest first (by `publishedAt`).
 ```ts
 StudentTestListItem {
   id: number
+  slug: string
   examType: ExamType
   title: string
   source: string | null              // e.g. "Cambridge IELTS 18"
@@ -164,6 +165,7 @@ StudentTestSection {
   "data": [
     {
       "id": 12,
+      "slug": "cambridge-ielts-18-practice-test-1",
       "examType": "IELTS_ACADEMIC",
       "title": "Practice Test 1",
       "source": "Cambridge IELTS 18",
@@ -181,7 +183,7 @@ StudentTestSection {
 
 ---
 
-## 4. `GET /student/tests/:id` — test content
+## 4. `GET /student/tests/:slug` — test content
 
 Returns everything needed to render a published test. **Answers, explanations, evidence and audio transcripts are never included.**
 
@@ -192,6 +194,7 @@ Returns everything needed to render a published test. **Answers, explanations, e
 ```ts
 StudentTestDetail {
   id: number
+  slug: string
   examType: ExamType
   title: string
   source: string | null
