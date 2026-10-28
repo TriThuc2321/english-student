@@ -31,7 +31,7 @@ test('renders without a profile', async ({ page, signIn }) => {
 test('uses a drawer on mobile', async ({ page, signIn }) => {
   await page.setViewportSize({ width: 375, height: 800 });
   await signIn();
-  await page.goto('/');
+  await page.goto('/tests/academic-test-14-14');
 
   await expect(page.getByRole('link', { name: 'Tests' })).toBeHidden();
   await page.getByRole('button', { name: 'Open menu' }).click();
@@ -41,5 +41,5 @@ test('uses a drawer on mobile', async ({ page, signIn }) => {
   await expect(drawerLink).toBeVisible();
   await drawerLink.click();
 
-  await expect(page).toHaveURL(/\/tests$/);
+  await expect(page).toHaveURL(/\/$/);
 });

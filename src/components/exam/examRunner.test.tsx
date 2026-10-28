@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NextIntlClientProvider } from 'next-intl';
 import { renderToString } from 'react-dom/server';
@@ -14,6 +14,14 @@ import en from '../../../messages/en.json';
 import { ExamRunner } from './examRunner';
 
 const test = makeTest();
+
+const push = vi.fn();
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
+
+const currentStep = () =>
+  screen
+    .getByRole('list', { name: 'Sections' })
+    .querySelector('[aria-current="step"]');
 
 function saveDraft(overrides: Partial<ExamState>) {
   localStorage.setItem(
@@ -34,6 +42,7 @@ describe('ExamRunner', () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     localStorage.clear();
+    push.mockClear();
   });
   afterEach(() => vi.useRealTimers());
 
@@ -57,16 +66,41 @@ describe('ExamRunner', () => {
     expect(screen.getAllByText('The history of tea').length).toBeGreaterThan(0);
   });
 
-  it('moves to the next section with Next and selects its tab', async () => {
+  it('keeps Next within the current section', async () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     renderWithIntl(<ExamRunner test={test} />);
-    await user.click(screen.getByRole('button', { name: 'Next' }));
-    await user.click(screen.getByRole('button', { name: 'Next' }));
-    expect(screen.getAllByText('The history of tea').length).toBeGreaterThan(0);
-    expect(screen.getByRole('tab', { name: 'Reading' })).toHaveAttribute(
-      'aria-selected',
-      'true',
+    await user.click(screen.getByRole('button', { name: 'Next question' }));
+    expect(
+      screen.getByRole('button', { name: 'Next question' }),
+    ).toBeDisabled();
+    expect(currentStep()).toHaveTextContent('Listening');
+  });
+
+  it('submits the section after confirming and moves to the next one', async () => {
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    renderWithIntl(<ExamRunner test={test} />);
+    await user.click(screen.getByRole('button', { name: 'Submit section' }));
+    const dialog = await screen.findByRole('dialog');
+    expect(
+      within(dialog).getByText('Submit the Listening section?'),
+    ).toBeInTheDocument();
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Submit section' }),
     );
+    expect(currentStep()).toHaveTextContent('Reading');
+    expect(screen.getAllByText('The history of tea').length).toBeGreaterThan(0);
+  });
+
+  it('returns to the test overview after submitting the last section', async () => {
+    saveDraft({ sectionId: 31, partId: 310, submitted: [30] });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    renderWithIntl(<ExamRunner test={test} />);
+    await user.click(screen.getByRole('button', { name: 'Submit section' }));
+    const dialog = await screen.findByRole('dialog');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Submit section' }),
+    );
+    expect(push).toHaveBeenCalledWith('/tests/practice-test-1');
   });
 
   it('opens the time-up dialog and locks inputs when the section runs out', () => {
@@ -87,17 +121,29 @@ describe('ExamRunner', () => {
       vi.advanceTimersByTime(1000);
     });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
-    await user.click(screen.getByRole('button', { name: 'Next section' }));
-    expect(screen.getByRole('tab', { name: 'Reading' })).toHaveAttribute(
-      'aria-selected',
-      'true',
+    await user.click(
+      screen.getByRole('button', { name: 'Continue to Reading' }),
     );
+    expect(currentStep()).toHaveTextContent('Reading');
   });
 
-  it('keeps inputs locked without a dialog when the draft is already out of time', () => {
+  it('continues automatically after the time-up countdown', () => {
+    saveDraft({ remaining: { 30: 1, 31: 1800 } });
+    renderWithIntl(<ExamRunner test={test} />);
+    act(() => {
+      vi.advanceTimersByTime(1000);
+    });
+    expect(screen.getByText('Time is up')).toBeInTheDocument();
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(currentStep()).toHaveTextContent('Reading');
+  });
+
+  it('skips a section that was already out of time in the draft', () => {
     saveDraft({ remaining: { 30: 0, 31: 1800 } });
     renderWithIntl(<ExamRunner test={test} />);
-    expect(screen.getByLabelText('Answer 1')).toBeDisabled();
+    expect(currentStep()).toHaveTextContent('Reading');
     expect(screen.queryByText('Time is up')).not.toBeInTheDocument();
   });
 
@@ -107,21 +153,21 @@ describe('ExamRunner', () => {
     saveDraft({ sectionId: 31, partId: 310 });
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     renderWithIntl(<ExamRunner test={test} />);
-    await user.click(screen.getByRole('button', { name: '2' }));
+    await user.click(screen.getByRole('button', { name: /^Question 2,/ }));
     await act(async () => {
       await vi.advanceTimersByTimeAsync(50);
     });
     expect(scrollIntoView).toHaveBeenCalledTimes(1);
 
-    await user.click(screen.getByRole('button', { name: 'Next' }));
-    await user.click(screen.getByRole('button', { name: 'Previous' }));
+    await user.click(screen.getByRole('button', { name: 'Next question' }));
+    await user.click(screen.getByRole('button', { name: 'Previous question' }));
     await act(async () => {
       await vi.advanceTimersByTimeAsync(50);
     });
     expect(scrollIntoView).toHaveBeenCalledTimes(1);
   });
 
-  it('remounts the part banner audio when stepping to another part', async () => {
+  it('remounts the part audio when stepping to another part', async () => {
     const shared = test.testSections[0].testParts[0];
     const withAudio = {
       ...test,
@@ -140,7 +186,7 @@ describe('ExamRunner', () => {
     const { container } = renderWithIntl(<ExamRunner test={withAudio} />);
     const first = container.querySelector('audio');
     expect(first).not.toBeNull();
-    await user.click(screen.getByRole('button', { name: 'Next' }));
+    await user.click(screen.getByRole('button', { name: 'Next question' }));
     const second = container.querySelector('audio');
     expect(second).not.toBeNull();
     expect(second).not.toBe(first);

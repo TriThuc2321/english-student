@@ -7,11 +7,12 @@
     "appName": "MyEnglish",
     "welcome": "Welcome back",
     "nav": {
-      "home": "Home",
       "tests": "Tests",
       "openMenu": "Open menu"
     },
     "userMenu": "Account menu",
+    "toggleTheme": "Toggle dark mode",
+    "switchLocale": "Change language",
     "error": {
       "title": "Something went wrong",
       "description": "We couldn't load this page. Please try again.",
@@ -24,14 +25,19 @@
     "email": "Email",
     "password": "Password",
     "forgotPassword": "Forgot password?",
-    "loginTitle": "Sign in to your account",
     "loginButton": "Sign in",
-    "welcomeBack": "Ready for your test?",
-    "welcomeSubtitle": "Sign in to take your English tests, track your scores and see how you're improving",
     "continueWithGoogle": "Continue with Google",
-    "loginFooter": "Use the Google account your teacher registered for your class",
+    "tagline": "Test practice",
+    "signInTitle": "Sign in",
+    "signInSubtitle": "Practise IELTS and TOEIC under real exam conditions.",
+    "orWithEmail": "or with email",
+    "newHere": "New here?",
+    "createAccount": "Create an account",
     "errors": {
-      "google_login_failed": "Google sign-in failed. Please try again."
+      "google_login_failed": {
+        "title": "Google sign-in failed",
+        "description": "Try again, or sign in with your email."
+      }
     }
   },
   "exam": {
@@ -47,9 +53,12 @@
     }
   },
   "tests": {
+    "libraryTitle": "Test library",
+    "subtitle": "Full IELTS and TOEIC tests, timed like the real exam.",
     "minutes": "{count} min",
-    "publishedOn": "Published {date}",
-    "title": "Tests",
+    "hours": "{count} h",
+    "hoursMinutes": "{hours} h {minutes} min",
+    "publishedOn": "Added {date}",
     "all": "All",
     "searchLabel": "Search tests",
     "searchPlaceholder": "Search by title or source",
@@ -59,20 +68,15 @@
     "next": "Next",
     "empty": {
       "title": "No matching tests",
+      "description": "Try another title or source, or clear the filters.",
       "clear": "Clear filters"
-    }
-  },
-  "home": {
-    "greeting": "Hi {name}",
-    "greetingFallback": "Hi there",
-    "subtitle": "Pick an exam and start practising.",
-    "seeAll": "See all →",
-    "rowError": "Couldn't load",
-    "retry": "Try again",
-    "empty": {
+    },
+    "examFilter": "Exam type",
+    "noTests": {
       "title": "No tests yet",
-      "description": "New tests will appear here once they are published."
-    }
+      "description": "New tests are added every month. Check back soon."
+    },
+    "sections": "Sections"
   },
   "taking": {
     "flag": "Flag for review",
@@ -107,23 +111,97 @@
     "partFallback": "Part {n}",
     "questionsRange": "Questions {range}",
     "answeredCount": "{answered} / {total} answered",
-    "prev": "Previous",
-    "next": "Next",
+    "navQuestion": "Question {n}, {status, select, answered {answered} other {not answered}}{flagged, select, yes {, flagged} other {}}",
     "passage": "Passage",
     "questions": "Questions",
     "emptyPart": "This part has no questions yet.",
     "timeUp": {
       "title": "Time is up",
-      "body": "Your time for this section has ended.",
-      "review": "Review answers",
-      "nextSection": "Next section"
+      "body": "Your answers have been saved and the {section} section was submitted.",
+      "answeredOf": "{answered} of {total} questions answered",
+      "continueTo": "Continue to {section}",
+      "finish": "Finish",
+      "autoContinue": "{section} starts automatically in {seconds, plural, one {# second} other {# seconds}}."
     },
     "intro": {
       "start": "Start",
       "continue": "Continue",
       "restart": "Start over",
       "sections": "Sections",
-      "questionCount": "{count, plural, one {# question} other {# questions}}"
+      "questionCount": "{count, plural, one {# question} other {# questions}}",
+      "inProgress": "In progress",
+      "timeLeft": "{time} left",
+      "timeLeftIn": "{time} left in {section}",
+      "flaggedCount": "{count} flagged",
+      "restartTitle": "Start over?",
+      "restartBody": "Your saved answers, flags and remaining time for this test will be discarded. This can't be undone.",
+      "restartConfirm": "Discard and start over",
+      "cancel": "Cancel",
+      "guideTitle": "Before you start",
+      "guide": {
+        "timer": "The timer starts as soon as you begin and counts down for each section.",
+        "autosave": "Your answers are saved automatically on this device as you go.",
+        "flag": "Flag any question to come back to it later from the question navigator.",
+        "resume": "You can exit at any time and continue later from where you left off."
+      },
+      "back": "Test library",
+      "summaryMeta": "{sections, plural, one {# section} other {# sections}} · {questions, plural, one {# question} other {# questions}}",
+      "modeTitle": "Choose a mode",
+      "modeFull": "Full test",
+      "modeFullHint": "All sections in order, timed like the real exam.",
+      "modePractice": "Practice sections",
+      "modePracticeHint": "Pick one or more. Each section has its own timer.",
+      "sectionsInOrder": "Sections, in order",
+      "chooseSections": "Choose sections",
+      "audioTitle": "Check your headphones",
+      "audioHint": "Play the sample and set a comfortable volume.",
+      "playSample": "Play sample",
+      "pauseSample": "Pause sample",
+      "volume": "Volume",
+      "audioOk": "I can hear the sample clearly",
+      "youTake": "You'll take",
+      "noSections": "No sections yet",
+      "time": "Time",
+      "inProgressTitle": "You have an attempt in progress",
+      "resume": "Resume attempt",
+      "lockedHint": "Only one attempt per test can be open. Start over to pick a different mode."
+    },
+    "fullTest": "Full test",
+    "practice": "Practice",
+    "submitSection": "Submit section",
+    "saveStatus": {
+      "saving": "Saving…",
+      "saved": "Saved",
+      "failed": "Not saved"
+    },
+    "textSize": {
+      "label": "Text size",
+      "sm": "Smaller text",
+      "md": "Default text size",
+      "lg": "Larger text"
+    },
+    "timerLabel": "Time left: {minutes, plural, one {# minute} other {# minutes}} {seconds, plural, one {# second} other {# seconds}}",
+    "partAudio": "{part} audio",
+    "prevQuestion": "Previous question",
+    "nextQuestion": "Next question",
+    "partProgress": "{answered} of {total}",
+    "timeWarning": {
+      "title": "{minutes, plural, one {# minute} other {# minutes}} left",
+      "body": "Check your answers. They are saved as you go.",
+      "dismiss": "Dismiss"
+    },
+    "submit": {
+      "title": "Submit the {section} section?",
+      "body": "You can't come back to this section after you submit.",
+      "close": "Close and go back to the test",
+      "answered": "Answered",
+      "unanswered": "Unanswered",
+      "flagged": "Flagged",
+      "flaggedTitle": "Flagged for review",
+      "goTo": "Go to question {n}",
+      "timerRunning": "The timer keeps running: {time} left.",
+      "back": "Back to test",
+      "confirm": "Submit section"
     }
   }
 }

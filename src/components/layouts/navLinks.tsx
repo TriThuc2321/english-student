@@ -12,15 +12,16 @@ type NavLinksProps = {
   onNavigate?: () => void;
 };
 
+// The library lives at `/`, but test pages under /tests belong to it too.
 const LINKS = [
-  { href: ROUTES.HOME, label: 'home', exact: true },
-  { href: ROUTES.TESTS, label: 'tests', exact: false },
+  { href: ROUTES.HOME, label: 'tests', match: [ROUTES.TESTS] },
 ] as const;
 
-const isActive = (pathname: string, href: string, exact: boolean) =>
-  exact
-    ? pathname === href
-    : pathname === href || pathname.startsWith(`${href}/`);
+const isActive = (pathname: string, href: string, match: readonly string[]) =>
+  pathname === href ||
+  match.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
 
 export default function NavLinks({ orientation, onNavigate }: NavLinksProps) {
   const t = useTranslations('common.nav');
@@ -33,8 +34,8 @@ export default function NavLinks({ orientation, onNavigate }: NavLinksProps) {
         'items-center': orientation === 'horizontal',
       })}
     >
-      {LINKS.map(({ href, label, exact }) => {
-        const active = isActive(pathname, href, exact);
+      {LINKS.map(({ href, label, match }) => {
+        const active = isActive(pathname, href, match);
         return (
           <Link
             key={href}

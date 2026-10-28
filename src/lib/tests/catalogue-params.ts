@@ -36,5 +36,5 @@ export function buildTestsHref({ exam, q, page }: Partial<CatalogueParams>) {
   if (q) params.set('q', q);
   if (page && page > 1) params.set('page', String(page));
   const query = params.toString();
-  return query ? `${ROUTES.TESTS}?${query}` : ROUTES.TESTS;
+  return query ? `${ROUTES.HOME}?${query}` : ROUTES.HOME;
 }

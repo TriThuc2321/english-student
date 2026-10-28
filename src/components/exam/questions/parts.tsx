@@ -27,42 +27,46 @@ export const fillTemplate = (
 
 type QRowProps = { n: number; label?: string; children: ReactNode };
 
-export const QRow = ({ n, label, children }: QRowProps) => {
+export const FlagToggle = ({ n }: { n: number }) => {
   const t = useTranslations('taking');
   const { flagged, toggleFlag } = useExamGroup();
   const isFlagged = flagged.includes(n);
   return (
-    <div
-      id={`q-${n}`}
-      className="rounded-field mb-1.5 grid grid-cols-[auto_1fr_auto] gap-2.5 border border-transparent p-2"
+    <ToggleButton
+      isIconOnly
+      variant="ghost"
+      aria-label={t('flagN', { n })}
+      isSelected={isFlagged}
+      onChange={() => toggleFlag(n)}
+      className={cn('shrink-0 align-middle', isFlagged && 'text-warning')}
     >
-      <QNum>{label ?? n}</QNum>
-      <div className="min-w-0">{children}</div>
-      <ToggleButton
-        isIconOnly
-        size="sm"
-        variant="ghost"
-        aria-label={t('flagN', { n })}
-        isSelected={isFlagged}
-        onChange={() => toggleFlag(n)}
+      <svg
+        viewBox="0 0 24 24"
+        className="size-4"
+        fill={isFlagged ? 'currentColor' : 'none'}
+        stroke="currentColor"
+        strokeWidth={2}
+        aria-hidden
       >
-        <svg
-          viewBox="0 0 24 24"
-          className="size-4"
-          fill={isFlagged ? 'currentColor' : 'none'}
-          stroke="currentColor"
-          strokeWidth={2}
-          aria-hidden
-        >
-          <path d="M5 21V4m0 0h12l-2 4 2 4H5" />
-        </svg>
-      </ToggleButton>
-    </div>
+        <path d="M5 21V4m0 0h12l-2 4 2 4H5" />
+      </svg>
+    </ToggleButton>
   );
 };
 
+export const QRow = ({ n, label, children }: QRowProps) => (
+  <div
+    id={`q-${n}`}
+    className="rounded-field mb-1.5 grid grid-cols-[auto_1fr_auto] gap-2.5 border border-transparent p-2"
+  >
+    <QNum>{label ?? n}</QNum>
+    <div className="min-w-0">{children}</div>
+    <FlagToggle n={n} />
+  </div>
+);
+
 export const QNum = ({ children }: { children: ReactNode }) => (
-  <span className="bg-accent-soft text-accent-soft-foreground rounded-field grid h-6.5 min-w-7 place-items-center px-1.5 text-[13px] font-bold">
+  <span className="bg-accent-soft text-accent-soft-foreground rounded-field inline-grid h-7 min-w-7 shrink-0 place-items-center px-1.5 align-middle text-[13px] leading-none font-bold">
     {children}
   </span>
 );
@@ -76,7 +80,7 @@ export const Hint = ({ children }: { children: ReactNode }) => (
 );
 
 const fieldClass =
-  'border-border bg-surface rounded-field border px-2 py-0.5 text-sm outline-none focus:border-accent disabled:opacity-60';
+  'border-border bg-surface rounded-field min-h-10 border px-3 py-1 text-base leading-tight outline-none focus:border-accent disabled:opacity-60';
 
 const keyOptions = (options: Option[], disabledKeys?: string[]) =>
   options.map((o) => (
@@ -85,37 +89,22 @@ const keyOptions = (options: Option[], disabledKeys?: string[]) =>
     </option>
   ));
 
-export const FlagBadge = ({ n }: { n: number }) => {
-  const t = useTranslations('taking');
-  const { flagged, toggleFlag } = useExamGroup();
-  const isFlagged = flagged.includes(n);
-  return (
-    <button
-      type="button"
-      aria-pressed={isFlagged}
-      aria-label={t('flagN', { n })}
-      onClick={() => toggleFlag(n)}
-      className={cn(
-        'rounded-field grid h-6.5 min-w-7 place-items-center px-1.5 text-[13px] font-bold',
-        isFlagged
-          ? 'bg-warning text-warning-foreground'
-          : 'bg-accent-soft text-accent-soft-foreground',
-      )}
-    >
-      {n}
-    </button>
-  );
+type BlankProps = {
+  n: number;
+  options?: Option[];
+  /** Off when the surrounding row already renders this question's flag toggle. */
+  withFlag?: boolean;
 };
 
-export const Blank = ({ n, options }: { n: number; options?: Option[] }) => {
+export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
   const t = useTranslations('taking');
   const { answers, setAnswer, readOnly } = useExamGroup();
   const value = (answers[n] as string | undefined) ?? '';
   const label = t('answerLabel', { n });
 
   return (
-    <span className="mx-0.5 inline-flex items-center gap-1 align-baseline">
-      <FlagBadge n={n} />
+    <span className="mx-0.5 inline-flex items-center gap-1.5 align-middle">
+      <QNum>{n}</QNum>
       {options ? (
         <select
           id={`q-${n}`}
@@ -140,6 +129,7 @@ export const Blank = ({ n, options }: { n: number; options?: Option[] }) => {
           onChange={(e) => setAnswer(n, e.target.value)}
         />
       )}
+      {withFlag && <FlagToggle n={n} />}
     </span>
   );
 };
@@ -176,7 +166,7 @@ export const TextAnswer = ({ n }: { n: number }) => {
     <input
       aria-label={t('answerLabel', { n })}
       autoComplete="off"
-      className="border-muted w-full max-w-72 border-b-[1.5px] bg-transparent px-1 py-0.5 outline-none disabled:opacity-60"
+      className="border-muted focus:border-accent min-h-10 w-full max-w-72 border-b-[1.5px] bg-transparent px-1 py-1 text-base outline-none disabled:opacity-60"
       value={(answers[n] as string | undefined) ?? ''}
       disabled={readOnly}
       onChange={(e) => setAnswer(n, e.target.value)}
@@ -226,10 +216,12 @@ export const Choices = ({
           <label
             key={o.key}
             className={cn(
-              'rounded-field flex cursor-pointer items-center gap-2',
-              variant === 'list' && 'hover:bg-default px-2 py-1',
+              'rounded-field relative flex cursor-pointer items-center gap-2',
+              variant !== 'list' &&
+                'has-[:focus-visible]:ring-accent has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2',
+              variant === 'list' && 'hover:bg-default min-h-10 px-2 py-1.5',
               variant === 'pills' &&
-                'border-border border px-3 py-1 text-sm font-semibold',
+                'border-border min-h-10 border px-4 py-1.5 text-sm font-semibold',
               variant === 'bubbles' &&
                 'border-border grid size-10 place-items-center rounded-full border font-bold',
               variant !== 'list' &&
@@ -293,21 +285,25 @@ export const PassagePane = ({
 }) => (
   <div
     className={cn(
-      'border-border max-h-[460px] overflow-y-auto border-b p-4 text-sm leading-relaxed md:border-r md:border-b-0',
+      'border-border max-h-[460px] overflow-y-auto border-b p-4 text-base leading-[1.65] md:border-r md:border-b-0',
       className,
     )}
   >
-    <h4 className="mb-2 font-bold">{passage.title}</h4>
-    {passage.subtitle && <p className="text-muted mb-2">{passage.subtitle}</p>}
-    {passage.paragraphs.map((p, i) => (
-      <p key={i} className="mb-2.5">
-        {p.label && (
-          <span className="bg-accent-soft text-accent-soft-foreground mr-1.5 inline-grid size-5 place-items-center rounded text-xs font-bold">
-            {p.label}
-          </span>
-        )}
-        {p.text}
-      </p>
-    ))}
+    <div className="max-w-[70ch]">
+      <h4 className="mb-2 text-lg font-bold">{passage.title}</h4>
+      {passage.subtitle && (
+        <p className="text-muted mb-3">{passage.subtitle}</p>
+      )}
+      {passage.paragraphs.map((p, i) => (
+        <p key={i} className="mb-4">
+          {p.label && (
+            <span className="bg-accent-soft text-accent-soft-foreground mr-1.5 inline-grid size-5 place-items-center rounded text-xs font-bold">
+              {p.label}
+            </span>
+          )}
+          {p.text}
+        </p>
+      ))}
+    </div>
   </div>
 );

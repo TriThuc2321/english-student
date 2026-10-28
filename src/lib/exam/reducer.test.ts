@@ -38,16 +38,27 @@ describe('examReducer', () => {
     expect(Object.values(s.flagged).flat()).toEqual([]);
   });
 
-  it('steps along the part sequence and clamps at the ends', () => {
+  it('steps between parts of the current section only', () => {
     const atFirst = initial();
     expect(run(atFirst, { type: 'step', dir: -1 })).toEqual(atFirst);
     const atSecond = run(atFirst, { type: 'step', dir: 1 });
     expect(atSecond.partId).toBe(301);
-    const next = run(atSecond, { type: 'step', dir: 1 });
-    expect([next.sectionId, next.partId]).toEqual([31, 310]);
-    let last = next;
-    for (let i = 0; i < 5; i++) last = run(last, { type: 'step', dir: 1 });
-    expect([last.sectionId, last.partId]).toEqual([31, 311]);
+    expect(run(atSecond, { type: 'step', dir: 1 })).toEqual(atSecond);
+  });
+
+  it('submits the section and moves to the next one', () => {
+    const s = run(initial(), { type: 'submitSection' });
+    expect(s.submitted).toEqual([30]);
+    expect([s.sectionId, s.partId]).toEqual([31, 310]);
+    expect(isSectionLocked(s, 30)).toBe(true);
+    expect(run(s, { type: 'goTo', sectionId: 30 })).toEqual(s);
+  });
+
+  it('stays on the last section after submitting it', () => {
+    let s = run(initial(), { type: 'submitSection' });
+    s = run(s, { type: 'submitSection' });
+    expect(s.submitted).toEqual([30, 31]);
+    expect(s.sectionId).toBe(31);
   });
 
   it('goTo defaults to the first part of the section', () => {
@@ -59,6 +70,7 @@ describe('examReducer', () => {
     let s = run(initial(), { type: 'tick', seconds: 2000 });
     expect(s.remaining[30]).toBe(0);
     expect(isSectionLocked(s, 30)).toBe(true);
+    expect(s.submitted).toEqual([30]);
     s = run(s, { type: 'answer', n: 1, value: 'x' });
     expect(s.answers[30]?.[1]).toBeUndefined();
   });
@@ -83,5 +95,12 @@ describe('examReducer', () => {
     const s = run(initial(), { type: 'restore', state: saved });
     expect(s.remaining[30]).toBe(0);
     expect(s.remaining[31]).toBe(3600);
+  });
+
+  it('restore moves past locked sections', () => {
+    const saved: ExamState = { ...initial(), submitted: [30, 999] };
+    const s = run(initial(), { type: 'restore', state: saved });
+    expect(s.submitted).toEqual([30]);
+    expect([s.sectionId, s.partId]).toEqual([31, 310]);
   });
 });

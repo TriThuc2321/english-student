@@ -1,6 +1,5 @@
 import type { IconType } from 'react-icons';
 
-import { Chip } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import {
   IoBookOutline,
@@ -11,9 +10,7 @@ import {
 
 import type { SkillType, StudentTestSection } from '@/types/student-test';
 
-import { SKILL_CLASSES } from '@/constants/exam';
-
-const SKILL_ICONS: Record<SkillType, IconType> = {
+export const SKILL_ICONS: Record<SkillType, IconType> = {
   LISTENING: IoHeadsetOutline,
   READING: IoBookOutline,
   WRITING: IoCreateOutline,
@@ -28,25 +25,22 @@ export default function SkillBadges({ sections }: SkillBadgesProps) {
   const t = useTranslations();
 
   return (
-    <div className="flex flex-wrap gap-1.5">
+    <ul aria-label={t('tests.sections')} className="flex flex-wrap gap-1.5">
       {sections.map((section) => {
         const Icon = SKILL_ICONS[section.skill];
         return (
-          <Chip
+          <li
             key={section.id}
-            size="sm"
-            variant="soft"
-            className={SKILL_CLASSES[section.skill]}
+            className="bg-surface-secondary flex items-center gap-1.5 rounded px-2 py-1 text-[13px] leading-[18px]"
           >
-            <Icon size={12} aria-hidden />
-            <Chip.Label>
-              {section.durationMinutes === null
-                ? t(`exam.skill.${section.skill}`)
-                : `${t(`exam.skill.${section.skill}`)} · ${t('tests.minutes', { count: section.durationMinutes })}`}
-            </Chip.Label>
-          </Chip>
+            <Icon size={14} aria-hidden className="text-muted" />
+            {t(`exam.skill.${section.skill}`)}
+            {section.durationMinutes !== null && (
+              <b>{t('tests.minutes', { count: section.durationMinutes })}</b>
+            )}
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }

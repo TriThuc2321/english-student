@@ -1,6 +1,8 @@
 'use client';
 
 import { Skeleton } from '@heroui/react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 
 import type { Answer } from '@/lib/exam/structure';
@@ -18,12 +20,14 @@ import {
 import { partSequence } from '@/lib/exam/structure';
 
 import { ExamHeader } from './examHeader';
-import { PartBanner } from './partBanner';
 import { PartView, type FocusRequest } from './partView';
-import { QuestionNavigator } from './questionNavigator';
+import { partGroups, QuestionNavigator } from './questionNavigator';
+import { SubmitModal } from './submitModal';
 import { TimeUpModal } from './timeUpModal';
 import { useExamPersistence } from './useExamPersistence';
+import { useExamTextSize } from './useExamTextSize';
 import { useSectionTimer } from './useSectionTimer';
+import { useTimeWarnings } from './useTimeWarnings';
 
 type RunnerState = {
   exam: ExamState;
@@ -35,7 +39,15 @@ type RunnerAction =
   | { type: 'hydrate'; draft: ExamState | null }
   | { type: 'closeTimeUp' };
 
-export function ExamRunner({ test }: { test: StudentTestDetail }) {
+type ExamRunnerProps = {
+  test: StudentTestDetail;
+  // Set when the attempt covers only some sections (practice mode); test already holds just those.
+  sectionIds?: number[] | null;
+};
+
+export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
+  const t = useTranslations();
+  const router = useRouter();
   const [{ exam: state, restored, timeUpOpen }, dispatch] = useReducer(
     (s: RunnerState, a: RunnerAction): RunnerState => {
       if (a.type === 'hydrate') {
@@ -66,6 +78,12 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
   const [focus, setFocus] = useState<
     (FocusRequest & { sectionId: number; partId: number | null }) | null
   >(null);
+  const [submitOpen, setSubmitOpen] = useState(false);
+  const [textSize, setTextSize] = useExamTextSize();
+  const [active, setActive] = useState<{
+    sectionId: number;
+    n: number;
+  } | null>(null);
   // Never reset: PartView only re-triggers on a new seq, even after the request was cleared.
   const focusSeq = useRef(0);
 
@@ -74,7 +92,7 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
     dispatch({ type: 'hydrate', draft: loadExamDraft(test.slug) });
   }, [test.slug]);
 
-  useExamPersistence(test.slug, state, restored);
+  const saveStatus = useExamPersistence(test.slug, state, restored, sectionIds);
 
   const sections = [...test.testSections].sort((a, b) => a.order - b.order);
   const section = sections.find((s) => s.id === state.sectionId) ?? sections[0];
@@ -91,12 +109,51 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
   );
   useSectionTimer(restored && remaining !== null && remaining > 0, onTick);
 
-  const sequence = partSequence(test);
-  const position = sequence.findIndex(
-    (ref) => ref.sectionId === state.sectionId && ref.partId === state.partId,
-  );
+  useTimeWarnings(section.id, remaining);
 
-  const nextSection = sections[sections.indexOf(section) + 1];
+  const sequence = partSequence(test).filter(
+    (ref) => ref.sectionId === section.id,
+  );
+  const position = sequence.findIndex((ref) => ref.partId === state.partId);
+
+  const sectionName = (id: number) => {
+    const skill = sections.find((s) => s.id === id)?.skill;
+    return skill ? t(`exam.skill.${skill}`) : '';
+  };
+  // After the time-up tick the current section is locked, so the next open one is where Continue goes.
+  const nextSection = sections.find(
+    (s) => s.id !== section.id && !isSectionLocked(state, s.id),
+  );
+  const exitHref = ROUTES.test(test.slug);
+
+  const sectionAnswers = state.answers[section.id] ?? {};
+  const sectionFlagged = state.flagged[section.id] ?? [];
+  const groups = partGroups(section, sectionAnswers);
+  const allNumbers = groups.flatMap((g) => g.numbers);
+
+  const goToQuestion = (partId: number, from: number) => {
+    dispatch({ type: 'goTo', sectionId: section.id, partId });
+    setFocus({
+      n: from,
+      seq: ++focusSeq.current,
+      sectionId: section.id,
+      partId,
+    });
+  };
+
+  const submitSection = () => {
+    setSubmitOpen(false);
+    setFocus(null);
+    if (!nextSection) router.push(exitHref);
+    dispatch({ type: 'submitSection' });
+  };
+
+  const continueAfterTimeUp = () => {
+    setFocus(null);
+    dispatch({ type: 'closeTimeUp' });
+    if (nextSection) dispatch({ type: 'goTo', sectionId: nextSection.id });
+    else router.push(exitHref);
+  };
 
   if (!restored) {
     return (
@@ -109,57 +166,47 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
   }
 
   return (
-    <div className="flex h-dvh flex-col">
+    <div className="bg-background flex h-dvh flex-col">
       <ExamHeader
         test={test}
+        practice={sectionIds !== null}
         sectionId={section.id}
+        submitted={state.submitted}
         remaining={remaining}
-        onSelectSection={(id) => {
-          setFocus(null);
-          dispatch({ type: 'goTo', sectionId: id });
-        }}
-        exitHref={ROUTES.test(test.slug)}
+        saveStatus={saveStatus}
+        textSize={textSize}
+        onTextSize={setTextSize}
+        onSubmit={locked ? null : () => setSubmitOpen(true)}
+        exitHref={exitHref}
       />
-      {part && (
-        <PartBanner
-          key={`${section.id}-${part.id}`}
-          part={part}
-          index={partIndex}
-        />
-      )}
       <div className="flex min-h-0 flex-1 flex-col">
         <PartView
           key={`${section.id}-${part?.id ?? 'none'}`}
           part={part}
           index={Math.max(partIndex, 0)}
-          answers={state.answers[section.id] ?? {}}
+          answers={sectionAnswers}
           onAnswer={(n: number, value: Answer) =>
             dispatch({ type: 'answer', n, value })
           }
           readOnly={locked}
-          flagged={state.flagged[section.id] ?? []}
+          flagged={sectionFlagged}
           onToggleFlag={(n) => dispatch({ type: 'toggleFlag', n })}
           focusRequest={
             focus?.sectionId === section.id && focus.partId === state.partId
               ? focus
               : null
           }
+          onActiveQuestion={(n) => setActive({ sectionId: section.id, n })}
+          textSize={textSize}
         />
       </div>
       <QuestionNavigator
         section={section}
         partId={state.partId}
-        answers={state.answers[section.id] ?? {}}
-        flagged={state.flagged[section.id] ?? []}
-        onSelect={(partId, from) => {
-          dispatch({ type: 'goTo', sectionId: section.id, partId });
-          setFocus({
-            n: from,
-            seq: ++focusSeq.current,
-            sectionId: section.id,
-            partId,
-          });
-        }}
+        activeQuestion={active?.sectionId === section.id ? active.n : null}
+        answers={sectionAnswers}
+        flagged={sectionFlagged}
+        onSelect={goToQuestion}
         onStep={(dir) => {
           setFocus(null);
           dispatch({ type: 'step', dir });
@@ -167,18 +214,23 @@ export function ExamRunner({ test }: { test: StudentTestDetail }) {
         canPrev={position > 0}
         canNext={position !== -1 && position < sequence.length - 1}
       />
+      <SubmitModal
+        isOpen={submitOpen && !locked}
+        sectionName={sectionName(section.id)}
+        groups={groups}
+        flagged={sectionFlagged}
+        remaining={remaining}
+        onClose={() => setSubmitOpen(false)}
+        onConfirm={submitSection}
+        onGoTo={goToQuestion}
+      />
       <TimeUpModal
         isOpen={timeUpOpen}
-        onReview={() => dispatch({ type: 'closeTimeUp' })}
-        onNextSection={
-          nextSection
-            ? () => {
-                setFocus(null);
-                dispatch({ type: 'closeTimeUp' });
-                dispatch({ type: 'goTo', sectionId: nextSection.id });
-              }
-            : null
-        }
+        sectionName={sectionName(section.id)}
+        answered={allNumbers.filter((x) => x.answered).length}
+        total={allNumbers.length}
+        nextSectionName={nextSection ? sectionName(nextSection.id) : null}
+        onContinue={continueAfterTimeUp}
       />
     </div>
   );

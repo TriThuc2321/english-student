@@ -1,21 +1,19 @@
-import { Card, Skeleton } from '@heroui/react';
+import { Skeleton } from '@heroui/react';
 
 export default function TestCardSkeleton() {
   return (
-    <Card className="h-full" aria-hidden>
-      <Card.Header className="gap-2">
-        <Skeleton className="h-5 w-24 rounded-full" />
-        <Skeleton className="h-5 w-4/5 rounded-lg" />
-        <Skeleton className="h-4 w-2/5 rounded-lg" />
-      </Card.Header>
-      <Card.Content className="flex-row gap-1.5">
-        <Skeleton className="h-5 w-20 rounded-full" />
-        <Skeleton className="h-5 w-20 rounded-full" />
-      </Card.Content>
-      <Card.Footer className="justify-between">
-        <Skeleton className="h-3 w-12 rounded-lg" />
-        <Skeleton className="h-3 w-28 rounded-lg" />
-      </Card.Footer>
-    </Card>
+    <div
+      aria-hidden
+      className="bg-surface border-border flex h-59 flex-col gap-3 rounded-xl border p-5"
+    >
+      <Skeleton className="h-4.5 w-24 rounded" />
+      <Skeleton className="h-5.5 w-4/5 rounded" />
+      <Skeleton className="h-3.5 w-2/5 rounded" />
+      <div className="flex gap-1.5">
+        <Skeleton className="h-6.5 w-25 rounded" />
+        <Skeleton className="h-6.5 w-25 rounded" />
+      </div>
+      <Skeleton className="mt-auto h-3.5 w-full rounded" />
+    </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { Button, cn, Drawer, useOverlayState } from '@heroui/react';
 import { useTranslations } from 'next-intl';
+import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentTestSectionDetail } from '@/types/student-test';
@@ -11,6 +12,7 @@ import { isAnswered, questionSlots } from '@/lib/exam/structure';
 type QuestionNavigatorProps = {
   section: StudentTestSectionDetail;
   partId: number | null;
+  activeQuestion: number | null;
   answers: Record<number, Answer>;
   flagged: number[];
   onSelect: (partId: number, from: number) => void;
@@ -19,14 +21,14 @@ type QuestionNavigatorProps = {
   canNext: boolean;
 };
 
-type PartGroup = {
+export type PartGroup = {
   id: number;
   title: string | null;
   index: number;
   numbers: { n: number; from: number; answered: boolean }[];
 };
 
-function usePartGroups(
+export function partGroups(
   section: StudentTestSectionDetail,
   answers: Record<number, Answer>,
 ) {
@@ -50,58 +52,144 @@ function usePartGroups(
     }));
 }
 
+export function NavNumber({
+  n,
+  answered,
+  flagged,
+  current = false,
+  label,
+  onPress,
+  className,
+}: {
+  n: number;
+  answered: boolean;
+  flagged: boolean;
+  current?: boolean;
+  label: string;
+  onPress: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      data-answered={answered}
+      data-flagged={flagged || undefined}
+      aria-current={current || undefined}
+      aria-label={label}
+      onClick={onPress}
+      className={cn(
+        'relative grid h-9 min-w-9 place-items-center overflow-hidden rounded-lg border px-1 text-sm font-semibold tabular-nums transition-colors',
+        answered
+          ? 'border-brand-navy bg-brand-navy text-brand-navy-foreground'
+          : 'border-field-border bg-surface text-foreground hover:bg-default',
+        current && 'ring-foreground ring-offset-surface ring-2 ring-offset-2',
+        className,
+      )}
+    >
+      {n}
+      {flagged && (
+        <span
+          aria-hidden
+          className="border-t-warning absolute top-0 right-0 size-0 border-t-[12px] border-l-[12px] border-l-transparent"
+        />
+      )}
+    </button>
+  );
+}
+
 type GridProps = {
   groups: PartGroup[];
   partId: number | null;
+  current: number | null;
   flagged: number[];
   onSelect: (partId: number, from: number) => void;
+  // Collapsed: only the current part shows its numbers; the others become a single jump button.
+  collapsed?: boolean;
 };
 
-function NumberGrid({ groups, partId, flagged, onSelect }: GridProps) {
+function NumberGrid({
+  groups,
+  partId,
+  current,
+  flagged,
+  onSelect,
+  collapsed = false,
+}: GridProps) {
   const t = useTranslations('taking');
   return (
-    <div className="flex flex-wrap gap-x-6 gap-y-2">
-      {groups.map((group) => (
-        <div key={group.id} className="flex items-center gap-2">
-          <span className="text-muted text-xs font-semibold whitespace-nowrap">
-            {group.title ?? t('partFallback', { n: group.index + 1 })}
-          </span>
-          <div className="flex flex-wrap gap-1">
-            {group.numbers.map(({ n, from, answered }) => {
-              const isFlagged = flagged.includes(from);
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  data-answered={answered}
-                  data-flagged={isFlagged || undefined}
-                  aria-current={group.id === partId || undefined}
-                  onClick={() => onSelect(group.id, from)}
-                  className={cn(
-                    'rounded-field relative grid size-8 place-items-center border text-xs font-semibold',
-                    answered
-                      ? 'border-accent bg-accent text-accent-foreground'
-                      : 'border-border bg-surface text-foreground',
-                    group.id === partId && !answered && 'border-accent',
-                  )}
-                >
-                  {n}
-                  {isFlagged && (
-                    <span className="bg-warning absolute -top-1 -right-1 size-2.5 rounded-full" />
-                  )}
-                </button>
-              );
-            })}
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+      {groups.map((group) => {
+        const title = group.title ?? t('partFallback', { n: group.index + 1 });
+        const isCurrentPart = group.id === partId;
+        const progress = t('partProgress', {
+          answered: group.numbers.filter((x) => x.answered).length,
+          total: group.numbers.length,
+        });
+        const first = group.numbers[0];
+
+        if (collapsed && !isCurrentPart) {
+          return (
+            <button
+              key={group.id}
+              type="button"
+              disabled={!first}
+              onClick={() => first && onSelect(group.id, first.from)}
+              className="hover:bg-default h-10 rounded-lg px-3 text-sm font-semibold whitespace-nowrap disabled:opacity-50"
+            >
+              {title} <span className="text-muted font-normal">{progress}</span>
+            </button>
+          );
+        }
+
+        return (
+          <div
+            key={group.id}
+            data-current-part={isCurrentPart || undefined}
+            className="flex flex-wrap items-center gap-3"
+          >
+            <span
+              className={cn(
+                'text-sm whitespace-nowrap',
+                isCurrentPart ? 'font-bold' : 'text-muted font-medium',
+              )}
+            >
+              {title} <span className="text-muted font-normal">{progress}</span>
+            </span>
+            <ul className="flex flex-wrap gap-1.5 p-0.5">
+              {group.numbers.map(({ n, from, answered }) => {
+                const isFlagged = flagged.includes(from);
+                return (
+                  <li key={n}>
+                    <NavNumber
+                      n={n}
+                      answered={answered}
+                      flagged={isFlagged}
+                      current={isCurrentPart && from === current}
+                      label={t('navQuestion', {
+                        n,
+                        status: answered ? 'answered' : 'unanswered',
+                        flagged: isFlagged ? 'yes' : 'no',
+                      })}
+                      onPress={() => onSelect(group.id, from)}
+                    />
+                  </li>
+                );
+              })}
+            </ul>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
 
+const STEP_CLASS =
+  'border-field-border bg-surface hover:bg-default grid size-11 flex-none place-items-center rounded-lg border disabled:pointer-events-none disabled:opacity-50';
+
 export function QuestionNavigator({
   section,
   partId,
+  activeQuestion,
   answers,
   flagged,
   onSelect,
@@ -111,9 +199,13 @@ export function QuestionNavigator({
 }: QuestionNavigatorProps) {
   const t = useTranslations('taking');
   const drawer = useOverlayState();
-  const groups = usePartGroups(section, answers);
+  const groups = partGroups(section, answers);
   const current = groups.find((g) => g.id === partId) ?? groups[0];
   const answered = current?.numbers.filter((x) => x.answered).length ?? 0;
+  const currentQuestion =
+    current?.numbers.find((x) => x.from === activeQuestion)?.from ??
+    current?.numbers[0]?.from ??
+    null;
 
   const select = (id: number, from: number) => {
     drawer.close();
@@ -121,13 +213,27 @@ export function QuestionNavigator({
   };
 
   return (
-    <nav className="border-border bg-surface flex items-center gap-3 border-t px-4 py-2">
+    <nav
+      aria-label={t('questions')}
+      className="border-border bg-surface flex flex-none items-center gap-4 border-t px-5 py-2.5"
+    >
+      <button
+        type="button"
+        aria-label={t('prevQuestion')}
+        disabled={!canPrev}
+        onClick={() => onStep(-1)}
+        className={STEP_CLASS}
+      >
+        <LuChevronLeft aria-hidden className="size-5" />
+      </button>
       <div className="hidden min-w-0 flex-1 md:block">
         <NumberGrid
           groups={groups}
           partId={partId}
+          current={currentQuestion}
           flagged={flagged}
           onSelect={onSelect}
+          collapsed
         />
       </div>
       <Button
@@ -136,20 +242,17 @@ export function QuestionNavigator({
         onPress={drawer.open}
       >
         {current &&
-          `${current.title ?? t('partFallback', { n: current.index + 1 })} · ${t('answeredCount', { answered, total: current.numbers.length })}`}
+          `${current.title ?? t('partFallback', { n: current.index + 1 })} · ${t('partProgress', { answered, total: current.numbers.length })}`}
       </Button>
-      <div className="flex shrink-0 gap-2">
-        <Button
-          variant="secondary"
-          isDisabled={!canPrev}
-          onPress={() => onStep(-1)}
-        >
-          {t('prev')}
-        </Button>
-        <Button isDisabled={!canNext} onPress={() => onStep(1)}>
-          {t('next')}
-        </Button>
-      </div>
+      <button
+        type="button"
+        aria-label={t('nextQuestion')}
+        disabled={!canNext}
+        onClick={() => onStep(1)}
+        className={STEP_CLASS}
+      >
+        <LuChevronRight aria-hidden className="size-5" />
+      </button>
       <Drawer.Backdrop isOpen={drawer.isOpen} onOpenChange={drawer.setOpen}>
         <Drawer.Content placement="bottom">
           <Drawer.Dialog>
@@ -162,6 +265,7 @@ export function QuestionNavigator({
               <NumberGrid
                 groups={groups}
                 partId={partId}
+                current={currentQuestion}
                 flagged={flagged}
                 onSelect={select}
               />

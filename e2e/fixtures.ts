@@ -2,8 +2,6 @@ import { test as base } from '@playwright/test';
 
 export type Scenario =
   | 'e2e'
-  | 'e2e-row-error'
-  | 'e2e-row-error-empty'
   | 'e2e-empty'
   | 'e2e-no-profile'
   | 'e2e-error'

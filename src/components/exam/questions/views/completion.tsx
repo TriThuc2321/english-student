@@ -6,6 +6,7 @@ import { useExamGroup } from '../context';
 import {
   Blank,
   fillTemplate,
+  FlagToggle,
   OptionsBox,
   Prompt,
   QRow,
@@ -16,7 +17,7 @@ import { GroupAudio, GroupImage } from './groupMedia';
 const textBlank = (n: number) => <Blank n={n} />;
 
 const Line = ({ children }: { children: ReactNode }) => (
-  <div className="mb-2 leading-9">{children}</div>
+  <div className="mb-2 leading-[3rem]">{children}</div>
 );
 
 // Form / note / flow-chart: one template, every {{n}} is a text box
@@ -32,7 +33,7 @@ export const TemplateView = () => {
           {lines.map((line, i) => (
             <Fragment key={i}>
               {i > 0 && <LuArrowDown className="text-muted my-1 size-4" />}
-              <div className="border-border rounded-field w-full border px-4 py-2 text-center leading-9">
+              <div className="border-border rounded-field w-full border px-4 py-2 text-center leading-[3rem]">
                 {fillTemplate(line, textBlank)}
               </div>
             </Fragment>
@@ -64,7 +65,7 @@ export const TemplateView = () => {
       );
     } else if (line.startsWith('- ')) {
       bullets.push(
-        <li key={i} className="leading-9">
+        <li key={i} className="leading-[3rem]">
           {fillTemplate(line.slice(2), textBlank)}
         </li>,
       );
@@ -99,7 +100,19 @@ export const SentenceView = () => {
     <>
       <GroupAudio />
       {group.questions.map((q) => (
-        <Line key={q.n}>{fillTemplate(q.prompt ?? '', textBlank)}</Line>
+        <div
+          key={q.n}
+          className="mb-2 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2"
+        >
+          <div className="leading-[3rem]">
+            {fillTemplate(q.prompt ?? '', (n) => (
+              <Blank n={n} withFlag={n !== q.n} />
+            ))}
+          </div>
+          <div className="pt-1">
+            <FlagToggle n={q.n} />
+          </div>
+        </div>
       ))}
     </>
   );
@@ -112,7 +125,7 @@ export const SummaryView = () => {
   return (
     <>
       <GroupAudio />
-      <p className="mb-3 leading-10">
+      <p className="mb-3 leading-[3rem]">
         {fillTemplate(template, (n) => (
           <Blank n={n} options={options} />
         ))}

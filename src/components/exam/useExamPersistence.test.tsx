@@ -13,6 +13,7 @@ const base: ExamState = {
   partId: null,
   remaining: { 1: 600 },
   flagged: {},
+  submitted: [],
 };
 
 function setup(enabled = true) {

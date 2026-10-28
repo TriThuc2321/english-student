@@ -7,11 +7,12 @@
     "appName": "MyEnglish",
     "welcome": "Chào mừng trở lại",
     "nav": {
-      "home": "Trang chủ",
       "tests": "Đề thi",
       "openMenu": "Mở menu"
     },
     "userMenu": "Menu tài khoản",
+    "toggleTheme": "Bật/tắt chế độ tối",
+    "switchLocale": "Đổi ngôn ngữ",
     "error": {
       "title": "Đã có lỗi xảy ra",
       "description": "Không thể tải trang này. Vui lòng thử lại.",
@@ -24,14 +25,19 @@
     "email": "Email",
     "password": "Mật khẩu",
     "forgotPassword": "Quên mật khẩu?",
-    "loginTitle": "Đăng nhập vào tài khoản",
     "loginButton": "Đăng nhập",
-    "welcomeBack": "Sẵn sàng làm bài kiểm tra?",
-    "welcomeSubtitle": "Đăng nhập để làm bài kiểm tra tiếng Anh, xem điểm số và theo dõi sự tiến bộ của bạn",
     "continueWithGoogle": "Tiếp tục với Google",
-    "loginFooter": "Sử dụng tài khoản Google mà giáo viên đã đăng ký cho lớp của bạn",
+    "tagline": "Luyện thi",
+    "signInTitle": "Đăng nhập",
+    "signInSubtitle": "Luyện IELTS và TOEIC trong điều kiện thi thật.",
+    "orWithEmail": "hoặc bằng email",
+    "newHere": "Bạn mới đến?",
+    "createAccount": "Tạo tài khoản",
     "errors": {
-      "google_login_failed": "Đăng nhập Google thất bại. Vui lòng thử lại."
+      "google_login_failed": {
+        "title": "Đăng nhập Google thất bại",
+        "description": "Hãy thử lại, hoặc đăng nhập bằng email."
+      }
     }
   },
   "exam": {
@@ -47,9 +53,12 @@
     }
   },
   "tests": {
+    "libraryTitle": "Thư viện đề thi",
+    "subtitle": "Đề IELTS và TOEIC đầy đủ, tính giờ như thi thật.",
     "minutes": "{count} phút",
-    "publishedOn": "Đăng ngày {date}",
-    "title": "Đề thi",
+    "hours": "{count} giờ",
+    "hoursMinutes": "{hours} giờ {minutes} phút",
+    "publishedOn": "Thêm ngày {date}",
     "all": "Tất cả",
     "searchLabel": "Tìm đề thi",
     "searchPlaceholder": "Tìm theo tên hoặc nguồn",
@@ -59,20 +68,15 @@
     "next": "Sau",
     "empty": {
       "title": "Không có đề thi phù hợp",
+      "description": "Thử tên hoặc nguồn khác, hoặc xoá bộ lọc.",
       "clear": "Xoá bộ lọc"
-    }
-  },
-  "home": {
-    "greeting": "Chào {name}",
-    "greetingFallback": "Xin chào",
-    "subtitle": "Chọn kỳ thi và bắt đầu luyện tập.",
-    "seeAll": "Xem tất cả →",
-    "rowError": "Không thể tải",
-    "retry": "Thử lại",
-    "empty": {
+    },
+    "examFilter": "Loại kỳ thi",
+    "noTests": {
       "title": "Chưa có đề thi",
-      "description": "Đề thi mới sẽ xuất hiện ở đây khi được đăng."
-    }
+      "description": "Đề mới được thêm hằng tháng. Hãy quay lại sau."
+    },
+    "sections": "Các phần thi"
   },
   "taking": {
     "flag": "Đánh dấu xem lại",
@@ -107,23 +111,97 @@
     "partFallback": "Phần {n}",
     "questionsRange": "Câu {range}",
     "answeredCount": "Đã trả lời {answered} / {total}",
-    "prev": "Trước",
-    "next": "Tiếp",
+    "navQuestion": "Câu {n}, {status, select, answered {đã trả lời} other {chưa trả lời}}{flagged, select, yes {, đã đánh dấu} other {}}",
     "passage": "Bài đọc",
     "questions": "Câu hỏi",
     "emptyPart": "Phần này chưa có câu hỏi.",
     "timeUp": {
-      "title": "Đã hết giờ",
-      "body": "Thời gian làm phần này đã kết thúc.",
-      "review": "Xem lại đáp án",
-      "nextSection": "Phần tiếp theo"
+      "title": "Hết giờ",
+      "body": "Bài làm đã được lưu và phần {section} đã được nộp.",
+      "answeredOf": "Đã trả lời {answered}/{total} câu",
+      "continueTo": "Tiếp tục phần {section}",
+      "finish": "Hoàn thành",
+      "autoContinue": "Phần {section} sẽ tự động bắt đầu sau {seconds} giây."
     },
     "intro": {
       "start": "Bắt đầu",
       "continue": "Tiếp tục",
       "restart": "Làm lại từ đầu",
       "sections": "Các phần",
-      "questionCount": "{count} câu"
+      "questionCount": "{count} câu",
+      "inProgress": "Đang làm dở",
+      "timeLeft": "còn {time}",
+      "timeLeftIn": "còn {time} cho phần {section}",
+      "flaggedCount": "{count} câu đã đánh dấu",
+      "restartTitle": "Làm lại từ đầu?",
+      "restartBody": "Các câu trả lời, đánh dấu và thời gian còn lại đã lưu của bài này sẽ bị xoá. Không thể hoàn tác.",
+      "restartConfirm": "Xoá và làm lại",
+      "cancel": "Huỷ",
+      "guideTitle": "Trước khi bắt đầu",
+      "guide": {
+        "timer": "Đồng hồ bắt đầu đếm ngược ngay khi bạn bắt đầu, riêng cho từng phần.",
+        "autosave": "Câu trả lời được tự động lưu trên thiết bị này trong lúc làm bài.",
+        "flag": "Đánh dấu câu hỏi bất kỳ để quay lại sau từ bảng điều hướng câu hỏi.",
+        "resume": "Bạn có thể thoát bất cứ lúc nào và tiếp tục sau từ chỗ đã dừng."
+      },
+      "back": "Thư viện đề thi",
+      "summaryMeta": "{sections} phần · {questions} câu",
+      "modeTitle": "Chọn chế độ",
+      "modeFull": "Làm cả bài",
+      "modeFullHint": "Làm tất cả các phần theo thứ tự, tính giờ như thi thật.",
+      "modePractice": "Luyện từng phần",
+      "modePracticeHint": "Chọn một hoặc nhiều phần. Mỗi phần có đồng hồ riêng.",
+      "sectionsInOrder": "Các phần, theo thứ tự",
+      "chooseSections": "Chọn phần",
+      "audioTitle": "Kiểm tra tai nghe",
+      "audioHint": "Phát đoạn mẫu và chỉnh âm lượng vừa nghe.",
+      "playSample": "Phát mẫu",
+      "pauseSample": "Dừng mẫu",
+      "volume": "Âm lượng",
+      "audioOk": "Tôi nghe rõ đoạn mẫu",
+      "youTake": "Bạn sẽ làm",
+      "noSections": "Chưa chọn phần nào",
+      "time": "Thời gian",
+      "inProgressTitle": "Bạn có một lượt làm bài đang dở",
+      "resume": "Làm tiếp",
+      "lockedHint": "Mỗi đề chỉ mở được một lượt làm. Làm lại từ đầu để chọn chế độ khác."
+    },
+    "fullTest": "Toàn bộ bài thi",
+    "practice": "Luyện tập",
+    "submitSection": "Nộp phần thi",
+    "saveStatus": {
+      "saving": "Đang lưu…",
+      "saved": "Đã lưu",
+      "failed": "Chưa lưu được"
+    },
+    "textSize": {
+      "label": "Cỡ chữ",
+      "sm": "Chữ nhỏ hơn",
+      "md": "Cỡ chữ mặc định",
+      "lg": "Chữ lớn hơn"
+    },
+    "timerLabel": "Thời gian còn lại: {minutes} phút {seconds} giây",
+    "partAudio": "Audio {part}",
+    "prevQuestion": "Câu trước",
+    "nextQuestion": "Câu tiếp theo",
+    "partProgress": "{answered}/{total}",
+    "timeWarning": {
+      "title": "Còn {minutes} phút",
+      "body": "Hãy kiểm tra lại câu trả lời. Bài làm được lưu tự động.",
+      "dismiss": "Đóng"
+    },
+    "submit": {
+      "title": "Nộp phần {section}?",
+      "body": "Bạn sẽ không thể quay lại phần này sau khi nộp.",
+      "close": "Đóng và quay lại bài thi",
+      "answered": "Đã trả lời",
+      "unanswered": "Chưa trả lời",
+      "flagged": "Đã đánh dấu",
+      "flaggedTitle": "Đánh dấu để xem lại",
+      "goTo": "Đến câu {n}",
+      "timerRunning": "Đồng hồ vẫn tiếp tục chạy: còn {time}.",
+      "back": "Quay lại bài thi",
+      "confirm": "Nộp phần thi"
     }
   }
 }

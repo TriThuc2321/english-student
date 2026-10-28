@@ -37,10 +37,10 @@ describe('parseCatalogueParams', () => {
 
 describe('buildTestsHref', () => {
   it.each([
-    [{}, '/tests'],
-    [{ page: 1 }, '/tests'],
-    [{ exam: 'TOEIC_LR', q: 'cam', page: 1 }, '/tests?exam=TOEIC_LR&q=cam'],
-    [{ q: 'a b', page: 2 }, '/tests?q=a+b&page=2'],
+    [{}, '/'],
+    [{ page: 1 }, '/'],
+    [{ exam: 'TOEIC_LR', q: 'cam', page: 1 }, '/?exam=TOEIC_LR&q=cam'],
+    [{ q: 'a b', page: 2 }, '/?q=a+b&page=2'],
   ])('builds %o', (input, expected) => {
     expect(buildTestsHref(input as Partial<CatalogueParams>)).toBe(expected);
   });
