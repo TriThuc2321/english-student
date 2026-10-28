@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.me{--background:oklch(97.02% 0.0018 27.74);--foreground:oklch(21.03% 0 27.99);--muted:oklch(52% 0 27.99);--surface:oklch(100% 0 27.99);--surface-2:oklch(95.24% 0 27.99);--surface-3:oklch(93.73% 0 27.99);--default:oklch(96.416% 0.00011 271.152);--field-border:oklch(64% 0.005 270);--border:oklch(84.522% 0.0001 271.152);--separator:oklch(92% 0 27.99);--accent:oklch(54.61% 0.2051 25.98);--accent-fg:oklch(99.11% 0 0);--focus:oklch(58.14% 0.2349 27.99);--success:oklch(73.31% 0.1932 150.75);--success-fg:oklch(15% 0.03 150.75);--warning:oklch(78.48% 0.159 72.51);--warning-fg:oklch(15% 0.03 72.51);--danger:oklch(43.46% 0.1757 27.74);--danger-fg:oklch(98% 0.0194 27.64);--navy:oklch(37.46% 0.142 275.16);--navy-fg:oklch(99.11% 0 0);--navy-soft:oklch(94.5% 0.025 277);--shadow-surface:0 1px 2px 0 rgba(24,24,24,.06);--danger-soft:color-mix(in oklch,var(--danger) 9%,var(--surface));font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--foreground);background:var(--background)}
+.me.dark{--background:oklch(14.5% 0.022 268);--foreground:oklch(95% 0.006 265);--muted:oklch(68% 0.02 265);--surface:oklch(19.5% 0.026 270);--surface-2:oklch(23.5% 0.029 269);--surface-3:oklch(21.5% 0.027 268);--default:oklch(26% 0.028 268);--field-border:oklch(50% 0.03 268);--border:oklch(28% 0.032 268);--separator:oklch(23% 0.026 267);--accent:oklch(56% 0.2 27);--focus:oklch(62% 0.2 25);--success:oklch(68% 0.172 148);--success-fg:oklch(14% 0.04 148);--warning:oklch(76% 0.148 68);--warning-fg:oklch(14% 0.04 68);--danger:oklch(66% 0.17 22);--danger-fg:oklch(15% 0.03 22);--navy:oklch(75% 0.1 277);--navy-fg:oklch(28.46% 0.1073 278.54);--navy-soft:oklch(25% 0.06 277);--shadow-surface:none}
+.me *{box-sizing:border-box}
+.me button{font:inherit;color:inherit;cursor:pointer}
+.me :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.me .ghost:hover{background:var(--default)}
+.me a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="dc-root" style="display: contents"></div>
+<script>window.__DC_PROPS__ = {"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"exam":{"editor":"enum","options":["IELTS","TOEIC"],"default":"IELTS"},"expired":{"editor":"boolean","default":true},"$preview":{"width":1440,"height":1800}};
+window.__DC_TPL__ = ["\n",{"n":"div","a":{"class":"{{rootClass}}","style":"min-height: 100vh;"},"c":["\n  ",{"n":"header","a":{"style":"background: var(--surface); border-bottom: 1px solid var(--border);"},"c":["\n    ",{"n":"div","a":{"style":"max-width: 1200px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px;"},"c":["\n      ",{"n":"a","a":{"href":"Library.html","style":"text-decoration: none; font-size: 20px; line-height: 28px; font-weight: 800; letter-spacing: -0.02em;"},"c":[{"n":"span","a":{"style":"color: var(--accent);"},"c":["My"]},{"n":"span","a":{"style":"color: var(--navy);"},"c":["English"]}]},"\n      ",{"n":"nav","a":{"aria-label":"Main","style":"flex: 1 1 auto; display: flex; gap: 4px; font-size: 14px; font-weight: 500;"},"c":["\n        ",{"n":"a","a":{"href":"Library.html","class":"ghost","style":"padding: 8px 12px; border-radius: 8px; color: var(--foreground); text-decoration: none;"},"c":["Tests"]},"\n        ",{"n":"a","a":{"href":"History.html","aria-current":"page","style":"padding: 8px 12px; border-radius: 8px; background: var(--navy-soft); color: var(--navy); text-decoration: none; font-weight: 600;"},"c":["My attempts"]},"\n      "]},"\n      ",{"n":"a","a":{"href":"Profile.html","aria-label":"Profile: Linh Tran","style":"width: 36px; height: 36px; border-radius: 9999px; background: var(--navy); color: var(--navy-fg); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; text-decoration: none;"},"c":["LT"]},"\n    "]},"\n  "]},"\n\n  ",{"n":"main","a":{"style":"max-width: 1200px; margin: 0 auto; padding: 24px 16px 64px; display: flex; flex-direction: column; gap: 24px;"},"c":["\n    ",{"n":"div","a":{"style":"display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px;"},"c":["\n      ",{"n":"div","a":{"style":"display: flex; flex-direction: column; gap: 8px;"},"c":["\n        ",{"n":"div","a":{"style":"display: flex; flex-wrap: wrap; gap: 6px;"},"c":["\n          ",{"n":"span","a":{"style":"padding: 2px 8px; border-radius: 4px; background: var(--navy-soft); color: var(--navy); font-size: 12px; line-height: 16px; font-weight: 600;"},"c":["{{examType}}"]},"\n          ",{"n":"span","a":{"style":"padding: 2px 8px; border-radius: 4px; background: var(--surface-2); font-size: 12px; line-height: 16px; font-weight: 600;"},"c":["Full test"]},"\n          ",{"n":"sc-if","a":{"value":"{{expired}}","hint-placeholder-val":"{{false}}"},"c":["\n            ",{"n":"span","a":{"style":"display: flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 4px; background: var(--warning); color: var(--warning-fg); font-size: 12px; line-height: 16px; font-weight: 600;"},"c":[{"n":"svg","a":{"width":"12","height":"12","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2.5","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"circle","a":{"cx":"12","cy":"12","r":"10"},"c":[]},{"n":"polyline","a":{"points":"12 6 12 12 16 14"},"c":[]}]},"Expired, auto-submitted"]},"\n          "]},"\n        "]},"\n        ",{"n":"h1","a":{"style":"margin: 0; font-size: 30px; line-height: 36px; font-weight: 700; letter-spacing: -0.01em;"},"c":["{{title}}"]},"\n        ",{"n":"p","a":{"style":"margin: 0; font-size: 14px; color: var(--muted);"},"c":["Submitted 27 Oct 2026, 21:12 · took {{took}}"]},"\n      "]},"\n      ",{"n":"div","a":{"style":"display: flex; flex-wrap: wrap; gap: 8px;"},"c":["\n        ",{"n":"a","a":{"href":"Library.html","class":"ghost","style":"height: 44px; padding: 0 18px; display: flex; align-items: center; border-radius: 8px; border: 1px solid var(--field-border); background: var(--default); color: var(--foreground); font-size: 14px; font-weight: 600; text-decoration: none;"},"c":["Back to library"]},"\n        ",{"n":"a","a":{"href":"Overview.html","style":"height: 44px; padding: 0 18px; display: flex; align-items: center; gap: 8px; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 14px; font-weight: 600; text-decoration: none;"},"c":[{"n":"svg","a":{"width":"16","height":"16","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"path","a":{"d":"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"},"c":[]},{"n":"path","a":{"d":"M3 3v5h5"},"c":[]}]},"Retake test"]},"\n      "]},"\n    "]},"\n\n    ","\n    ",{"n":"section","a":{"aria-label":"Score","style":"display: flex; flex-wrap: wrap; gap: 16px; padding: 24px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-surface);"},"c":["\n      ",{"n":"div","a":{"style":"flex: 1 1 240px; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 8px 24px 8px 8px;"},"c":["\n        ",{"n":"p","a":{"style":"margin: 0; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--navy);"},"c":["{{totalLabel}}"]},"\n        ",{"n":"p","a":{"style":"margin: 0; display: flex; align-items: baseline; gap: 8px;"},"c":[{"n":"span","a":{"style":"font-size: 64px; line-height: 64px; font-weight: 800; letter-spacing: -0.03em;"},"c":["{{total}}"]},{"n":"span","a":{"style":"font-size: 18px; color: var(--muted);"},"c":["{{totalOf}}"]}]},"\n        ",{"n":"p","a":{"style":"margin: 4px 0 0; font-size: 14px; line-height: 20px; color: var(--muted);"},"c":["{{totalNote}}"]},"\n      "]},"\n      ",{"n":"ul","a":{"style":"flex: 999 1 520px; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 12px;"},"c":["\n        ",{"n":"sc-for","a":{"list":"{{skills}}","as":"k","hint-placeholder-count":"4"},"c":["\n          ",{"n":"li","a":{"style":"padding: 16px; border-radius: 12px; background: var(--surface-2); display: flex; flex-direction: column; gap: 4px;"},"c":["\n            ",{"n":"span","a":{"style":"display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600;"},"c":[{"n":"svg","a":{"width":"16","height":"16","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true","style":"color: var(--navy);"},"c":[{"n":"path","a":{"d":"{{k.d1}}"},"c":[]},{"n":"path","a":{"d":"{{k.d2}}"},"c":[]}]},"{{k.name}}"]},"\n            ",{"n":"span","a":{"style":"font-size: 32px; line-height: 40px; font-weight: 700;"},"c":["{{k.score}}"]},"\n            ",{"n":"span","a":{"style":"font-size: 13px; line-height: 18px; color: var(--muted);"},"c":["{{k.raw}}"]},"\n          "]},"\n        "]},"\n      "]},"\n    "]},"\n\n    ",{"n":"div","a":{"style":"display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;"},"c":["\n      ",{"n":"div","a":{"style":"flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 24px;"},"c":["\n        ","\n        ",{"n":"section","a":{"aria-labelledby":"qg-h","style":"padding: 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-surface); display: flex; flex-direction: column; gap: 16px;"},"c":["\n          ",{"n":"div","a":{"style":"display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px;"},"c":["\n            ",{"n":"h2","a":{"id":"qg-h","style":"margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;"},"c":["Your answers · {{gridSection}}"]},"\n            ",{"n":"ul","a":{"style":"list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: var(--muted);"},"c":["\n              ",{"n":"li","a":{"style":"display: flex; align-items: center; gap: 6px;"},"c":[{"n":"span","a":{"aria-hidden":"true","style":"width: 14px; height: 14px; border-radius: 4px; background: var(--success);"},"c":[]},"Correct {{nCorrect}}"]},"\n              ",{"n":"li","a":{"style":"display: flex; align-items: center; gap: 6px;"},"c":[{"n":"span","a":{"aria-hidden":"true","style":"width: 14px; height: 14px; border-radius: 4px; border: 2px solid var(--danger); background: var(--danger-soft);"},"c":[]},"Incorrect {{nWrong}}"]},"\n              ",{"n":"li","a":{"style":"display: flex; align-items: center; gap: 6px;"},"c":[{"n":"span","a":{"aria-hidden":"true","style":"width: 14px; height: 14px; border-radius: 4px; border: 1px dashed var(--field-border);"},"c":[]},"Blank {{nBlank}}"]},"\n            "]},"\n          "]},"\n          ",{"n":"ul","a":{"style":"list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap: 6px;"},"c":["\n            ",{"n":"sc-for","a":{"list":"{{grid}}","as":"g","hint-placeholder-count":"40"},"c":["\n              ",{"n":"li","a":{},"c":[{"n":"button","a":{"type":"button","onClick":"{{g.pick}}","aria-label":"{{g.aria}}","aria-pressed":"{{g.on}}","style":"{{g.style}}"},"c":["{{g.n}}",{"n":"span","a":{"aria-hidden":"true","style":"font-size: 11px; line-height: 1;"},"c":["{{g.glyph}}"]}]}]},"\n            "]},"\n          "]},"\n        "]},"\n\n        ","\n        ",{"n":"section","a":{"aria-labelledby":"bd-h","style":"padding: 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-surface); display: flex; flex-direction: column; gap: 20px;"},"c":["\n          ",{"n":"h2","a":{"id":"bd-h","style":"margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;"},"c":["Where to focus"]},"\n          ",{"n":"div","a":{"style":"display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 24px 32px;"},"c":["\n            ",{"n":"div","a":{"style":"display: flex; flex-direction: column; gap: 12px;"},"c":["\n              ",{"n":"h3","a":{"style":"margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--muted);"},"c":["By part"]},"\n              ",{"n":"sc-for","a":{"list":"{{parts}}","as":"b","hint-placeholder-count":"4"},"c":["\n                ",{"n":"div","a":{"style":"display: flex; flex-direction: column; gap: 6px;"},"c":["\n                  ",{"n":"div","a":{"style":"display: flex; justify-content: space-between; font-size: 14px;"},"c":[{"n":"span","a":{},"c":["{{b.label}}"]},{"n":"span","a":{"style":"font-variant-numeric: tabular-nums;"},"c":[{"n":"b","a":{},"c":["{{b.pct}}%"]}," ",{"n":"span","a":{"style":"color: var(--muted);"},"c":["{{b.raw}}"]}]}]},"\n                  ",{"n":"div","a":{"role":"img","aria-label":"{{b.aria}}","style":"height: 8px; border-radius: 9999px; background: var(--surface-3); overflow: hidden;"},"c":[{"n":"div","a":{"style":"{{b.bar}}"},"c":[]}]},"\n                "]},"\n              "]},"\n            "]},"\n            ",{"n":"div","a":{"style":"display: flex; flex-direction: column; gap: 12px;"},"c":["\n              ",{"n":"h3","a":{"style":"margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--muted);"},"c":["By question type"]},"\n              ",{"n":"sc-for","a":{"list":"{{types}}","as":"b","hint-placeholder-count":"6"},"c":["\n                ",{"n":"div","a":{"style":"display: flex; flex-direction: column; gap: 6px;"},"c":["\n                  ",{"n":"div","a":{"style":"display: flex; justify-content: space-between; gap: 8px; font-size: 14px;"},"c":[{"n":"span","a":{},"c":["{{b.label}}",{"n":"sc-if","a":{"value":"{{b.weak}}","hint-placeholder-val":"{{false}}"},"c":[{"n":"span","a":{"style":"margin-left: 8px; padding: 1px 6px; border-radius: 4px; background: var(--warning); color: var(--warning-fg); font-size: 11px; font-weight: 600;"},"c":["Needs work"]}]}]},{"n":"span","a":{"style":"font-variant-numeric: tabular-nums; white-space: nowrap;"},"c":[{"n":"b","a":{},"c":["{{b.pct}}%"]}," ",{"n":"span","a":{"style":"color: var(--muted);"},"c":["{{b.raw}}"]}]}]},"\n                  ",{"n":"div","a":{"role":"img","aria-label":"{{b.aria}}","style":"height: 8px; border-radius: 9999px; background: var(--surface-3); overflow: hidden;"},"c":[{"n":"div","a":{"style":"{{b.bar}}"},"c":[]}]},"\n                "]},"\n              "]},"\n            "]},"\n          "]},"\n        "]},"\n      "]},"\n\n      ","\n      ",{"n":"aside","a":{"aria-labelledby":"rv-h","style":"flex: 1 1 340px; min-width: 0; position: sticky; top: 16px; padding: 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-surface); display: flex; flex-direction: column; gap: 16px;"},"c":["\n        ",{"n":"div","a":{"style":"display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;"},"c":["\n          ",{"n":"div","a":{},"c":["\n            ",{"n":"p","a":{"style":"margin: 0; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--navy);"},"c":["{{rvType}}"]},"\n            ",{"n":"h2","a":{"id":"rv-h","style":"margin: 2px 0 0; font-size: 20px; line-height: 28px; font-weight: 600;"},"c":["Question {{rvN}}"]},"\n          "]},"\n          ",{"n":"span","a":{"style":"{{rvBadgeStyle}}"},"c":["{{rvStatus}}"]},"\n        "]},"\n        ",{"n":"p","a":{"style":"margin: 0; font-size: 16px; line-height: 24px;"},"c":["{{rvPrompt}}"]},"\n        ",{"n":"div","a":{"style":"padding: 12px 14px; border-radius: 8px; background: var(--surface-2);"},"c":["\n          ",{"n":"p","a":{"style":"margin: 0; font-size: 12px; line-height: 16px; color: var(--muted);"},"c":["Your answer"]},"\n          ",{"n":"p","a":{"style":"margin: 2px 0 0; font-size: 16px; font-weight: 600;"},"c":["{{rvAnswer}}"]},"\n        "]},"\n        ",{"n":"div","a":{"style":"padding: 12px 14px; border-radius: 8px; border: 1px dashed var(--border);"},"c":["\n          ",{"n":"p","a":{"style":"margin: 0; font-size: 12px; line-height: 16px; color: var(--muted);"},"c":["Correct answer"]},"\n          ",{"n":"p","a":{"style":"margin: 2px 0 0; font-size: 14px; color: var(--muted);"},"c":["Coming soon"]},"\n        "]},"\n        ",{"n":"div","a":{"style":"padding: 12px 14px; border-radius: 8px; border: 1px dashed var(--border); min-height: 96px;"},"c":["\n          ",{"n":"p","a":{"style":"margin: 0; font-size: 12px; line-height: 16px; color: var(--muted);"},"c":["Explanation"]},"\n          ",{"n":"p","a":{"style":"margin: 2px 0 0; font-size: 14px; color: var(--muted);"},"c":["Explanations will appear here when they are ready."]},"\n        "]},"\n        ",{"n":"div","a":{"style":"display: flex; justify-content: space-between; gap: 8px;"},"c":["\n          ",{"n":"button","a":{"type":"button","onClick":"{{rvPrev}}","class":"ghost","style":"height: 40px; padding: 0 12px; display: flex; align-items: center; gap: 6px; border-radius: 8px; border: 1px solid var(--field-border); background: var(--surface); font-size: 14px; font-weight: 600;"},"c":[{"n":"svg","a":{"width":"16","height":"16","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"path","a":{"d":"m15 18-6-6 6-6"},"c":[]}]},"Previous"]},"\n          ",{"n":"button","a":{"type":"button","onClick":"{{rvNext}}","class":"ghost","style":"height: 40px; padding: 0 12px; display: flex; align-items: center; gap: 6px; border-radius: 8px; border: 1px solid var(--field-border); background: var(--surface); font-size: 14px; font-weight: 600;"},"c":["Next",{"n":"svg","a":{"width":"16","height":"16","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"path","a":{"d":"m9 18 6-6-6-6"},"c":[]}]}]},"\n        "]},"\n      "]},"\n    "]},"\n  "]},"\n"]},"\n"];</script>
+<script>
+/* Minimal standalone runtime for exported MyEnglish design screens. */
+(function () {
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var TPL = window.__DC_TPL__;
+  var PROPS_DEF = window.__DC_PROPS__ || {};
+  var HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
+  var WHOLE = /^\{\{\s*([^}]+?)\s*\}\}$/;
+
+  function DCLogic(props) { this.props = props || {}; this.state = {}; }
+  DCLogic.prototype.setState = function (p) {
+    var next = typeof p === 'function' ? p(this.state, this.props) : p;
+    this.state = Object.assign({}, this.state, next);
+    schedule();
+  };
+  DCLogic.prototype.forceUpdate = function () { schedule(); };
+  window.DCLogic = DCLogic;
+
+  function lookup(expr, scope) {
+    expr = expr.trim();
+    if (expr === 'true') return true;
+    if (expr === 'false') return false;
+    if (expr === 'null') return null;
+    if (/^-?\d+(\.\d+)?$/.test(expr)) return Number(expr);
+    if (/^(['"]).*\1$/.test(expr)) return expr.slice(1, -1);
+    var parts = expr.split('.');
+    var cur;
+    for (var i = scope.length - 1; i >= 0; i--) {
+      if (scope[i] && Object.prototype.hasOwnProperty.call(scope[i], parts[0])) { cur = scope[i][parts[0]]; break; }
+    }
+    for (var j = 1; j < parts.length && cur != null; j++) cur = cur[parts[j]];
+    return cur;
+  }
+  function resolve(val, scope) {
+    var m = WHOLE.exec(val);
+    if (m) return lookup(m[1], scope);
+    return val.replace(HOLE, function (_, e) { var v = lookup(e, scope); return v == null ? '' : String(v); });
+  }
+
+  var BOOL_PROPS = { checked: 1, disabled: 1, readonly: 1, selected: 1, multiple: 1, required: 1 };
+
+  function build(nodes, parent, scope, inSvg) {
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      if (typeof n === 'string') {
+        parent.appendChild(document.createTextNode(n.indexOf('{{') < 0 ? n : (function () {
+          var v = resolve(n, scope); return v == null ? '' : String(v);
+        })()));
+        continue;
+      }
+      if (n.n === 'sc-for') {
+        var list = resolve(n.a.list || '', scope) || [];
+        var as = n.a.as || 'item';
+        for (var k = 0; k < list.length; k++) {
+          var s = {}; s[as] = list[k]; s.$index = k;
+          build(n.c, parent, scope.concat([s]), inSvg);
+        }
+        continue;
+      }
+      if (n.n === 'sc-if') {
+        if (resolve(n.a.value || '', scope)) build(n.c, parent, scope, inSvg);
+        continue;
+      }
+      var svg = inSvg || n.n === 'svg';
+      var el = svg ? document.createElementNS(SVG_NS, n.n) : document.createElement(n.n);
+      build(n.c, el, scope, svg && n.n !== 'foreignObject');
+      applyAttrs(el, n.a, scope, svg);
+      parent.appendChild(el);
+    }
+  }
+
+  function applyAttrs(el, attrs, scope, svg) {
+    var later = [];
+    for (var name in attrs) {
+      if (/^hint-/.test(name)) continue;
+      var raw = attrs[name];
+      var v = raw.indexOf('{{') < 0 ? raw : resolve(raw, scope);
+      if (/^on[A-Z]/.test(name) || (/^on/.test(name) && typeof v === 'function')) {
+        if (typeof v !== 'function') continue;
+        var ev = name.slice(2).toLowerCase();
+        if (ev === 'change') {
+          var tag = el.tagName.toLowerCase(); var type = (attrs.type || 'text').toLowerCase();
+          if (tag === 'textarea' || (tag === 'input' && !/^(checkbox|radio|range|file)$/.test(type))) ev = 'input';
+        }
+        el.addEventListener(ev, v);
+        continue;
+      }
+      var lname = name.toLowerCase();
+      if (!svg && BOOL_PROPS[lname]) {
+        var on = v === '' || v === true || v === 'true' || v === lname;
+        if (lname === 'readonly') el.readOnly = on; else el[lname] = on;
+        if (on) el.setAttribute(lname, '');
+        continue;
+      }
+      if (!svg && lname === 'value') { later.push(v == null ? '' : String(v)); continue; }
+      if (v === false || v == null) continue;
+      el.setAttribute(name === 'className' ? 'class' : name === 'htmlFor' ? 'for' : name, v === true ? 'true' : String(v));
+    }
+    if (later.length) {
+      var val = later[0];
+      if (el.tagName === 'TEXTAREA') el.value = val; else { el.setAttribute('value', val); el.value = val; }
+    }
+  }
+
+  var root, comp, pending = false;
+  function allEls() { return root.getElementsByTagName('*'); }
+  function render() {
+    pending = false;
+    var els = allEls(), scrolls = [], focusIdx = -1, sel = null;
+    for (var i = 0; i < els.length; i++) {
+      if (els[i].scrollTop || els[i].scrollLeft) scrolls.push([i, els[i].scrollTop, els[i].scrollLeft]);
+      if (els[i] === document.activeElement) {
+        focusIdx = i;
+        try { sel = [els[i].selectionStart, els[i].selectionEnd]; } catch (e) { sel = null; }
+      }
+    }
+    var wy = window.scrollY;
+    var vals = comp.renderVals ? comp.renderVals() : {};
+    var frag = document.createDocumentFragment();
+    build(TPL, frag, [vals], false);
+    root.replaceChildren(frag);
+    els = allEls();
+    scrolls.forEach(function (s) { if (els[s[0]]) { els[s[0]].scrollTop = s[1]; els[s[0]].scrollLeft = s[2]; } });
+    if (focusIdx >= 0 && els[focusIdx]) {
+      els[focusIdx].focus({ preventScroll: true });
+      if (sel && sel[0] != null) { try { els[focusIdx].setSelectionRange(sel[0], sel[1]); } catch (e) {} }
+    }
+    window.scrollTo(0, wy);
+  }
+  function schedule() { if (!pending && root) { pending = true; Promise.resolve().then(render); } }
+
+  function tweaks(props) {
+    var keys = Object.keys(PROPS_DEF).filter(function (k) { return k[0] !== '$' && PROPS_DEF[k] && PROPS_DEF[k].editor; });
+    if (!keys.length) return;
+    var box = document.createElement('details');
+    box.id = 'dc-tweaks';
+    box.innerHTML = '<summary>Preview options</summary>';
+    var body = document.createElement('div');
+    keys.forEach(function (k) {
+      var d = PROPS_DEF[k];
+      var row = document.createElement('label');
+      var span = document.createElement('span'); span.textContent = k; row.appendChild(span);
+      var input;
+      if (d.editor === 'enum') {
+        input = document.createElement('select');
+        (d.options || []).forEach(function (o) { var op = document.createElement('option'); op.value = o; op.textContent = o; input.appendChild(op); });
+        input.value = props[k];
+        input.addEventListener('change', function () { props[k] = input.value; schedule(); });
+      } else if (d.editor === 'boolean') {
+        input = document.createElement('input'); input.type = 'checkbox'; input.checked = !!props[k];
+        input.addEventListener('change', function () { props[k] = input.checked; schedule(); });
+      } else if (d.editor === 'range' || d.editor === 'int' || d.editor === 'float') {
+        input = document.createElement('input'); input.type = 'range';
+        input.min = d.min != null ? d.min : 0; input.max = d.max != null ? d.max : 100; input.step = d.step || 1; input.value = props[k];
+        input.addEventListener('input', function () { props[k] = Number(input.value); schedule(); });
+      } else {
+        input = document.createElement('input'); input.value = props[k] == null ? '' : props[k];
+        input.addEventListener('input', function () { props[k] = input.value; schedule(); });
+      }
+      row.appendChild(input); body.appendChild(row);
+    });
+    box.appendChild(body);
+    var st = document.createElement('style');
+    st.textContent = '#dc-tweaks{position:fixed;left:12px;bottom:84px;opacity:.92;z-index:99999;font:13px/1.4 system-ui,sans-serif;background:#fff;color:#222;border:1px solid #ccc;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-width:260px}#dc-tweaks summary{cursor:pointer;padding:8px 12px;font-weight:600}#dc-tweaks div{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}#dc-tweaks label{display:flex;justify-content:space-between;align-items:center;gap:12px}#dc-tweaks select,#dc-tweaks input{font:inherit}@media print{#dc-tweaks{display:none}}';
+    document.head.appendChild(st);
+    document.body.appendChild(box);
+  }
+
+  window.__dcMount = function (Component) {
+    var props = {};
+    Object.keys(PROPS_DEF).forEach(function (k) { if (k[0] !== '$' && PROPS_DEF[k] && 'default' in PROPS_DEF[k]) props[k] = PROPS_DEF[k].default; });
+    root = document.getElementById('dc-root');
+    comp = new Component(props);
+    comp.props = props;
+    render();
+    if (comp.componentDidMount) comp.componentDidMount();
+    tweaks(props);
+  };
+})();
+
+</script>
+<script>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sel: 14 }; }
+  renderVals() {
+    const toeic = (this.props.exam ?? 'IELTS') === 'TOEIC';
+    const ICON = {
+      Listening: ['M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3', ''],
+      Reading: ['M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z', 'M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'],
+      Writing: ['M12 20h9', 'M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z'],
+      Speaking: ['M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z', 'M19 10v2a7 7 0 0 1-14 0v-2']
+    };
+    const sk = (name, score, raw) => ({ name, score, raw, d1: ICON[name][0], d2: ICON[name][1] });
+    const skills = toeic
+      ? [sk('Listening', '395', '82 / 100 correct'), sk('Reading', '360', '74 / 100 correct')]
+      : [sk('Listening', '7.0', '32 / 40 correct'), sk('Reading', '6.5', '28 / 40 correct'), sk('Writing', '—', 'Grading pending'), sk('Speaking', '—', 'Grading pending')];
+    // question results: c correct, x incorrect, b blank
+    const pattern = 'ccxccbcxcccxcxccccxcxccbccxcccxcccxccccb';
+    const n0 = toeic ? 101 : 1;
+    const s0 = this.state.sel;
+    const sel = toeic && s0 < 101 ? s0 + 100 : (!toeic && s0 > 100 ? s0 - 100 : s0);
+    const grid = pattern.split('').map((r, i) => {
+      const n = n0 + i; const on = sel === n;
+      const base = 'width: 100%; height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 8px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; ';
+      const st = r === 'c' ? 'background: var(--success); color: var(--success-fg); border: 1px solid var(--success);'
+        : r === 'x' ? 'background: var(--danger-soft); color: var(--foreground); border: 2px solid var(--danger);'
+        : 'background: transparent; color: var(--muted); border: 1px dashed var(--field-border);';
+      return { n, on, glyph: r === 'c' ? '✓' : r === 'x' ? '✗' : '–',
+        aria: 'Question ' + n + ', ' + (r === 'c' ? 'correct' : r === 'x' ? 'incorrect' : 'blank'),
+        pick: () => this.setState({ sel: n }),
+        style: base + st + (on ? ' box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--foreground);' : '') };
+    });
+    const count = (ch) => pattern.split('').filter((r) => r === ch).length;
+    const bar = (p) => ({ pct: p, bar: 'height: 100%; width: ' + p + '%; border-radius: 9999px; background: var(--navy);' });
+    const mk = (label, a, b, weak) => ({ label, raw: a + '/' + b, aria: label + ': ' + a + ' of ' + b + ' correct', weak: !!weak, ...bar(Math.round(a / b * 100)) });
+    const parts = toeic
+      ? [mk('Part 5 · Incomplete sentences', 24, 30), mk('Part 6 · Text completion', 11, 16), mk('Part 7 · Single passages', 21, 29), mk('Part 7 · Multiple passages', 18, 25)]
+      : [mk('Passage 1', 11, 13), mk('Passage 2', 9, 13), mk('Passage 3', 8, 14)];
+    const types = toeic
+      ? [mk('Grammar', 18, 20), mk('Vocabulary', 6, 10, true), mk('Text completion', 11, 16), mk('Reading comprehension', 39, 54)]
+      : [mk('Multiple choice', 8, 10), mk('True / False / Not given', 7, 12, true), mk('Matching headings', 3, 5, true), mk('Sentence completion', 5, 6), mk('Summary completion', 5, 7)];
+    const r = pattern[sel - n0] || 'b';
+    const prompts = { 14: 'Why did the writer visit the city?' };
+    return {
+      rootClass: (this.props.theme ?? 'light') === 'dark' ? 'me dark' : 'me',
+      expired: this.props.expired ?? true,
+      examType: toeic ? 'TOEIC L&R' : 'IELTS Academic',
+      title: toeic ? 'ETS TOEIC 2024 – Test 3' : 'Cambridge IELTS 18 – Practice Test 1',
+      took: toeic ? '2h 0m' : '2h 30m',
+      totalLabel: toeic ? 'Total score' : 'Overall band (estimated)',
+      total: toeic ? '755' : '6.5', totalOf: toeic ? '/ 990' : '/ 9',
+      totalNote: toeic ? 'Listening 395 + Reading 360' : 'Based on Listening and Reading. Writing and Speaking are graded later.',
+      skills, grid, gridSection: toeic ? 'Reading 101–140' : 'Reading',
+      nCorrect: count('c'), nWrong: count('x'), nBlank: count('b'), parts, types,
+      rvN: sel, rvType: toeic ? 'Incomplete sentences' : (sel <= 13 ? 'Matching headings' : 'Multiple choice'),
+      rvPrompt: prompts[sel] || 'Question text from the test appears here.',
+      rvAnswer: r === 'b' ? 'No answer' : r === 'x' ? 'B · to study' : 'A · for work',
+      rvStatus: r === 'c' ? '✓ Correct' : r === 'x' ? '✗ Incorrect' : '– Blank',
+      rvBadgeStyle: 'flex: none; padding: 4px 10px; border-radius: 4px; font-size: 13px; font-weight: 600; ' +
+        (r === 'c' ? 'background: var(--success); color: var(--success-fg);' : r === 'x' ? 'background: var(--danger); color: var(--danger-fg);' : 'background: var(--surface-2); color: var(--muted);'),
+      rvPrev: () => this.setState({ sel: Math.max(n0, sel - 1) }),
+      rvNext: () => this.setState({ sel: Math.min(n0 + 39, sel + 1) })
+    };
+  }
+}
+window.__dcMount(Component);
+</script>
+</body>
+</html>
