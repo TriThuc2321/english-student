@@ -69,7 +69,7 @@ type TestOverviewProps = {
 const SAMPLE_AUDIO_SRC = '/audio/sample.mp3';
 
 const CARD =
-  'bg-surface border-border shadow-surface flex flex-col rounded-xl border p-6';
+  'bg-surface border-separator shadow-surface flex flex-col rounded-xl border p-6';
 
 const subscribe = () => () => {};
 
@@ -233,7 +233,7 @@ export default function TestOverview({
                     'rounded-[10px] border',
                     mode === value
                       ? 'border-accent bg-accent-soft'
-                      : 'border-field-border bg-surface',
+                      : 'border-border bg-surface',
                   )}
                 >
                   <Radio.Content className="flex w-full items-start gap-3 p-4">

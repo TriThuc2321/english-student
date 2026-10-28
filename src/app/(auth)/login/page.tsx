@@ -31,7 +31,7 @@ export default async function Page({ searchParams }: PageProps<'/login'>) {
         <span className="text-muted text-sm">{t('tagline')}</span>
       </div>
 
-      <main className="bg-surface border-border shadow-surface flex w-full max-w-[420px] flex-col gap-5 rounded-4xl border p-8">
+      <main className="bg-surface border-separator shadow-surface flex w-full max-w-[420px] flex-col gap-5 rounded-4xl border p-8">
         <div>
           <h1 className="text-foreground text-2xl font-semibold">
             {t('signInTitle')}

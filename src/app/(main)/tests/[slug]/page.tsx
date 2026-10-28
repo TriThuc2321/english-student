@@ -133,7 +133,7 @@ export default async function TestIntroPage({
         rules={
           <section
             aria-labelledby="rules-heading"
-            className="bg-surface border-border shadow-surface rounded-xl border p-6"
+            className="bg-surface border-separator shadow-surface rounded-xl border p-6"
           >
             <h2 id="rules-heading" className="mb-3 text-xl font-semibold">
               {t('taking.intro.guideTitle')}

@@ -66,7 +66,7 @@ export default async function Home({ searchParams }: PageProps<'/'>) {
                 'flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold transition-colors',
                 active
                   ? 'border-brand-navy bg-brand-navy text-brand-navy-foreground'
-                  : 'border-field-border bg-surface hover:bg-default',
+                  : 'border-separator bg-surface text-foreground hover:border-border hover:bg-surface-secondary',
               )}
             >
               {exam ? t(`exam.${exam}`) : t('tests.all')}

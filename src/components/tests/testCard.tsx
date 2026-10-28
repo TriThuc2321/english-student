@@ -23,7 +23,7 @@ export default function TestCard({ test }: TestCardProps) {
   return (
     <Link
       href={ROUTES.test(test.slug)}
-      className="bg-surface border-border shadow-surface hover:border-field-border focus-visible:ring-focus flex h-full flex-col gap-3.5 rounded-xl border p-5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+      className="bg-surface border-separator shadow-surface hover:border-border focus-visible:ring-focus flex h-full flex-col gap-3.5 rounded-xl border p-5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
     >
       <span className="bg-brand-navy-soft text-brand-navy self-start rounded px-2 py-0.5 text-xs font-semibold">
         {t(`exam.${test.examType}`)}

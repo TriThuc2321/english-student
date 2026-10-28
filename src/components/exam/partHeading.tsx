@@ -41,7 +41,7 @@ export function PartAudioCard({ part, index }: PartHeadingProps) {
     <div className="bg-background sticky top-0 z-10 px-4 pt-5 pb-3 sm:px-6">
       <section
         aria-label={t('partAudio', { part: name })}
-        className="border-border bg-surface shadow-surface mx-auto flex max-w-[920px] flex-wrap items-center gap-x-5 gap-y-3 rounded-xl border px-5 py-3.5"
+        className="border-separator bg-surface shadow-surface mx-auto flex max-w-[920px] flex-wrap items-center gap-x-5 gap-y-3 rounded-xl border px-5 py-3.5"
       >
         <span
           aria-hidden
