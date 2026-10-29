@@ -16,7 +16,8 @@ type SearchParams = Record<string, string | string[] | undefined>;
 const first = (value: string | string[] | undefined) =>
   Array.isArray(value) ? value[0] : value;
 
-function parsePage(value: string | undefined) {
+export function parsePage(raw: string | string[] | undefined) {
+  const value = first(raw);
   if (!value || !/^\d+$/.test(value)) return 1;
   return Math.max(Number(value), 1);
 }
@@ -26,7 +27,7 @@ export function parseCatalogueParams(sp: SearchParams): CatalogueParams {
   return {
     exam: isExamType(exam) ? exam : undefined,
     q: (first(sp.q) ?? '').trim().slice(0, SEARCH_MAX_LENGTH),
-    page: parsePage(first(sp.page)),
+    page: parsePage(sp.page),
   };
 }
 

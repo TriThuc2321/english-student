@@ -8,7 +8,8 @@
     "welcome": "Welcome back",
     "nav": {
       "tests": "Tests",
-      "openMenu": "Open menu"
+      "openMenu": "Open menu",
+      "attempts": "My attempts"
     },
     "userMenu": "Account menu",
     "toggleTheme": "Toggle dark mode",
@@ -17,6 +18,11 @@
       "title": "Something went wrong",
       "description": "We couldn't load this page. Please try again.",
       "retry": "Try again"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous",
+      "next": "Next"
     }
   },
   "auth": {
@@ -63,9 +69,6 @@
     "searchLabel": "Search tests",
     "searchPlaceholder": "Search by title or source",
     "summary": "Showing {from}–{to} of {total}",
-    "pagination": "Pagination",
-    "previous": "Previous",
-    "next": "Next",
     "empty": {
       "title": "No matching tests",
       "description": "Try another title or source, or clear the filters.",
@@ -297,5 +300,47 @@
     "transcripts": "Transcripts",
     "transcriptN": "Transcript {n}",
     "emptySection": "This section has no questions."
+  },
+  "attempts": {
+    "title": "My attempts",
+    "subtitle": "Every test you've taken and how you scored.",
+    "tableTitle": "All attempts",
+    "summary": "Showing {from}–{to} of {total}",
+    "columns": {
+      "test": "Test",
+      "mode": "Mode",
+      "started": "Started",
+      "status": "Status",
+      "score": "Score",
+      "action": "Action"
+    },
+    "mode": {
+      "FULL": "Full",
+      "SECTION": "Sections"
+    },
+    "status": {
+      "IN_PROGRESS": "In progress",
+      "SUBMITTED": "Submitted",
+      "GRADED": "Graded",
+      "EXPIRED": "Expired"
+    },
+    "score": {
+      "none": "—",
+      "pending": "Awaiting grading",
+      "outOf": "{score} / {max}"
+    },
+    "skillShort": {
+      "LISTENING": "L",
+      "READING": "R",
+      "WRITING": "W",
+      "SPEAKING": "S"
+    },
+    "resume": "Resume",
+    "viewResults": "View results",
+    "empty": {
+      "title": "No attempts yet",
+      "description": "Pick a test from the library to get started.",
+      "browse": "Browse tests"
+    }
   }
 }

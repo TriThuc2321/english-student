@@ -8,3 +8,6 @@ dayjs.extend(localizedFormat);
 
 export const formatDate = (iso: string, locale: Locale) =>
   dayjs(iso).locale(locale).format('LL');
+
+export const formatDateTime = (iso: string, locale: Locale) =>
+  dayjs(iso).locale(locale).format('lll');

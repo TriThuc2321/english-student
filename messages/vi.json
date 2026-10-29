@@ -8,7 +8,8 @@
     "welcome": "Chào mừng trở lại",
     "nav": {
       "tests": "Đề thi",
-      "openMenu": "Mở menu"
+      "openMenu": "Mở menu",
+      "attempts": "Bài đã làm"
     },
     "userMenu": "Menu tài khoản",
     "toggleTheme": "Bật/tắt chế độ tối",
@@ -17,6 +18,11 @@
       "title": "Đã có lỗi xảy ra",
       "description": "Không thể tải trang này. Vui lòng thử lại.",
       "retry": "Thử lại"
+    },
+    "pagination": {
+      "label": "Phân trang",
+      "previous": "Trước",
+      "next": "Sau"
     }
   },
   "auth": {
@@ -63,9 +69,6 @@
     "searchLabel": "Tìm đề thi",
     "searchPlaceholder": "Tìm theo tên hoặc nguồn",
     "summary": "Hiển thị {from}–{to} trên {total}",
-    "pagination": "Phân trang",
-    "previous": "Trước",
-    "next": "Sau",
     "empty": {
       "title": "Không có đề thi phù hợp",
       "description": "Thử tên hoặc nguồn khác, hoặc xoá bộ lọc.",
@@ -297,5 +300,47 @@
     "transcripts": "Transcript",
     "transcriptN": "Transcript {n}",
     "emptySection": "Phần thi này không có câu hỏi."
+  },
+  "attempts": {
+    "title": "Bài đã làm",
+    "subtitle": "Mọi bài thi bạn đã làm và điểm số của từng bài.",
+    "tableTitle": "Tất cả bài làm",
+    "summary": "Hiển thị {from}–{to} trong {total}",
+    "columns": {
+      "test": "Đề thi",
+      "mode": "Hình thức",
+      "started": "Bắt đầu",
+      "status": "Trạng thái",
+      "score": "Điểm",
+      "action": "Thao tác"
+    },
+    "mode": {
+      "FULL": "Toàn bộ",
+      "SECTION": "Từng phần"
+    },
+    "status": {
+      "IN_PROGRESS": "Đang làm",
+      "SUBMITTED": "Đã nộp",
+      "GRADED": "Đã chấm",
+      "EXPIRED": "Hết giờ"
+    },
+    "score": {
+      "none": "—",
+      "pending": "Đang chờ chấm",
+      "outOf": "{score} / {max}"
+    },
+    "skillShort": {
+      "LISTENING": "L",
+      "READING": "R",
+      "WRITING": "W",
+      "SPEAKING": "S"
+    },
+    "resume": "Làm tiếp",
+    "viewResults": "Xem kết quả",
+    "empty": {
+      "title": "Chưa có bài làm nào",
+      "description": "Chọn một đề trong thư viện để bắt đầu.",
+      "browse": "Xem đề thi"
+    }
   }
 }

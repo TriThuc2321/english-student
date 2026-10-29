@@ -413,18 +413,46 @@ const toAttemptDto = (attempt: MockAttempt) => ({
   })),
 });
 
+const toListItemDto = (attempt: MockAttempt) => ({
+  ...attemptBase(attempt),
+  test: {
+    id: attempt.test.id,
+    slug: attempt.test.slug,
+    title: attempt.test.title,
+    examType: attempt.test.examType,
+  },
+});
+
+function toContentDto(attempt: MockAttempt) {
+  const detail = toDetail(attempt.test);
+  const sectionIds = attempt.sections.map((s) => s.sectionId);
+  return {
+    ...detail,
+    testSections: detail.testSections.filter((s) => sectionIds.includes(s.id)),
+  };
+}
+
+function listAttempts(
+  res: ServerResponse,
+  searchParams: URLSearchParams,
+  token: string,
+) {
+  const page = Number(searchParams.get('page') ?? 1);
+  const take = Number(searchParams.get('take') ?? 10);
+  const status = searchParams.get('status');
+  const mine = [...attempts.values()]
+    .filter((a) => a.token === token && (!status || a.status === status))
+    .sort((a, b) => Date.parse(b.startedAt) - Date.parse(a.startedAt));
+  return send(res, 200, {
+    data: mine.slice((page - 1) * take, page * take).map(toListItemDto),
+    meta: { page, take, totalCount: mine.length },
+  });
+}
+
 function toResultDto(attempt: MockAttempt) {
   const sectionIds = attempt.sections.map((s) => s.sectionId);
   return {
-    attempt: {
-      ...attemptBase(attempt),
-      test: {
-        id: attempt.test.id,
-        slug: attempt.test.slug,
-        title: attempt.test.title,
-        examType: attempt.test.examType,
-      },
-    },
+    attempt: toListItemDto(attempt),
     questions: testQuestions(attempt.test)
       .filter((q) => sectionIds.includes(q.sectionId))
       .map((q) => {
@@ -492,9 +520,14 @@ async function handleAttempts(
   req: IncomingMessage,
   res: ServerResponse,
   pathname: string,
+  searchParams: URLSearchParams,
   token: string,
 ) {
   const now = new Date().toISOString();
+
+  if (pathname === '/api/student/attempts' && req.method === 'GET') {
+    return listAttempts(res, searchParams, token);
+  }
 
   if (pathname === '/api/student/attempts' && req.method === 'POST') {
     const body = (await readJson(req)) as {
@@ -516,7 +549,7 @@ async function handleAttempts(
   }
 
   const match = pathname.match(
-    /^\/api\/student\/attempts\/([^/]+)(\/result|\/answers|\/submit|\/sections\/(\d+)\/submit)?$/,
+    /^\/api\/student\/attempts\/([^/]+)(\/result|\/content|\/answers|\/submit|\/sections\/(\d+)\/submit)?$/,
   );
   const attempt = match && attempts.get(match[1]);
   if (!attempt || attempt.token !== token) {
@@ -532,6 +565,9 @@ async function handleAttempts(
       return conflict(res, 'ATTEMPT_NOT_GRADED');
     }
     return send(res, 200, toResultDto(attempt));
+  }
+  if (req.method === 'GET' && action === '/content') {
+    return send(res, 200, toContentDto(attempt));
   }
   if (attempt.status !== 'IN_PROGRESS') {
     return conflict(res, 'ATTEMPT_CLOSED');
@@ -592,7 +628,7 @@ const server = createServer((req, res) => {
   }
 
   if (pathname.startsWith('/api/student/attempts')) {
-    void handleAttempts(req, res, pathname, token);
+    void handleAttempts(req, res, pathname, searchParams, token);
     return;
   }
 

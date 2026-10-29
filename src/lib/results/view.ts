@@ -339,25 +339,31 @@ export function ieltsBand(bands: number[]): number {
   return whole + 1;
 }
 
-function totalScore(
-  examType: ExamType,
-  attempt: AttemptListItem,
-  skills: SkillScore[],
-): TotalScore | null {
-  const { overallScore } = attempt;
-  if (examType === 'TOEIC_LR' || examType === 'TOEIC_SW') {
-    return overallScore === null
-      ? null
-      : { kind: 'toeic', score: overallScore, max: 990, parts: skills };
-  }
+const isToeic = (examType: ExamType) =>
+  examType === 'TOEIC_LR' || examType === 'TOEIC_SW';
+
+// The headline score of an attempt: TOEIC's graded total, or an estimated IELTS band.
+export function overallScore(attempt: AttemptListItem): number | null {
+  if (isToeic(attempt.test.examType)) return attempt.overallScore;
   // Practice sessions are not a whole exam, so they get no overall band.
   if (attempt.mode !== 'FULL') return null;
-  const bands = skills
+  const bands = attempt.sections
     .filter((s) => s.skill === 'LISTENING' || s.skill === 'READING')
     .map((s) => s.scaledScore);
   // An estimate needs both objective skills; a single section already shows its own band.
   if (bands.length < 2 || bands.some((b) => b === null)) return null;
-  return { kind: 'ielts', band: ieltsBand(bands as number[]), max: 9 };
+  return ieltsBand(bands as number[]);
+}
+
+function totalScore(
+  attempt: AttemptListItem,
+  skills: SkillScore[],
+): TotalScore | null {
+  const score = overallScore(attempt);
+  if (score === null) return null;
+  return isToeic(attempt.test.examType)
+    ? { kind: 'toeic', score, max: 990, parts: skills }
+    : { kind: 'ielts', band: score, max: 9 };
 }
 
 export function buildResultView(
@@ -391,7 +397,7 @@ export function buildResultView(
   return {
     examType: attempt.test.examType,
     skills,
-    total: totalScore(attempt.test.examType, attempt, skills),
+    total: totalScore(attempt, skills),
     sections: sections.map((s) =>
       sectionResult(
         s.sectionId,

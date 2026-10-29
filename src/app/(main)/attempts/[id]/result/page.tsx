@@ -6,8 +6,7 @@ import { ResultHeader } from '@/components/results/resultHeader';
 import { ResultReview } from '@/components/results/resultReview';
 import { ScoreSummary } from '@/components/results/scoreSummary';
 import { ROUTES } from '@/constants/routes';
-import { getAttemptResult } from '@/lib/api/attempts';
-import { getStudentTest } from '@/lib/api/student-tests';
+import { getAttemptContent, getAttemptResult } from '@/lib/api/attempts';
 import { buildResultView } from '@/lib/results/view';
 
 export async function generateMetadata({
@@ -33,7 +32,7 @@ export default async function AttemptResultPage({
   }
 
   const { result } = lookup;
-  const test = await getStudentTest(result.attempt.test.slug);
+  const test = await getAttemptContent(id);
   if (!test) notFound();
 
   const view = buildResultView(result, test);
