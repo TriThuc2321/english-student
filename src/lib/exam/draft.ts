@@ -58,6 +58,19 @@ export function loadExamDraft(slug: string): ExamDraft | null {
   }
 }
 
+// Drafts are keyed by slug only, so a practice draft must not leak into a full attempt or the reverse.
+export function draftMatchesSections(
+  draft: ExamDraft,
+  sectionIds: number[] | null,
+): boolean {
+  const saved = draft.sectionIds ?? null;
+  if (saved === null || sectionIds === null) return saved === sectionIds;
+  if (saved.length !== sectionIds.length) return false;
+  const a = [...saved].sort((x, y) => x - y);
+  const b = [...sectionIds].sort((x, y) => x - y);
+  return a.every((id, i) => id === b[i]);
+}
+
 export function saveExamDraft(
   slug: string,
   state: ExamState,

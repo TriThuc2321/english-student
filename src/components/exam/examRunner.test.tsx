@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import type { ExamState } from '@/lib/exam/reducer';
+import type { ExamDraft } from '@/lib/exam/draft';
 
 import { LOCALE } from '@/i18n';
 import { makeTest } from '@/test/fixtures/student-test';
@@ -23,7 +23,7 @@ const currentStep = () =>
     .getByRole('list', { name: 'Sections' })
     .querySelector('[aria-current="step"]');
 
-function saveDraft(overrides: Partial<ExamState>) {
+function saveDraft(overrides: Partial<ExamDraft>) {
   localStorage.setItem(
     'exam-draft:practice-test-1',
     JSON.stringify({
@@ -64,6 +64,18 @@ describe('ExamRunner', () => {
     saveDraft({ sectionId: 31, partId: 310 });
     renderWithIntl(<ExamRunner test={test} />);
     expect(screen.getAllByText('The history of tea').length).toBeGreaterThan(0);
+  });
+
+  it('ignores a practice draft when starting the full test', () => {
+    saveDraft({
+      sectionId: 31,
+      partId: 310,
+      submitted: [30],
+      sectionIds: [30],
+    });
+    renderWithIntl(<ExamRunner test={test} />);
+    expect(currentStep()).toHaveTextContent('Listening');
+    expect(screen.getByLabelText('Answer 1')).toBeEnabled();
   });
 
   it('keeps Next within the current section', async () => {

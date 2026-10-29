@@ -4,6 +4,7 @@ import type { ExamState } from './reducer';
 
 import {
   clearExamDraft,
+  draftMatchesSections,
   hasExamDraft,
   loadExamDraft,
   saveExamDraft,
@@ -31,6 +32,16 @@ describe('exam draft', () => {
   it('round-trips the practice section selection', () => {
     saveExamDraft('x', state, [1, 3]);
     expect(loadExamDraft('x')).toEqual({ ...state, sectionIds: [1, 3] });
+  });
+
+  it('matches drafts to the same section selection only', () => {
+    expect(draftMatchesSections(state, null)).toBe(true);
+    expect(draftMatchesSections(state, [1])).toBe(false);
+    const practice = { ...state, sectionIds: [3, 1] };
+    expect(draftMatchesSections(practice, [1, 3])).toBe(true);
+    expect(draftMatchesSections(practice, [1])).toBe(false);
+    expect(draftMatchesSections(practice, [1, 2])).toBe(false);
+    expect(draftMatchesSections(practice, null)).toBe(false);
   });
 
   it('returns null for malformed section ids', () => {

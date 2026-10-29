@@ -9,7 +9,7 @@ import type { Answer } from '@/lib/exam/structure';
 import type { StudentTestDetail } from '@/types/student-test';
 
 import { ROUTES } from '@/constants/routes';
-import { loadExamDraft } from '@/lib/exam/draft';
+import { draftMatchesSections, loadExamDraft } from '@/lib/exam/draft';
 import {
   createInitialState,
   examReducer,
@@ -53,9 +53,10 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
       if (a.type === 'hydrate') {
         return {
           ...s,
-          exam: a.draft
-            ? examReducer(test, s.exam, { type: 'restore', state: a.draft })
-            : s.exam,
+          exam:
+            a.draft && draftMatchesSections(a.draft, sectionIds)
+              ? examReducer(test, s.exam, { type: 'restore', state: a.draft })
+              : s.exam,
           restored: true,
         };
       }
