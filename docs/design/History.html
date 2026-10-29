@@ -1,237 +1,1340 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My attempts</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<style>
-body{margin:0}
-.me{--background:oklch(97.02% 0.0018 27.74);--foreground:oklch(21.03% 0 27.99);--muted:oklch(52% 0 27.99);--surface:oklch(100% 0 27.99);--surface-2:oklch(95.24% 0 27.99);--surface-3:oklch(93.73% 0 27.99);--default:oklch(96.416% 0.00011 271.152);--field-border:oklch(80% 0.004 270);--border:oklch(91% 0.002 271);--separator:oklch(94.8% 0 27.99);--accent:oklch(54.61% 0.2051 25.98);--accent-fg:oklch(99.11% 0 0);--focus:oklch(58.14% 0.2349 27.99);--success:oklch(73.31% 0.1932 150.75);--success-fg:oklch(15% 0.03 150.75);--warning:oklch(78.48% 0.159 72.51);--warning-fg:oklch(15% 0.03 72.51);--navy:oklch(37.46% 0.142 275.16);--navy-fg:oklch(99.11% 0 0);--navy-soft:oklch(94.5% 0.025 277);--shadow-surface:0 1px 2px 0 rgba(24,24,24,.06);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--foreground);background:var(--background)}
-.me.dark{--background:oklch(14.5% 0.022 268);--foreground:oklch(95% 0.006 265);--muted:oklch(68% 0.02 265);--surface:oklch(19.5% 0.026 270);--surface-2:oklch(23.5% 0.029 269);--surface-3:oklch(21.5% 0.027 268);--default:oklch(26% 0.028 268);--field-border:oklch(50% 0.03 268);--border:oklch(28% 0.032 268);--separator:oklch(23% 0.026 267);--accent:oklch(56% 0.2 27);--focus:oklch(62% 0.2 25);--success:oklch(68% 0.172 148);--success-fg:oklch(14% 0.04 148);--warning:oklch(76% 0.148 68);--warning-fg:oklch(14% 0.04 68);--navy:oklch(75% 0.1 277);--navy-fg:oklch(28.46% 0.1073 278.54);--navy-soft:oklch(25% 0.06 277);--shadow-surface:none}
-.me *{box-sizing:border-box}
-.me button{font:inherit;color:inherit;cursor:pointer}
-.me :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-.me .ghost:hover{background:var(--default)}
-.me tbody tr:hover{background:var(--surface-2)}
-</style>
-</head>
-<body>
-<div id="dc-root" style="display: contents"></div>
-<script>window.__DC_PROPS__ = {"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"$preview":{"width":1440,"height":1200}};
-window.__DC_TPL__ = ["\n",{"n":"div","a":{"class":"{{rootClass}}","style":"min-height: 100vh;"},"c":["\n  ",{"n":"header","a":{"style":"background: var(--surface); border-bottom: 1px solid var(--border);"},"c":["\n    ",{"n":"div","a":{"style":"max-width: 1200px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px;"},"c":["\n      ",{"n":"a","a":{"href":"Library.html","style":"text-decoration: none; font-size: 20px; line-height: 28px; font-weight: 800; letter-spacing: -0.02em;"},"c":[{"n":"span","a":{"style":"color: var(--accent);"},"c":["My"]},{"n":"span","a":{"style":"color: var(--navy);"},"c":["English"]}]},"\n      ",{"n":"nav","a":{"aria-label":"Main","style":"flex: 1 1 auto; display: flex; gap: 4px; font-size: 14px; font-weight: 500;"},"c":["\n        ",{"n":"a","a":{"href":"Library.html","class":"ghost","style":"padding: 8px 12px; border-radius: 8px; color: var(--foreground); text-decoration: none;"},"c":["Tests"]},"\n        ",{"n":"a","a":{"href":"History.html","aria-current":"page","style":"padding: 8px 12px; border-radius: 8px; background: var(--navy-soft); color: var(--navy); text-decoration: none; font-weight: 600;"},"c":["My attempts"]},"\n      "]},"\n      ",{"n":"a","a":{"href":"Profile.html","aria-label":"Profile: Linh Tran","style":"width: 36px; height: 36px; border-radius: 9999px; background: var(--navy); color: var(--navy-fg); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; text-decoration: none;"},"c":["LT"]},"\n    "]},"\n  "]},"\n\n  ",{"n":"main","a":{"style":"max-width: 1200px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 24px;"},"c":["\n    ",{"n":"div","a":{},"c":["\n      ",{"n":"h1","a":{"style":"margin: 0; font-size: 30px; line-height: 36px; font-weight: 700; letter-spacing: -0.01em;"},"c":["My attempts"]},"\n      ",{"n":"p","a":{"style":"margin: 4px 0 0; font-size: 16px; line-height: 24px; color: var(--muted);"},"c":["Your scores over time and every test you've taken."]},"\n    "]},"\n\n    ",{"n":"div","a":{"style":"display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px;"},"c":["\n      ",{"n":"section","a":{"aria-labelledby":"ch1","style":"padding: 20px 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface);"},"c":["\n        ",{"n":"div","a":{"style":"display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;"},"c":["\n          ",{"n":"h2","a":{"id":"ch1","style":"margin: 0; font-size: 16px; line-height: 24px; font-weight: 600;"},"c":["IELTS overall band"]},"\n          ",{"n":"span","a":{"style":"font-size: 14px; color: var(--muted);"},"c":["Latest ",{"n":"b","a":{"style":"color: var(--foreground);"},"c":["6.5"]}]},"\n        "]},"\n        ",{"n":"svg","a":{"viewBox":"0 0 440 180","role":"img","aria-label":"IELTS band rose from 5.5 in July to 6.5 in October","style":"display: block; width: 100%; height: auto; font-family: inherit;"},"c":["\n          ",{"n":"g","a":{"stroke":"var(--separator)"},"c":[{"n":"line","a":{"x1":"36","y1":"20","x2":"430","y2":"20"},"c":[]},{"n":"line","a":{"x1":"36","y1":"65","x2":"430","y2":"65"},"c":[]},{"n":"line","a":{"x1":"36","y1":"110","x2":"430","y2":"110"},"c":[]},{"n":"line","a":{"x1":"36","y1":"155","x2":"430","y2":"155"},"c":[]}]},"\n          ",{"n":"g","a":{"font-size":"11","fill":"var(--muted)","text-anchor":"end"},"c":[{"n":"text","a":{"x":"28","y":"24"},"c":["7.0"]},{"n":"text","a":{"x":"28","y":"69"},"c":["6.5"]},{"n":"text","a":{"x":"28","y":"114"},"c":["6.0"]},{"n":"text","a":{"x":"28","y":"159"},"c":["5.5"]}]},"\n          ",{"n":"polyline","a":{"points":"60,155 150,110 240,110 330,65 410,65","fill":"none","stroke":"var(--navy)","stroke-width":"2.5","stroke-linejoin":"round","stroke-linecap":"round"},"c":[]},"\n          ",{"n":"g","a":{"fill":"var(--surface)","stroke":"var(--navy)","stroke-width":"2"},"c":[{"n":"circle","a":{"cx":"60","cy":"155","r":"4.5"},"c":[]},{"n":"circle","a":{"cx":"150","cy":"110","r":"4.5"},"c":[]},{"n":"circle","a":{"cx":"240","cy":"110","r":"4.5"},"c":[]},{"n":"circle","a":{"cx":"330","cy":"65","r":"4.5"},"c":[]},{"n":"circle","a":{"cx":"410","cy":"65","r":"5.5","fill":"var(--navy)"},"c":[]}]},"\n          ",{"n":"g","a":{"font-size":"11","fill":"var(--muted)","text-anchor":"middle"},"c":[{"n":"text","a":{"x":"60","y":"176"},"c":["12 Jul"]},{"n":"text","a":{"x":"150","y":"176"},"c":["3 Aug"]},{"n":"text","a":{"x":"240","y":"176"},"c":["31 Aug"]},{"n":"text","a":{"x":"330","y":"176"},"c":["28 Sep"]},{"n":"text","a":{"x":"410","y":"176"},"c":["27 Oct"]}]},"\n        "]},"\n      "]},"\n      ",{"n":"section","a":{"aria-labelledby":"ch2","style":"padding: 20px 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface);"},"c":["\n        ",{"n":"div","a":{"style":"display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;"},"c":["\n          ",{"n":"h2","a":{"id":"ch2","style":"margin: 0; font-size: 16px; line-height: 24px; font-weight: 600;"},"c":["TOEIC L&R total"]},"\n          ",{"n":"span","a":{"style":"font-size: 14px; color: var(--muted);"},"c":["Latest ",{"n":"b","a":{"style":"color: var(--foreground);"},"c":["755"]}]},"\n        "]},"\n        ",{"n":"svg","a":{"viewBox":"0 0 440 180","role":"img","aria-label":"TOEIC total rose from 640 in August to 755 in October","style":"display: block; width: 100%; height: auto; font-family: inherit;"},"c":["\n          ",{"n":"g","a":{"stroke":"var(--separator)"},"c":[{"n":"line","a":{"x1":"36","y1":"20","x2":"430","y2":"20"},"c":[]},{"n":"line","a":{"x1":"36","y1":"65","x2":"430","y2":"65"},"c":[]},{"n":"line","a":{"x1":"36","y1":"110","x2":"430","y2":"110"},"c":[]},{"n":"line","a":{"x1":"36","y1":"155","x2":"430","y2":"155"},"c":[]}]},"\n          ",{"n":"g","a":{"font-size":"11","fill":"var(--muted)","text-anchor":"end"},"c":[{"n":"text","a":{"x":"28","y":"24"},"c":["800"]},{"n":"text","a":{"x":"28","y":"69"},"c":["733"]},{"n":"text","a":{"x":"28","y":"114"},"c":["667"]},{"n":"text","a":{"x":"28","y":"159"},"c":["600"]}]},"\n          ",{"n":"polyline","a":{"points":"60,128 180,104 300,87 410,75","fill":"none","stroke":"var(--navy)","stroke-width":"2.5","stroke-linejoin":"round","stroke-linecap":"round"},"c":[]},"\n          ",{"n":"g","a":{"fill":"var(--surface)","stroke":"var(--navy)","stroke-width":"2"},"c":[{"n":"circle","a":{"cx":"60","cy":"128","r":"4.5"},"c":[]},{"n":"circle","a":{"cx":"180","cy":"104","r":"4.5"},"c":[]},{"n":"circle","a":{"cx":"300","cy":"87","r":"4.5"},"c":[]},{"n":"circle","a":{"cx":"410","cy":"75","r":"5.5","fill":"var(--navy)"},"c":[]}]},"\n          ",{"n":"g","a":{"font-size":"11","fill":"var(--muted)","text-anchor":"middle"},"c":[{"n":"text","a":{"x":"60","y":"176"},"c":["10 Aug"]},{"n":"text","a":{"x":"180","y":"176"},"c":["7 Sep"]},{"n":"text","a":{"x":"300","y":"176"},"c":["5 Oct"]},{"n":"text","a":{"x":"410","y":"176"},"c":["25 Oct"]}]},"\n        "]},"\n      "]},"\n    "]},"\n\n    ",{"n":"section","a":{"aria-labelledby":"tbl-h","style":"border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface); overflow: hidden;"},"c":["\n      ",{"n":"h2","a":{"id":"tbl-h","style":"margin: 0; padding: 18px 24px; font-size: 18px; line-height: 26px; font-weight: 600; border-bottom: 1px solid var(--separator);"},"c":["All attempts"]},"\n      ",{"n":"div","a":{"style":"overflow-x: auto;"},"c":["\n        ",{"n":"table","a":{"style":"width: 100%; min-width: 820px; border-collapse: collapse; font-size: 14px; line-height: 20px;"},"c":["\n          ",{"n":"thead","a":{},"c":["\n            ",{"n":"tr","a":{"style":"background: var(--surface-2); text-align: left;"},"c":["\n              ",{"n":"th","a":{"scope":"col","style":"padding: 10px 24px; font-weight: 600;"},"c":["Test"]},"\n              ",{"n":"th","a":{"scope":"col","style":"padding: 10px 12px; font-weight: 600;"},"c":["Mode"]},"\n              ",{"n":"th","a":{"scope":"col","style":"padding: 10px 12px; font-weight: 600;"},"c":["Started"]},"\n              ",{"n":"th","a":{"scope":"col","style":"padding: 10px 12px; font-weight: 600;"},"c":["Status"]},"\n              ",{"n":"th","a":{"scope":"col","style":"padding: 10px 12px; font-weight: 600;"},"c":["Score"]},"\n              ",{"n":"th","a":{"scope":"col","style":"padding: 10px 24px; font-weight: 600;"},"c":[{"n":"span","a":{"style":"position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);"},"c":["Action"]}]},"\n            "]},"\n          "]},"\n          ",{"n":"tbody","a":{},"c":["\n            ",{"n":"sc-for","a":{"list":"{{rows}}","as":"r","hint-placeholder-count":"7"},"c":["\n              ",{"n":"tr","a":{"style":"border-top: 1px solid var(--separator);"},"c":["\n                ",{"n":"td","a":{"style":"padding: 14px 24px;"},"c":[{"n":"span","a":{"style":"display: block; font-weight: 600;"},"c":["{{r.title}}"]},{"n":"span","a":{"style":"font-size: 12px; color: var(--muted);"},"c":["{{r.type}}"]}]},"\n                ",{"n":"td","a":{"style":"padding: 14px 12px;"},"c":["{{r.mode}}"]},"\n                ",{"n":"td","a":{"style":"padding: 14px 12px; white-space: nowrap; color: var(--muted);"},"c":["{{r.started}}"]},"\n                ",{"n":"td","a":{"style":"padding: 14px 12px;"},"c":[{"n":"span","a":{"style":"{{r.badge}}"},"c":["{{r.status}}"]}]},"\n                ",{"n":"td","a":{"style":"padding: 14px 12px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap;"},"c":["{{r.score}}"]},"\n                ",{"n":"td","a":{"style":"padding: 14px 24px; text-align: right;"},"c":[{"n":"a","a":{"href":"{{r.href}}","style":"{{r.btn}}"},"c":["{{r.action}}"]}]},"\n              "]},"\n            "]},"\n          "]},"\n        "]},"\n      "]},"\n    "]},"\n  "]},"\n"]},"\n"];</script>
-<script>
-/* Minimal standalone runtime for exported MyEnglish design screens. */
-(function () {
-  var SVG_NS = 'http://www.w3.org/2000/svg';
-  var TPL = window.__DC_TPL__;
-  var PROPS_DEF = window.__DC_PROPS__ || {};
-  var HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
-  var WHOLE = /^\{\{\s*([^}]+?)\s*\}\}$/;
-
-  function DCLogic(props) { this.props = props || {}; this.state = {}; }
-  DCLogic.prototype.setState = function (p) {
-    var next = typeof p === 'function' ? p(this.state, this.props) : p;
-    this.state = Object.assign({}, this.state, next);
-    schedule();
-  };
-  DCLogic.prototype.forceUpdate = function () { schedule(); };
-  window.DCLogic = DCLogic;
-
-  function lookup(expr, scope) {
-    expr = expr.trim();
-    if (expr === 'true') return true;
-    if (expr === 'false') return false;
-    if (expr === 'null') return null;
-    if (/^-?\d+(\.\d+)?$/.test(expr)) return Number(expr);
-    if (/^(['"]).*\1$/.test(expr)) return expr.slice(1, -1);
-    var parts = expr.split('.');
-    var cur;
-    for (var i = scope.length - 1; i >= 0; i--) {
-      if (scope[i] && Object.prototype.hasOwnProperty.call(scope[i], parts[0])) { cur = scope[i][parts[0]]; break; }
-    }
-    for (var j = 1; j < parts.length && cur != null; j++) cur = cur[parts[j]];
-    return cur;
-  }
-  function resolve(val, scope) {
-    var m = WHOLE.exec(val);
-    if (m) return lookup(m[1], scope);
-    return val.replace(HOLE, function (_, e) { var v = lookup(e, scope); return v == null ? '' : String(v); });
-  }
-
-  var BOOL_PROPS = { checked: 1, disabled: 1, readonly: 1, selected: 1, multiple: 1, required: 1 };
-
-  function build(nodes, parent, scope, inSvg) {
-    for (var i = 0; i < nodes.length; i++) {
-      var n = nodes[i];
-      if (typeof n === 'string') {
-        parent.appendChild(document.createTextNode(n.indexOf('{{') < 0 ? n : (function () {
-          var v = resolve(n, scope); return v == null ? '' : String(v);
-        })()));
-        continue;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My attempts</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
       }
-      if (n.n === 'sc-for') {
-        var list = resolve(n.a.list || '', scope) || [];
-        var as = n.a.as || 'item';
-        for (var k = 0; k < list.length; k++) {
-          var s = {}; s[as] = list[k]; s.$index = k;
-          build(n.c, parent, scope.concat([s]), inSvg);
+      .me {
+        --background: oklch(97.02% 0.0018 27.74);
+        --foreground: oklch(21.03% 0 27.99);
+        --muted: oklch(52% 0 27.99);
+        --surface: oklch(100% 0 27.99);
+        --surface-2: oklch(95.24% 0 27.99);
+        --surface-3: oklch(93.73% 0 27.99);
+        --default: oklch(96.416% 0.00011 271.152);
+        --field-border: oklch(80% 0.004 270);
+        --border: oklch(91% 0.002 271);
+        --separator: oklch(94.8% 0 27.99);
+        --accent: oklch(54.61% 0.2051 25.98);
+        --accent-fg: oklch(99.11% 0 0);
+        --focus: oklch(58.14% 0.2349 27.99);
+        --success: oklch(73.31% 0.1932 150.75);
+        --success-fg: oklch(15% 0.03 150.75);
+        --warning: oklch(78.48% 0.159 72.51);
+        --warning-fg: oklch(15% 0.03 72.51);
+        --navy: oklch(37.46% 0.142 275.16);
+        --navy-fg: oklch(99.11% 0 0);
+        --navy-soft: oklch(94.5% 0.025 277);
+        --shadow-surface: 0 1px 2px 0 rgba(24, 24, 24, 0.06);
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        color: var(--foreground);
+        background: var(--background);
+      }
+      .me.dark {
+        --background: oklch(14.5% 0.022 268);
+        --foreground: oklch(95% 0.006 265);
+        --muted: oklch(68% 0.02 265);
+        --surface: oklch(19.5% 0.026 270);
+        --surface-2: oklch(23.5% 0.029 269);
+        --surface-3: oklch(21.5% 0.027 268);
+        --default: oklch(26% 0.028 268);
+        --field-border: oklch(50% 0.03 268);
+        --border: oklch(28% 0.032 268);
+        --separator: oklch(23% 0.026 267);
+        --accent: oklch(56% 0.2 27);
+        --focus: oklch(62% 0.2 25);
+        --success: oklch(68% 0.172 148);
+        --success-fg: oklch(14% 0.04 148);
+        --warning: oklch(76% 0.148 68);
+        --warning-fg: oklch(14% 0.04 68);
+        --navy: oklch(75% 0.1 277);
+        --navy-fg: oklch(28.46% 0.1073 278.54);
+        --navy-soft: oklch(25% 0.06 277);
+        --shadow-surface: none;
+      }
+      .me * {
+        box-sizing: border-box;
+      }
+      .me button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+      .me :focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+      }
+      .me .ghost:hover {
+        background: var(--default);
+      }
+      .me tbody tr:hover {
+        background: var(--surface-2);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dc-root" style="display: contents"></div>
+    <script>
+      window.__DC_PROPS__ = {
+        theme: { editor: 'enum', options: ['light', 'dark'], default: 'light' },
+        $preview: { width: 1440, height: 1200 },
+      };
+      window.__DC_TPL__ = [
+        '\n',
+        {
+          n: 'div',
+          a: { class: '{{rootClass}}', style: 'min-height: 100vh;' },
+          c: [
+            '\n  ',
+            {
+              n: 'header',
+              a: {
+                style:
+                  'background: var(--surface); border-bottom: 1px solid var(--border);',
+              },
+              c: [
+                '\n    ',
+                {
+                  n: 'div',
+                  a: {
+                    style:
+                      'max-width: 1200px; margin: 0 auto; padding: 12px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px;',
+                  },
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'a',
+                      a: {
+                        href: 'Library.html',
+                        style:
+                          'text-decoration: none; font-size: 20px; line-height: 28px; font-weight: 800; letter-spacing: -0.02em;',
+                      },
+                      c: [
+                        {
+                          n: 'span',
+                          a: { style: 'color: var(--accent);' },
+                          c: ['My'],
+                        },
+                        {
+                          n: 'span',
+                          a: { style: 'color: var(--navy);' },
+                          c: ['English'],
+                        },
+                      ],
+                    },
+                    '\n      ',
+                    {
+                      n: 'nav',
+                      a: {
+                        'aria-label': 'Main',
+                        style:
+                          'flex: 1 1 auto; display: flex; gap: 4px; font-size: 14px; font-weight: 500;',
+                      },
+                      c: [
+                        '\n        ',
+                        {
+                          n: 'a',
+                          a: {
+                            href: 'Library.html',
+                            class: 'ghost',
+                            style:
+                              'padding: 8px 12px; border-radius: 8px; color: var(--foreground); text-decoration: none;',
+                          },
+                          c: ['Tests'],
+                        },
+                        '\n        ',
+                        {
+                          n: 'a',
+                          a: {
+                            href: 'History.html',
+                            'aria-current': 'page',
+                            style:
+                              'padding: 8px 12px; border-radius: 8px; background: var(--navy-soft); color: var(--navy); text-decoration: none; font-weight: 600;',
+                          },
+                          c: ['My attempts'],
+                        },
+                        '\n      ',
+                      ],
+                    },
+                    '\n      ',
+                    {
+                      n: 'a',
+                      a: {
+                        href: 'Profile.html',
+                        'aria-label': 'Profile: Linh Tran',
+                        style:
+                          'width: 36px; height: 36px; border-radius: 9999px; background: var(--navy); color: var(--navy-fg); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; text-decoration: none;',
+                      },
+                      c: ['LT'],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n  ',
+              ],
+            },
+            '\n\n  ',
+            {
+              n: 'main',
+              a: {
+                style:
+                  'max-width: 1200px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 24px;',
+              },
+              c: [
+                '\n    ',
+                {
+                  n: 'div',
+                  a: {},
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'h1',
+                      a: {
+                        style:
+                          'margin: 0; font-size: 30px; line-height: 36px; font-weight: 700; letter-spacing: -0.01em;',
+                      },
+                      c: ['My attempts'],
+                    },
+                    '\n      ',
+                    {
+                      n: 'p',
+                      a: {
+                        style:
+                          'margin: 4px 0 0; font-size: 16px; line-height: 24px; color: var(--muted);',
+                      },
+                      c: ["Your scores over time and every test you've taken."],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n\n    ',
+                {
+                  n: 'div',
+                  a: {
+                    style:
+                      'display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px;',
+                  },
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'section',
+                      a: {
+                        'aria-labelledby': 'ch1',
+                        style:
+                          'padding: 20px 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface);',
+                      },
+                      c: [
+                        '\n        ',
+                        {
+                          n: 'div',
+                          a: {
+                            style:
+                              'display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'h2',
+                              a: {
+                                id: 'ch1',
+                                style:
+                                  'margin: 0; font-size: 16px; line-height: 24px; font-weight: 600;',
+                              },
+                              c: ['IELTS overall band'],
+                            },
+                            '\n          ',
+                            {
+                              n: 'span',
+                              a: {
+                                style: 'font-size: 14px; color: var(--muted);',
+                              },
+                              c: [
+                                'Latest ',
+                                {
+                                  n: 'b',
+                                  a: { style: 'color: var(--foreground);' },
+                                  c: ['6.5'],
+                                },
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n        ',
+                        {
+                          n: 'svg',
+                          a: {
+                            viewBox: '0 0 440 180',
+                            role: 'img',
+                            'aria-label':
+                              'IELTS band rose from 5.5 in July to 6.5 in October',
+                            style:
+                              'display: block; width: 100%; height: auto; font-family: inherit;',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: { stroke: 'var(--separator)' },
+                              c: [
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '20',
+                                    x2: '430',
+                                    y2: '20',
+                                  },
+                                  c: [],
+                                },
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '65',
+                                    x2: '430',
+                                    y2: '65',
+                                  },
+                                  c: [],
+                                },
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '110',
+                                    x2: '430',
+                                    y2: '110',
+                                  },
+                                  c: [],
+                                },
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '155',
+                                    x2: '430',
+                                    y2: '155',
+                                  },
+                                  c: [],
+                                },
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: {
+                                'font-size': '11',
+                                fill: 'var(--muted)',
+                                'text-anchor': 'end',
+                              },
+                              c: [
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '24' },
+                                  c: ['7.0'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '69' },
+                                  c: ['6.5'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '114' },
+                                  c: ['6.0'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '159' },
+                                  c: ['5.5'],
+                                },
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'polyline',
+                              a: {
+                                points: '60,155 150,110 240,110 330,65 410,65',
+                                fill: 'none',
+                                stroke: 'var(--navy)',
+                                'stroke-width': '2.5',
+                                'stroke-linejoin': 'round',
+                                'stroke-linecap': 'round',
+                              },
+                              c: [],
+                            },
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: {
+                                fill: 'var(--surface)',
+                                stroke: 'var(--navy)',
+                                'stroke-width': '2',
+                              },
+                              c: [
+                                {
+                                  n: 'circle',
+                                  a: { cx: '60', cy: '155', r: '4.5' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: { cx: '150', cy: '110', r: '4.5' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: { cx: '240', cy: '110', r: '4.5' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: { cx: '330', cy: '65', r: '4.5' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: {
+                                    cx: '410',
+                                    cy: '65',
+                                    r: '5.5',
+                                    fill: 'var(--navy)',
+                                  },
+                                  c: [],
+                                },
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: {
+                                'font-size': '11',
+                                fill: 'var(--muted)',
+                                'text-anchor': 'middle',
+                              },
+                              c: [
+                                {
+                                  n: 'text',
+                                  a: { x: '60', y: '176' },
+                                  c: ['12 Jul'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '150', y: '176' },
+                                  c: ['3 Aug'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '240', y: '176' },
+                                  c: ['31 Aug'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '330', y: '176' },
+                                  c: ['28 Sep'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '410', y: '176' },
+                                  c: ['27 Oct'],
+                                },
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n      ',
+                      ],
+                    },
+                    '\n      ',
+                    {
+                      n: 'section',
+                      a: {
+                        'aria-labelledby': 'ch2',
+                        style:
+                          'padding: 20px 24px; border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface);',
+                      },
+                      c: [
+                        '\n        ',
+                        {
+                          n: 'div',
+                          a: {
+                            style:
+                              'display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px;',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'h2',
+                              a: {
+                                id: 'ch2',
+                                style:
+                                  'margin: 0; font-size: 16px; line-height: 24px; font-weight: 600;',
+                              },
+                              c: ['TOEIC L&R total'],
+                            },
+                            '\n          ',
+                            {
+                              n: 'span',
+                              a: {
+                                style: 'font-size: 14px; color: var(--muted);',
+                              },
+                              c: [
+                                'Latest ',
+                                {
+                                  n: 'b',
+                                  a: { style: 'color: var(--foreground);' },
+                                  c: ['755'],
+                                },
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n        ',
+                        {
+                          n: 'svg',
+                          a: {
+                            viewBox: '0 0 440 180',
+                            role: 'img',
+                            'aria-label':
+                              'TOEIC total rose from 640 in August to 755 in October',
+                            style:
+                              'display: block; width: 100%; height: auto; font-family: inherit;',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: { stroke: 'var(--separator)' },
+                              c: [
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '20',
+                                    x2: '430',
+                                    y2: '20',
+                                  },
+                                  c: [],
+                                },
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '65',
+                                    x2: '430',
+                                    y2: '65',
+                                  },
+                                  c: [],
+                                },
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '110',
+                                    x2: '430',
+                                    y2: '110',
+                                  },
+                                  c: [],
+                                },
+                                {
+                                  n: 'line',
+                                  a: {
+                                    x1: '36',
+                                    y1: '155',
+                                    x2: '430',
+                                    y2: '155',
+                                  },
+                                  c: [],
+                                },
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: {
+                                'font-size': '11',
+                                fill: 'var(--muted)',
+                                'text-anchor': 'end',
+                              },
+                              c: [
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '24' },
+                                  c: ['800'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '69' },
+                                  c: ['733'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '114' },
+                                  c: ['667'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '28', y: '159' },
+                                  c: ['600'],
+                                },
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'polyline',
+                              a: {
+                                points: '60,128 180,104 300,87 410,75',
+                                fill: 'none',
+                                stroke: 'var(--navy)',
+                                'stroke-width': '2.5',
+                                'stroke-linejoin': 'round',
+                                'stroke-linecap': 'round',
+                              },
+                              c: [],
+                            },
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: {
+                                fill: 'var(--surface)',
+                                stroke: 'var(--navy)',
+                                'stroke-width': '2',
+                              },
+                              c: [
+                                {
+                                  n: 'circle',
+                                  a: { cx: '60', cy: '128', r: '4.5' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: { cx: '180', cy: '104', r: '4.5' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: { cx: '300', cy: '87', r: '4.5' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: {
+                                    cx: '410',
+                                    cy: '75',
+                                    r: '5.5',
+                                    fill: 'var(--navy)',
+                                  },
+                                  c: [],
+                                },
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'g',
+                              a: {
+                                'font-size': '11',
+                                fill: 'var(--muted)',
+                                'text-anchor': 'middle',
+                              },
+                              c: [
+                                {
+                                  n: 'text',
+                                  a: { x: '60', y: '176' },
+                                  c: ['10 Aug'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '180', y: '176' },
+                                  c: ['7 Sep'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '300', y: '176' },
+                                  c: ['5 Oct'],
+                                },
+                                {
+                                  n: 'text',
+                                  a: { x: '410', y: '176' },
+                                  c: ['25 Oct'],
+                                },
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n      ',
+                      ],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n\n    ',
+                {
+                  n: 'section',
+                  a: {
+                    'aria-labelledby': 'tbl-h',
+                    style:
+                      'border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface); overflow: hidden;',
+                  },
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'h2',
+                      a: {
+                        id: 'tbl-h',
+                        style:
+                          'margin: 0; padding: 18px 24px; font-size: 18px; line-height: 26px; font-weight: 600; border-bottom: 1px solid var(--separator);',
+                      },
+                      c: ['All attempts'],
+                    },
+                    '\n      ',
+                    {
+                      n: 'div',
+                      a: { style: 'overflow-x: auto;' },
+                      c: [
+                        '\n        ',
+                        {
+                          n: 'table',
+                          a: {
+                            style:
+                              'width: 100%; min-width: 820px; border-collapse: collapse; font-size: 14px; line-height: 20px;',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'thead',
+                              a: {},
+                              c: [
+                                '\n            ',
+                                {
+                                  n: 'tr',
+                                  a: {
+                                    style:
+                                      'background: var(--surface-2); text-align: left;',
+                                  },
+                                  c: [
+                                    '\n              ',
+                                    {
+                                      n: 'th',
+                                      a: {
+                                        scope: 'col',
+                                        style:
+                                          'padding: 10px 24px; font-weight: 600;',
+                                      },
+                                      c: ['Test'],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'th',
+                                      a: {
+                                        scope: 'col',
+                                        style:
+                                          'padding: 10px 12px; font-weight: 600;',
+                                      },
+                                      c: ['Mode'],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'th',
+                                      a: {
+                                        scope: 'col',
+                                        style:
+                                          'padding: 10px 12px; font-weight: 600;',
+                                      },
+                                      c: ['Started'],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'th',
+                                      a: {
+                                        scope: 'col',
+                                        style:
+                                          'padding: 10px 12px; font-weight: 600;',
+                                      },
+                                      c: ['Status'],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'th',
+                                      a: {
+                                        scope: 'col',
+                                        style:
+                                          'padding: 10px 12px; font-weight: 600;',
+                                      },
+                                      c: ['Score'],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'th',
+                                      a: {
+                                        scope: 'col',
+                                        style:
+                                          'padding: 10px 24px; font-weight: 600;',
+                                      },
+                                      c: [
+                                        {
+                                          n: 'span',
+                                          a: {
+                                            style:
+                                              'position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);',
+                                          },
+                                          c: ['Action'],
+                                        },
+                                      ],
+                                    },
+                                    '\n            ',
+                                  ],
+                                },
+                                '\n          ',
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'tbody',
+                              a: {},
+                              c: [
+                                '\n            ',
+                                {
+                                  n: 'sc-for',
+                                  a: {
+                                    list: '{{rows}}',
+                                    as: 'r',
+                                    'hint-placeholder-count': '7',
+                                  },
+                                  c: [
+                                    '\n              ',
+                                    {
+                                      n: 'tr',
+                                      a: {
+                                        style:
+                                          'border-top: 1px solid var(--separator);',
+                                      },
+                                      c: [
+                                        '\n                ',
+                                        {
+                                          n: 'td',
+                                          a: { style: 'padding: 14px 24px;' },
+                                          c: [
+                                            {
+                                              n: 'span',
+                                              a: {
+                                                style:
+                                                  'display: block; font-weight: 600;',
+                                              },
+                                              c: ['{{r.title}}'],
+                                            },
+                                            {
+                                              n: 'span',
+                                              a: {
+                                                style:
+                                                  'font-size: 12px; color: var(--muted);',
+                                              },
+                                              c: ['{{r.type}}'],
+                                            },
+                                          ],
+                                        },
+                                        '\n                ',
+                                        {
+                                          n: 'td',
+                                          a: { style: 'padding: 14px 12px;' },
+                                          c: ['{{r.mode}}'],
+                                        },
+                                        '\n                ',
+                                        {
+                                          n: 'td',
+                                          a: {
+                                            style:
+                                              'padding: 14px 12px; white-space: nowrap; color: var(--muted);',
+                                          },
+                                          c: ['{{r.started}}'],
+                                        },
+                                        '\n                ',
+                                        {
+                                          n: 'td',
+                                          a: { style: 'padding: 14px 12px;' },
+                                          c: [
+                                            {
+                                              n: 'span',
+                                              a: { style: '{{r.badge}}' },
+                                              c: ['{{r.status}}'],
+                                            },
+                                          ],
+                                        },
+                                        '\n                ',
+                                        {
+                                          n: 'td',
+                                          a: {
+                                            style:
+                                              'padding: 14px 12px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap;',
+                                          },
+                                          c: ['{{r.score}}'],
+                                        },
+                                        '\n                ',
+                                        {
+                                          n: 'td',
+                                          a: {
+                                            style:
+                                              'padding: 14px 24px; text-align: right;',
+                                          },
+                                          c: [
+                                            {
+                                              n: 'a',
+                                              a: {
+                                                href: '{{r.href}}',
+                                                style: '{{r.btn}}',
+                                              },
+                                              c: ['{{r.action}}'],
+                                            },
+                                          ],
+                                        },
+                                        '\n              ',
+                                      ],
+                                    },
+                                    '\n            ',
+                                  ],
+                                },
+                                '\n          ',
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n      ',
+                      ],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n  ',
+              ],
+            },
+            '\n',
+          ],
+        },
+        '\n',
+      ];
+    </script>
+    <script>
+      /* Minimal standalone runtime for exported MyEnglish design screens. */
+      (function () {
+        var SVG_NS = 'http://www.w3.org/2000/svg';
+        var TPL = window.__DC_TPL__;
+        var PROPS_DEF = window.__DC_PROPS__ || {};
+        var HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
+        var WHOLE = /^\{\{\s*([^}]+?)\s*\}\}$/;
+
+        function DCLogic(props) {
+          this.props = props || {};
+          this.state = {};
         }
-        continue;
-      }
-      if (n.n === 'sc-if') {
-        if (resolve(n.a.value || '', scope)) build(n.c, parent, scope, inSvg);
-        continue;
-      }
-      var svg = inSvg || n.n === 'svg';
-      var el = svg ? document.createElementNS(SVG_NS, n.n) : document.createElement(n.n);
-      build(n.c, el, scope, svg && n.n !== 'foreignObject');
-      applyAttrs(el, n.a, scope, svg);
-      parent.appendChild(el);
-    }
-  }
+        DCLogic.prototype.setState = function (p) {
+          var next = typeof p === 'function' ? p(this.state, this.props) : p;
+          this.state = Object.assign({}, this.state, next);
+          schedule();
+        };
+        DCLogic.prototype.forceUpdate = function () {
+          schedule();
+        };
+        window.DCLogic = DCLogic;
 
-  function applyAttrs(el, attrs, scope, svg) {
-    var later = [];
-    for (var name in attrs) {
-      if (/^hint-/.test(name)) continue;
-      var raw = attrs[name];
-      var v = raw.indexOf('{{') < 0 ? raw : resolve(raw, scope);
-      if (/^on[A-Z]/.test(name) || (/^on/.test(name) && typeof v === 'function')) {
-        if (typeof v !== 'function') continue;
-        var ev = name.slice(2).toLowerCase();
-        if (ev === 'change') {
-          var tag = el.tagName.toLowerCase(); var type = (attrs.type || 'text').toLowerCase();
-          if (tag === 'textarea' || (tag === 'input' && !/^(checkbox|radio|range|file)$/.test(type))) ev = 'input';
+        function lookup(expr, scope) {
+          expr = expr.trim();
+          if (expr === 'true') return true;
+          if (expr === 'false') return false;
+          if (expr === 'null') return null;
+          if (/^-?\d+(\.\d+)?$/.test(expr)) return Number(expr);
+          if (/^(['"]).*\1$/.test(expr)) return expr.slice(1, -1);
+          var parts = expr.split('.');
+          var cur;
+          for (var i = scope.length - 1; i >= 0; i--) {
+            if (
+              scope[i] &&
+              Object.prototype.hasOwnProperty.call(scope[i], parts[0])
+            ) {
+              cur = scope[i][parts[0]];
+              break;
+            }
+          }
+          for (var j = 1; j < parts.length && cur != null; j++)
+            cur = cur[parts[j]];
+          return cur;
         }
-        el.addEventListener(ev, v);
-        continue;
-      }
-      var lname = name.toLowerCase();
-      if (!svg && BOOL_PROPS[lname]) {
-        var on = v === '' || v === true || v === 'true' || v === lname;
-        if (lname === 'readonly') el.readOnly = on; else el[lname] = on;
-        if (on) el.setAttribute(lname, '');
-        continue;
-      }
-      if (!svg && lname === 'value') { later.push(v == null ? '' : String(v)); continue; }
-      if (v === false || v == null) continue;
-      el.setAttribute(name === 'className' ? 'class' : name === 'htmlFor' ? 'for' : name, v === true ? 'true' : String(v));
-    }
-    if (later.length) {
-      var val = later[0];
-      if (el.tagName === 'TEXTAREA') el.value = val; else { el.setAttribute('value', val); el.value = val; }
-    }
-  }
+        function resolve(val, scope) {
+          var m = WHOLE.exec(val);
+          if (m) return lookup(m[1], scope);
+          return val.replace(HOLE, function (_, e) {
+            var v = lookup(e, scope);
+            return v == null ? '' : String(v);
+          });
+        }
 
-  var root, comp, pending = false;
-  function allEls() { return root.getElementsByTagName('*'); }
-  function render() {
-    pending = false;
-    var els = allEls(), scrolls = [], focusIdx = -1, sel = null;
-    for (var i = 0; i < els.length; i++) {
-      if (els[i].scrollTop || els[i].scrollLeft) scrolls.push([i, els[i].scrollTop, els[i].scrollLeft]);
-      if (els[i] === document.activeElement) {
-        focusIdx = i;
-        try { sel = [els[i].selectionStart, els[i].selectionEnd]; } catch (e) { sel = null; }
+        var BOOL_PROPS = {
+          checked: 1,
+          disabled: 1,
+          readonly: 1,
+          selected: 1,
+          multiple: 1,
+          required: 1,
+        };
+
+        function build(nodes, parent, scope, inSvg) {
+          for (var i = 0; i < nodes.length; i++) {
+            var n = nodes[i];
+            if (typeof n === 'string') {
+              parent.appendChild(
+                document.createTextNode(
+                  n.indexOf('{{') < 0
+                    ? n
+                    : (function () {
+                        var v = resolve(n, scope);
+                        return v == null ? '' : String(v);
+                      })(),
+                ),
+              );
+              continue;
+            }
+            if (n.n === 'sc-for') {
+              var list = resolve(n.a.list || '', scope) || [];
+              var as = n.a.as || 'item';
+              for (var k = 0; k < list.length; k++) {
+                var s = {};
+                s[as] = list[k];
+                s.$index = k;
+                build(n.c, parent, scope.concat([s]), inSvg);
+              }
+              continue;
+            }
+            if (n.n === 'sc-if') {
+              if (resolve(n.a.value || '', scope))
+                build(n.c, parent, scope, inSvg);
+              continue;
+            }
+            var svg = inSvg || n.n === 'svg';
+            var el = svg
+              ? document.createElementNS(SVG_NS, n.n)
+              : document.createElement(n.n);
+            build(n.c, el, scope, svg && n.n !== 'foreignObject');
+            applyAttrs(el, n.a, scope, svg);
+            parent.appendChild(el);
+          }
+        }
+
+        function applyAttrs(el, attrs, scope, svg) {
+          var later = [];
+          for (var name in attrs) {
+            if (/^hint-/.test(name)) continue;
+            var raw = attrs[name];
+            var v = raw.indexOf('{{') < 0 ? raw : resolve(raw, scope);
+            if (
+              /^on[A-Z]/.test(name) ||
+              (/^on/.test(name) && typeof v === 'function')
+            ) {
+              if (typeof v !== 'function') continue;
+              var ev = name.slice(2).toLowerCase();
+              if (ev === 'change') {
+                var tag = el.tagName.toLowerCase();
+                var type = (attrs.type || 'text').toLowerCase();
+                if (
+                  tag === 'textarea' ||
+                  (tag === 'input' &&
+                    !/^(checkbox|radio|range|file)$/.test(type))
+                )
+                  ev = 'input';
+              }
+              el.addEventListener(ev, v);
+              continue;
+            }
+            var lname = name.toLowerCase();
+            if (!svg && BOOL_PROPS[lname]) {
+              var on = v === '' || v === true || v === 'true' || v === lname;
+              if (lname === 'readonly') el.readOnly = on;
+              else el[lname] = on;
+              if (on) el.setAttribute(lname, '');
+              continue;
+            }
+            if (!svg && lname === 'value') {
+              later.push(v == null ? '' : String(v));
+              continue;
+            }
+            if (v === false || v == null) continue;
+            el.setAttribute(
+              name === 'className'
+                ? 'class'
+                : name === 'htmlFor'
+                  ? 'for'
+                  : name,
+              v === true ? 'true' : String(v),
+            );
+          }
+          if (later.length) {
+            var val = later[0];
+            if (el.tagName === 'TEXTAREA') el.value = val;
+            else {
+              el.setAttribute('value', val);
+              el.value = val;
+            }
+          }
+        }
+
+        var root,
+          comp,
+          pending = false;
+        function allEls() {
+          return root.getElementsByTagName('*');
+        }
+        function render() {
+          pending = false;
+          var els = allEls(),
+            scrolls = [],
+            focusIdx = -1,
+            sel = null;
+          for (var i = 0; i < els.length; i++) {
+            if (els[i].scrollTop || els[i].scrollLeft)
+              scrolls.push([i, els[i].scrollTop, els[i].scrollLeft]);
+            if (els[i] === document.activeElement) {
+              focusIdx = i;
+              try {
+                sel = [els[i].selectionStart, els[i].selectionEnd];
+              } catch (e) {
+                sel = null;
+              }
+            }
+          }
+          var wy = window.scrollY;
+          var vals = comp.renderVals ? comp.renderVals() : {};
+          var frag = document.createDocumentFragment();
+          build(TPL, frag, [vals], false);
+          root.replaceChildren(frag);
+          els = allEls();
+          scrolls.forEach(function (s) {
+            if (els[s[0]]) {
+              els[s[0]].scrollTop = s[1];
+              els[s[0]].scrollLeft = s[2];
+            }
+          });
+          if (focusIdx >= 0 && els[focusIdx]) {
+            els[focusIdx].focus({ preventScroll: true });
+            if (sel && sel[0] != null) {
+              try {
+                els[focusIdx].setSelectionRange(sel[0], sel[1]);
+              } catch (e) {}
+            }
+          }
+          window.scrollTo(0, wy);
+        }
+        function schedule() {
+          if (!pending && root) {
+            pending = true;
+            Promise.resolve().then(render);
+          }
+        }
+
+        function tweaks(props) {
+          var keys = Object.keys(PROPS_DEF).filter(function (k) {
+            return k[0] !== '$' && PROPS_DEF[k] && PROPS_DEF[k].editor;
+          });
+          if (!keys.length) return;
+          var box = document.createElement('details');
+          box.id = 'dc-tweaks';
+          box.innerHTML = '<summary>Preview options</summary>';
+          var body = document.createElement('div');
+          keys.forEach(function (k) {
+            var d = PROPS_DEF[k];
+            var row = document.createElement('label');
+            var span = document.createElement('span');
+            span.textContent = k;
+            row.appendChild(span);
+            var input;
+            if (d.editor === 'enum') {
+              input = document.createElement('select');
+              (d.options || []).forEach(function (o) {
+                var op = document.createElement('option');
+                op.value = o;
+                op.textContent = o;
+                input.appendChild(op);
+              });
+              input.value = props[k];
+              input.addEventListener('change', function () {
+                props[k] = input.value;
+                schedule();
+              });
+            } else if (d.editor === 'boolean') {
+              input = document.createElement('input');
+              input.type = 'checkbox';
+              input.checked = !!props[k];
+              input.addEventListener('change', function () {
+                props[k] = input.checked;
+                schedule();
+              });
+            } else if (
+              d.editor === 'range' ||
+              d.editor === 'int' ||
+              d.editor === 'float'
+            ) {
+              input = document.createElement('input');
+              input.type = 'range';
+              input.min = d.min != null ? d.min : 0;
+              input.max = d.max != null ? d.max : 100;
+              input.step = d.step || 1;
+              input.value = props[k];
+              input.addEventListener('input', function () {
+                props[k] = Number(input.value);
+                schedule();
+              });
+            } else {
+              input = document.createElement('input');
+              input.value = props[k] == null ? '' : props[k];
+              input.addEventListener('input', function () {
+                props[k] = input.value;
+                schedule();
+              });
+            }
+            row.appendChild(input);
+            body.appendChild(row);
+          });
+          box.appendChild(body);
+          var st = document.createElement('style');
+          st.textContent =
+            '#dc-tweaks{position:fixed;left:12px;bottom:84px;opacity:.92;z-index:99999;font:13px/1.4 system-ui,sans-serif;background:#fff;color:#222;border:1px solid #ccc;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-width:260px}#dc-tweaks summary{cursor:pointer;padding:8px 12px;font-weight:600}#dc-tweaks div{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}#dc-tweaks label{display:flex;justify-content:space-between;align-items:center;gap:12px}#dc-tweaks select,#dc-tweaks input{font:inherit}@media print{#dc-tweaks{display:none}}';
+          document.head.appendChild(st);
+          document.body.appendChild(box);
+        }
+
+        window.__dcMount = function (Component) {
+          var props = {};
+          Object.keys(PROPS_DEF).forEach(function (k) {
+            if (k[0] !== '$' && PROPS_DEF[k] && 'default' in PROPS_DEF[k])
+              props[k] = PROPS_DEF[k].default;
+          });
+          root = document.getElementById('dc-root');
+          comp = new Component(props);
+          comp.props = props;
+          render();
+          if (comp.componentDidMount) comp.componentDidMount();
+          tweaks(props);
+        };
+      })();
+    </script>
+    <script>
+      class Component extends DCLogic {
+        renderVals() {
+          const B = {
+            'In progress':
+              'background: var(--warning); color: var(--warning-fg);',
+            Submitted: 'background: var(--navy-soft); color: var(--navy);',
+            Graded: 'background: var(--success); color: var(--success-fg);',
+            Expired:
+              'background: var(--surface-2); color: var(--foreground); border: 1px solid var(--border);',
+          };
+          const G = {
+            'In progress': '',
+            Submitted: '',
+            Graded: '✓ ',
+            Expired: '',
+          };
+          const R = [
+            [
+              'Cambridge IELTS 18 – Practice Test 1',
+              'IELTS Academic',
+              'Full',
+              '27 Oct 2026, 19:40',
+              'In progress',
+              '—',
+            ],
+            [
+              'ETS TOEIC 2024 – Test 3',
+              'TOEIC L&R',
+              'Full',
+              '25 Oct 2026, 08:15',
+              'Graded',
+              '755 / 990',
+            ],
+            [
+              'Cambridge IELTS 18 – Practice Test 2',
+              'IELTS Academic',
+              'Full',
+              '20 Oct 2026, 20:02',
+              'Expired',
+              '6.5',
+            ],
+            [
+              'TOEIC Speaking & Writing – Test 2',
+              'TOEIC S&W',
+              'Sections',
+              '14 Oct 2026, 18:30',
+              'Submitted',
+              'Awaiting grading',
+            ],
+            [
+              'ETS TOEIC 2024 – Test 4',
+              'TOEIC L&R',
+              'Sections',
+              '5 Oct 2026, 07:50',
+              'Graded',
+              'R 360',
+            ],
+            [
+              'Cambridge IELTS 17 General Training – Test 1',
+              'IELTS General',
+              'Sections',
+              '28 Sep 2026, 21:10',
+              'Graded',
+              'L 7.0 · R 6.5',
+            ],
+            [
+              'Cambridge IELTS 18 – Practice Test 3',
+              'IELTS Academic',
+              'Full',
+              '31 Aug 2026, 19:00',
+              'Graded',
+              '6.0',
+            ],
+          ];
+          const rows = R.map(([title, type, mode, started, status, score]) => {
+            const resume = status === 'In progress';
+            return {
+              title,
+              type,
+              mode,
+              started,
+              score,
+              status: G[status] + status,
+              badge:
+                'display: inline-flex; padding: 2px 8px; border-radius: 4px; font-size: 12px; line-height: 18px; font-weight: 600; white-space: nowrap; ' +
+                B[status],
+              action: resume ? 'Resume' : 'View results',
+              href: resume ? 'Main.dc.html' : 'Results.dc.html',
+              btn:
+                'display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; ' +
+                (resume
+                  ? 'background: var(--accent); color: var(--accent-fg);'
+                  : 'background: var(--default); color: var(--foreground); border: 1px solid var(--field-border);'),
+            };
+          });
+          return {
+            rootClass:
+              (this.props.theme ?? 'light') === 'dark' ? 'me dark' : 'me',
+            rows,
+          };
+        }
       }
-    }
-    var wy = window.scrollY;
-    var vals = comp.renderVals ? comp.renderVals() : {};
-    var frag = document.createDocumentFragment();
-    build(TPL, frag, [vals], false);
-    root.replaceChildren(frag);
-    els = allEls();
-    scrolls.forEach(function (s) { if (els[s[0]]) { els[s[0]].scrollTop = s[1]; els[s[0]].scrollLeft = s[2]; } });
-    if (focusIdx >= 0 && els[focusIdx]) {
-      els[focusIdx].focus({ preventScroll: true });
-      if (sel && sel[0] != null) { try { els[focusIdx].setSelectionRange(sel[0], sel[1]); } catch (e) {} }
-    }
-    window.scrollTo(0, wy);
-  }
-  function schedule() { if (!pending && root) { pending = true; Promise.resolve().then(render); } }
-
-  function tweaks(props) {
-    var keys = Object.keys(PROPS_DEF).filter(function (k) { return k[0] !== '$' && PROPS_DEF[k] && PROPS_DEF[k].editor; });
-    if (!keys.length) return;
-    var box = document.createElement('details');
-    box.id = 'dc-tweaks';
-    box.innerHTML = '<summary>Preview options</summary>';
-    var body = document.createElement('div');
-    keys.forEach(function (k) {
-      var d = PROPS_DEF[k];
-      var row = document.createElement('label');
-      var span = document.createElement('span'); span.textContent = k; row.appendChild(span);
-      var input;
-      if (d.editor === 'enum') {
-        input = document.createElement('select');
-        (d.options || []).forEach(function (o) { var op = document.createElement('option'); op.value = o; op.textContent = o; input.appendChild(op); });
-        input.value = props[k];
-        input.addEventListener('change', function () { props[k] = input.value; schedule(); });
-      } else if (d.editor === 'boolean') {
-        input = document.createElement('input'); input.type = 'checkbox'; input.checked = !!props[k];
-        input.addEventListener('change', function () { props[k] = input.checked; schedule(); });
-      } else if (d.editor === 'range' || d.editor === 'int' || d.editor === 'float') {
-        input = document.createElement('input'); input.type = 'range';
-        input.min = d.min != null ? d.min : 0; input.max = d.max != null ? d.max : 100; input.step = d.step || 1; input.value = props[k];
-        input.addEventListener('input', function () { props[k] = Number(input.value); schedule(); });
-      } else {
-        input = document.createElement('input'); input.value = props[k] == null ? '' : props[k];
-        input.addEventListener('input', function () { props[k] = input.value; schedule(); });
-      }
-      row.appendChild(input); body.appendChild(row);
-    });
-    box.appendChild(body);
-    var st = document.createElement('style');
-    st.textContent = '#dc-tweaks{position:fixed;left:12px;bottom:84px;opacity:.92;z-index:99999;font:13px/1.4 system-ui,sans-serif;background:#fff;color:#222;border:1px solid #ccc;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-width:260px}#dc-tweaks summary{cursor:pointer;padding:8px 12px;font-weight:600}#dc-tweaks div{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}#dc-tweaks label{display:flex;justify-content:space-between;align-items:center;gap:12px}#dc-tweaks select,#dc-tweaks input{font:inherit}@media print{#dc-tweaks{display:none}}';
-    document.head.appendChild(st);
-    document.body.appendChild(box);
-  }
-
-  window.__dcMount = function (Component) {
-    var props = {};
-    Object.keys(PROPS_DEF).forEach(function (k) { if (k[0] !== '$' && PROPS_DEF[k] && 'default' in PROPS_DEF[k]) props[k] = PROPS_DEF[k].default; });
-    root = document.getElementById('dc-root');
-    comp = new Component(props);
-    comp.props = props;
-    render();
-    if (comp.componentDidMount) comp.componentDidMount();
-    tweaks(props);
-  };
-})();
-
-</script>
-<script>
-class Component extends DCLogic {
-  renderVals() {
-    const B = {
-      'In progress': 'background: var(--warning); color: var(--warning-fg);',
-      Submitted: 'background: var(--navy-soft); color: var(--navy);',
-      Graded: 'background: var(--success); color: var(--success-fg);',
-      Expired: 'background: var(--surface-2); color: var(--foreground); border: 1px solid var(--border);'
-    };
-    const G = { 'In progress': '', Submitted: '', Graded: '✓ ', Expired: '' };
-    const R = [
-      ['Cambridge IELTS 18 – Practice Test 1', 'IELTS Academic', 'Full', '27 Oct 2026, 19:40', 'In progress', '—'],
-      ['ETS TOEIC 2024 – Test 3', 'TOEIC L&R', 'Full', '25 Oct 2026, 08:15', 'Graded', '755 / 990'],
-      ['Cambridge IELTS 18 – Practice Test 2', 'IELTS Academic', 'Full', '20 Oct 2026, 20:02', 'Expired', '6.5'],
-      ['TOEIC Speaking & Writing – Test 2', 'TOEIC S&W', 'Sections', '14 Oct 2026, 18:30', 'Submitted', 'Awaiting grading'],
-      ['ETS TOEIC 2024 – Test 4', 'TOEIC L&R', 'Sections', '5 Oct 2026, 07:50', 'Graded', 'R 360'],
-      ['Cambridge IELTS 17 General Training – Test 1', 'IELTS General', 'Sections', '28 Sep 2026, 21:10', 'Graded', 'L 7.0 · R 6.5'],
-      ['Cambridge IELTS 18 – Practice Test 3', 'IELTS Academic', 'Full', '31 Aug 2026, 19:00', 'Graded', '6.0']
-    ];
-    const rows = R.map(([title, type, mode, started, status, score]) => {
-      const resume = status === 'In progress';
-      return { title, type, mode, started, score, status: G[status] + status,
-        badge: 'display: inline-flex; padding: 2px 8px; border-radius: 4px; font-size: 12px; line-height: 18px; font-weight: 600; white-space: nowrap; ' + B[status],
-        action: resume ? 'Resume' : 'View results', href: resume ? 'Main.dc.html' : 'Results.dc.html',
-        btn: 'display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; ' +
-          (resume ? 'background: var(--accent); color: var(--accent-fg);' : 'background: var(--default); color: var(--foreground); border: 1px solid var(--field-border);') };
-    });
-    return { rootClass: (this.props.theme ?? 'light') === 'dark' ? 'me dark' : 'me', rows };
-  }
-}
-window.__dcMount(Component);
-</script>
-</body>
+      window.__dcMount(Component);
+    </script>
+  </body>
 </html>

@@ -1,229 +1,1283 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Exam room · Speaking</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-<style>
-body{margin:0}
-.me{--background:oklch(97.02% 0.0018 27.74);--foreground:oklch(21.03% 0 27.99);--muted:oklch(52% 0 27.99);--surface:oklch(100% 0 27.99);--surface-2:oklch(95.24% 0 27.99);--surface-3:oklch(93.73% 0 27.99);--overlay:oklch(100% 0 27.99);--default:oklch(96.416% 0.00011 271.152);--field-bg:oklch(100% 0 27.99);--field-border:oklch(80% 0.004 270);--placeholder:oklch(52% 0 27.99);--border:oklch(91% 0.002 271);--separator:oklch(94.8% 0 27.99);--accent:oklch(54.61% 0.2051 25.98);--accent-fg:oklch(99.11% 0 0);--focus:oklch(58.14% 0.2349 27.99);--success:oklch(73.31% 0.1932 150.75);--success-fg:oklch(15% 0.03 150.75);--warning:oklch(78.48% 0.159 72.51);--warning-fg:oklch(15% 0.03 72.51);--danger:oklch(43.46% 0.1757 27.74);--danger-fg:oklch(98% 0.0194 27.64);--navy:oklch(37.46% 0.142 275.16);--navy-fg:oklch(99.11% 0 0);--navy-soft:oklch(94.5% 0.025 277);--segment:oklch(100% 0 27.99);--scrollbar:oklch(87.1% 0 27.99);--shadow-surface:0 1px 2px 0 rgba(24,24,24,.06);--shadow-overlay:0 12px 32px -8px rgba(24,24,24,.18);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--foreground);background:var(--background)}
-.me.dark{--background:oklch(14.5% 0.022 268);--foreground:oklch(95% 0.006 265);--muted:oklch(68% 0.02 265);--surface:oklch(19.5% 0.026 270);--surface-2:oklch(23.5% 0.029 269);--surface-3:oklch(21.5% 0.027 268);--overlay:oklch(19% 0.024 266);--default:oklch(26% 0.028 268);--field-bg:oklch(19% 0.024 266);--field-border:oklch(50% 0.03 268);--placeholder:oklch(62% 0.018 265);--border:oklch(28% 0.032 268);--separator:oklch(23% 0.026 267);--accent:oklch(56% 0.2 27);--focus:oklch(62% 0.2 25);--success:oklch(68% 0.172 148);--success-fg:oklch(14% 0.04 148);--warning:oklch(76% 0.148 68);--warning-fg:oklch(14% 0.04 68);--danger:oklch(66% 0.17 22);--danger-fg:oklch(15% 0.03 22);--navy:oklch(75% 0.1 277);--navy-fg:oklch(28.46% 0.1073 278.54);--navy-soft:oklch(25% 0.06 277);--segment:oklch(30% 0.03 267);--scrollbar:oklch(35% 0.028 266);--shadow-surface:none;--shadow-overlay:0 12px 32px -8px rgba(0,0,0,.6)}
-.me *{box-sizing:border-box}
-.me button{font:inherit;color:inherit;cursor:pointer}
-.me :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
-.me .ghost:hover{background:var(--default)}
-</style>
-</head>
-<body>
-<div id="dc-root" style="display: contents"></div>
-<script>window.__DC_PROPS__ = {"theme":{"editor":"enum","options":["light","dark"],"default":"light"},"stage":{"editor":"enum","options":["prep","record","done"],"default":"record"},"$preview":{"width":1440,"height":900}};
-window.__DC_TPL__ = ["\n",{"n":"div","a":{"class":"{{rootClass}}","style":"height: 100vh; min-height: 760px; display: flex; flex-direction: column; overflow: hidden;"},"c":["\n\n  ",{"n":"header","a":{"style":"flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 10px 20px; background: var(--surface); border-bottom: 1px solid var(--border);"},"c":["\n    ",{"n":"div","a":{"style":"flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column;"},"c":["\n      ",{"n":"span","a":{"style":"font-size: 14px; line-height: 20px; font-weight: 600;"},"c":["ETS TOEIC Speaking & Writing – Test 2"]},"\n      ",{"n":"span","a":{"style":"font-size: 12px; line-height: 16px; color: var(--muted);"},"c":["TOEIC S&W · Full test"]},"\n    "]},"\n    ",{"n":"span","a":{"style":"display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 4px; background: var(--navy-soft); color: var(--navy); font-size: 14px; line-height: 20px; font-weight: 600;"},"c":[{"n":"svg","a":{"width":"16","height":"16","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"path","a":{"d":"M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"},"c":[]},{"n":"path","a":{"d":"M19 10v2a7 7 0 0 1-14 0v-2"},"c":[]},{"n":"line","a":{"x1":"12","x2":"12","y1":"19","y2":"22"},"c":[]}]},"Speaking · Question 3 of 11"]},"\n    ",{"n":"div","a":{"style":"display: flex; align-items: center; gap: 12px;"},"c":["\n      ",{"n":"div","a":{"role":"timer","aria-label":"Section time left: 14 minutes 30 seconds","style":"display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 9999px; background: var(--surface-2); font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums;"},"c":[{"n":"svg","a":{"width":"18","height":"18","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"circle","a":{"cx":"12","cy":"12","r":"10"},"c":[]},{"n":"polyline","a":{"points":"12 6 12 12 16 14"},"c":[]}]},"14:30"]},"\n      ",{"n":"span","a":{"role":"status","style":"display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted);"},"c":[{"n":"svg","a":{"width":"16","height":"16","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"path","a":{"d":"M20 6 9 17l-5-5"},"c":[]}]},"Saved"]},"\n      ",{"n":"button","a":{"type":"button","style":"height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 14px; font-weight: 600;"},"c":["Submit section"]},"\n    "]},"\n  "]},"\n\n  ",{"n":"main","a":{"style":"flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 28px 24px;"},"c":["\n    ",{"n":"div","a":{"style":"max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;"},"c":["\n      ",{"n":"div","a":{"style":"display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px;"},"c":["\n        ",{"n":"div","a":{},"c":["\n          ",{"n":"p","a":{"style":"margin: 0 0 4px; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--navy);"},"c":["Question 3 · Describe a picture"]},"\n          ",{"n":"h1","a":{"style":"margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;"},"c":["Describe the picture in as much detail as you can."]},"\n        "]},"\n        ",{"n":"ol","a":{"aria-label":"Steps","style":"list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; font-weight: 500;"},"c":["\n          ",{"n":"sc-for","a":{"list":"{{steps}}","as":"s","hint-placeholder-count":"3"},"c":["\n            ",{"n":"li","a":{"aria-current":"{{s.current}}","style":"{{s.style}}"},"c":[{"n":"span","a":{"style":"{{s.dot}}"},"c":["{{s.mark}}"]},"{{s.label}}"]},"\n          "]},"\n        "]},"\n      "]},"\n\n      ",{"n":"div","a":{"style":"display: flex; flex-wrap: wrap; gap: 24px;"},"c":["\n        ",{"n":"figure","a":{"style":"flex: 1 1 520px; min-width: 0; margin: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--surface-2); aspect-ratio: 4 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--muted);"},"c":["\n          ",{"n":"svg","a":{"width":"40","height":"40","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"1.5","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"},"c":[{"n":"rect","a":{"width":"18","height":"18","x":"3","y":"3","rx":"2"},"c":[]},{"n":"circle","a":{"cx":"9","cy":"9","r":"2"},"c":[]},{"n":"path","a":{"d":"m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"},"c":[]}]},"\n          ",{"n":"figcaption","a":{"style":"font-size: 14px; line-height: 20px;"},"c":["[Question image: people buying fruit at an outdoor market]"]},"\n        "]},"\n\n        ",{"n":"section","a":{"aria-label":"Response","style":"flex: 1 1 340px; min-width: 0; padding: 28px; border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center;"},"c":["\n          ",{"n":"sc-if","a":{"value":"{{isPrep}}","hint-placeholder-val":"{{true}}"},"c":["\n            ",{"n":"p","a":{"style":"margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--navy);"},"c":["Preparation time"]},"\n            ",{"n":"div","a":{"role":"timer","aria-label":"Preparation time left: 38 seconds","style":"position: relative; width: 168px; height: 168px;"},"c":["\n              ",{"n":"svg","a":{"width":"168","height":"168","viewBox":"0 0 168 168","aria-hidden":"true"},"c":[{"n":"circle","a":{"cx":"84","cy":"84","r":"76","fill":"none","stroke":"var(--surface-3)","stroke-width":"8"},"c":[]},{"n":"circle","a":{"cx":"84","cy":"84","r":"76","fill":"none","stroke":"var(--navy)","stroke-width":"8","stroke-linecap":"round","stroke-dasharray":"477.5","stroke-dashoffset":"74","transform":"rotate(-90 84 84)"},"c":[]}]},"\n              ",{"n":"span","a":{"style":"position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums;"},"c":["0:38"]},"\n            "]},"\n            ",{"n":"p","a":{"style":"margin: 0; font-size: 14px; line-height: 20px; color: var(--muted);"},"c":["Recording starts automatically after 45 seconds."]},"\n          "]},"\n          ",{"n":"sc-if","a":{"value":"{{isRec}}","hint-placeholder-val":"{{false}}"},"c":["\n            ",{"n":"p","a":{"style":"margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; font-weight: 600;"},"c":[{"n":"span","a":{"aria-hidden":"true","style":"width: 10px; height: 10px; border-radius: 9999px; background: var(--accent);"},"c":[]},"Recording"]},"\n            ",{"n":"div","a":{"role":"timer","aria-label":"Response time left: 24 seconds","style":"position: relative; width: 168px; height: 168px;"},"c":["\n              ",{"n":"svg","a":{"width":"168","height":"168","viewBox":"0 0 168 168","aria-hidden":"true"},"c":[{"n":"circle","a":{"cx":"84","cy":"84","r":"76","fill":"none","stroke":"var(--surface-3)","stroke-width":"8"},"c":[]},{"n":"circle","a":{"cx":"84","cy":"84","r":"76","fill":"none","stroke":"var(--accent)","stroke-width":"8","stroke-linecap":"round","stroke-dasharray":"477.5","stroke-dashoffset":"95","transform":"rotate(-90 84 84)"},"c":[]}]},"\n              ",{"n":"span","a":{"style":"position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums;"},"c":["0:24"]},"\n            "]},"\n            ",{"n":"div","a":{"role":"meter","aria-label":"Microphone level","aria-valuenow":"62","aria-valuemin":"0","aria-valuemax":"100","style":"display: flex; align-items: center; gap: 10px;"},"c":["\n              ",{"n":"svg","a":{"width":"18","height":"18","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2","stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true","style":"color: var(--muted);"},"c":[{"n":"path","a":{"d":"M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"},"c":[]},{"n":"path","a":{"d":"M19 10v2a7 7 0 0 1-14 0v-2"},"c":[]},{"n":"line","a":{"x1":"12","x2":"12","y1":"19","y2":"22"},"c":[]}]},"\n              ",{"n":"div","a":{"aria-hidden":"true","style":"display: flex; align-items: flex-end; gap: 3px; height: 28px;"},"c":["\n                ",{"n":"sc-for","a":{"list":"{{bars}}","as":"b","hint-placeholder-count":"16"},"c":[{"n":"span","a":{"style":"{{b.style}}"},"c":[]}]},"\n              "]},"\n            "]},"\n            ",{"n":"p","a":{"style":"margin: 0; font-size: 14px; line-height: 20px; color: var(--muted);"},"c":["Speak clearly. You have 30 seconds."]},"\n          "]},"\n          ",{"n":"sc-if","a":{"value":"{{isDone}}","hint-placeholder-val":"{{false}}"},"c":["\n            ",{"n":"span","a":{"aria-hidden":"true","style":"width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; border-radius: 9999px; background: var(--success); color: var(--success-fg);"},"c":[{"n":"svg","a":{"width":"32","height":"32","viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","stroke-width":"2.5","stroke-linecap":"round","stroke-linejoin":"round"},"c":[{"n":"path","a":{"d":"M20 6 9 17l-5-5"},"c":[]}]}]},"\n            ",{"n":"div","a":{},"c":["\n              ",{"n":"p","a":{"style":"margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;"},"c":["Response saved"]},"\n              ",{"n":"p","a":{"style":"margin: 4px 0 0; font-size: 14px; line-height: 20px; color: var(--muted);"},"c":["30 seconds recorded. The next question starts in 5 seconds."]},"\n            "]},"\n            ",{"n":"button","a":{"type":"button","style":"height: 44px; padding: 0 20px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 14px; font-weight: 600;"},"c":["Next question"]},"\n          "]},"\n        "]},"\n      "]},"\n    "]},"\n  "]},"\n\n  ",{"n":"nav","a":{"aria-label":"Question navigator","style":"flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 10px 20px; background: var(--surface); border-top: 1px solid var(--border);"},"c":["\n    ",{"n":"ul","a":{"style":"list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px;"},"c":["\n      ",{"n":"sc-for","a":{"list":"{{nav}}","as":"b","hint-placeholder-count":"11"},"c":["\n        ",{"n":"li","a":{},"c":[{"n":"span","a":{"role":"img","aria-label":"{{b.aria}}","style":"{{b.style}}"},"c":["{{b.n}}"]}]},"\n      "]},"\n    "]},"\n    ",{"n":"span","a":{"style":"flex: 1 1 200px; font-size: 12px; line-height: 16px; color: var(--muted); text-align: right;"},"c":["Speaking questions run one at a time and can't be revisited."]},"\n  "]},"\n"]},"\n"];</script>
-<script>
-/* Minimal standalone runtime for exported MyEnglish design screens. */
-(function () {
-  var SVG_NS = 'http://www.w3.org/2000/svg';
-  var TPL = window.__DC_TPL__;
-  var PROPS_DEF = window.__DC_PROPS__ || {};
-  var HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
-  var WHOLE = /^\{\{\s*([^}]+?)\s*\}\}$/;
-
-  function DCLogic(props) { this.props = props || {}; this.state = {}; }
-  DCLogic.prototype.setState = function (p) {
-    var next = typeof p === 'function' ? p(this.state, this.props) : p;
-    this.state = Object.assign({}, this.state, next);
-    schedule();
-  };
-  DCLogic.prototype.forceUpdate = function () { schedule(); };
-  window.DCLogic = DCLogic;
-
-  function lookup(expr, scope) {
-    expr = expr.trim();
-    if (expr === 'true') return true;
-    if (expr === 'false') return false;
-    if (expr === 'null') return null;
-    if (/^-?\d+(\.\d+)?$/.test(expr)) return Number(expr);
-    if (/^(['"]).*\1$/.test(expr)) return expr.slice(1, -1);
-    var parts = expr.split('.');
-    var cur;
-    for (var i = scope.length - 1; i >= 0; i--) {
-      if (scope[i] && Object.prototype.hasOwnProperty.call(scope[i], parts[0])) { cur = scope[i][parts[0]]; break; }
-    }
-    for (var j = 1; j < parts.length && cur != null; j++) cur = cur[parts[j]];
-    return cur;
-  }
-  function resolve(val, scope) {
-    var m = WHOLE.exec(val);
-    if (m) return lookup(m[1], scope);
-    return val.replace(HOLE, function (_, e) { var v = lookup(e, scope); return v == null ? '' : String(v); });
-  }
-
-  var BOOL_PROPS = { checked: 1, disabled: 1, readonly: 1, selected: 1, multiple: 1, required: 1 };
-
-  function build(nodes, parent, scope, inSvg) {
-    for (var i = 0; i < nodes.length; i++) {
-      var n = nodes[i];
-      if (typeof n === 'string') {
-        parent.appendChild(document.createTextNode(n.indexOf('{{') < 0 ? n : (function () {
-          var v = resolve(n, scope); return v == null ? '' : String(v);
-        })()));
-        continue;
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Exam room · Speaking</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
       }
-      if (n.n === 'sc-for') {
-        var list = resolve(n.a.list || '', scope) || [];
-        var as = n.a.as || 'item';
-        for (var k = 0; k < list.length; k++) {
-          var s = {}; s[as] = list[k]; s.$index = k;
-          build(n.c, parent, scope.concat([s]), inSvg);
+      .me {
+        --background: oklch(97.02% 0.0018 27.74);
+        --foreground: oklch(21.03% 0 27.99);
+        --muted: oklch(52% 0 27.99);
+        --surface: oklch(100% 0 27.99);
+        --surface-2: oklch(95.24% 0 27.99);
+        --surface-3: oklch(93.73% 0 27.99);
+        --overlay: oklch(100% 0 27.99);
+        --default: oklch(96.416% 0.00011 271.152);
+        --field-bg: oklch(100% 0 27.99);
+        --field-border: oklch(80% 0.004 270);
+        --placeholder: oklch(52% 0 27.99);
+        --border: oklch(91% 0.002 271);
+        --separator: oklch(94.8% 0 27.99);
+        --accent: oklch(54.61% 0.2051 25.98);
+        --accent-fg: oklch(99.11% 0 0);
+        --focus: oklch(58.14% 0.2349 27.99);
+        --success: oklch(73.31% 0.1932 150.75);
+        --success-fg: oklch(15% 0.03 150.75);
+        --warning: oklch(78.48% 0.159 72.51);
+        --warning-fg: oklch(15% 0.03 72.51);
+        --danger: oklch(43.46% 0.1757 27.74);
+        --danger-fg: oklch(98% 0.0194 27.64);
+        --navy: oklch(37.46% 0.142 275.16);
+        --navy-fg: oklch(99.11% 0 0);
+        --navy-soft: oklch(94.5% 0.025 277);
+        --segment: oklch(100% 0 27.99);
+        --scrollbar: oklch(87.1% 0 27.99);
+        --shadow-surface: 0 1px 2px 0 rgba(24, 24, 24, 0.06);
+        --shadow-overlay: 0 12px 32px -8px rgba(24, 24, 24, 0.18);
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        color: var(--foreground);
+        background: var(--background);
+      }
+      .me.dark {
+        --background: oklch(14.5% 0.022 268);
+        --foreground: oklch(95% 0.006 265);
+        --muted: oklch(68% 0.02 265);
+        --surface: oklch(19.5% 0.026 270);
+        --surface-2: oklch(23.5% 0.029 269);
+        --surface-3: oklch(21.5% 0.027 268);
+        --overlay: oklch(19% 0.024 266);
+        --default: oklch(26% 0.028 268);
+        --field-bg: oklch(19% 0.024 266);
+        --field-border: oklch(50% 0.03 268);
+        --placeholder: oklch(62% 0.018 265);
+        --border: oklch(28% 0.032 268);
+        --separator: oklch(23% 0.026 267);
+        --accent: oklch(56% 0.2 27);
+        --focus: oklch(62% 0.2 25);
+        --success: oklch(68% 0.172 148);
+        --success-fg: oklch(14% 0.04 148);
+        --warning: oklch(76% 0.148 68);
+        --warning-fg: oklch(14% 0.04 68);
+        --danger: oklch(66% 0.17 22);
+        --danger-fg: oklch(15% 0.03 22);
+        --navy: oklch(75% 0.1 277);
+        --navy-fg: oklch(28.46% 0.1073 278.54);
+        --navy-soft: oklch(25% 0.06 277);
+        --segment: oklch(30% 0.03 267);
+        --scrollbar: oklch(35% 0.028 266);
+        --shadow-surface: none;
+        --shadow-overlay: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+      }
+      .me * {
+        box-sizing: border-box;
+      }
+      .me button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+      .me :focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+      }
+      .me .ghost:hover {
+        background: var(--default);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dc-root" style="display: contents"></div>
+    <script>
+      window.__DC_PROPS__ = {
+        theme: { editor: 'enum', options: ['light', 'dark'], default: 'light' },
+        stage: {
+          editor: 'enum',
+          options: ['prep', 'record', 'done'],
+          default: 'record',
+        },
+        $preview: { width: 1440, height: 900 },
+      };
+      window.__DC_TPL__ = [
+        '\n',
+        {
+          n: 'div',
+          a: {
+            class: '{{rootClass}}',
+            style:
+              'height: 100vh; min-height: 760px; display: flex; flex-direction: column; overflow: hidden;',
+          },
+          c: [
+            '\n\n  ',
+            {
+              n: 'header',
+              a: {
+                style:
+                  'flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 10px 20px; background: var(--surface); border-bottom: 1px solid var(--border);',
+              },
+              c: [
+                '\n    ',
+                {
+                  n: 'div',
+                  a: {
+                    style:
+                      'flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column;',
+                  },
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'span',
+                      a: {
+                        style:
+                          'font-size: 14px; line-height: 20px; font-weight: 600;',
+                      },
+                      c: ['ETS TOEIC Speaking & Writing – Test 2'],
+                    },
+                    '\n      ',
+                    {
+                      n: 'span',
+                      a: {
+                        style:
+                          'font-size: 12px; line-height: 16px; color: var(--muted);',
+                      },
+                      c: ['TOEIC S&W · Full test'],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n    ',
+                {
+                  n: 'span',
+                  a: {
+                    style:
+                      'display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 4px; background: var(--navy-soft); color: var(--navy); font-size: 14px; line-height: 20px; font-weight: 600;',
+                  },
+                  c: [
+                    {
+                      n: 'svg',
+                      a: {
+                        width: '16',
+                        height: '16',
+                        viewBox: '0 0 24 24',
+                        fill: 'none',
+                        stroke: 'currentColor',
+                        'stroke-width': '2',
+                        'stroke-linecap': 'round',
+                        'stroke-linejoin': 'round',
+                        'aria-hidden': 'true',
+                      },
+                      c: [
+                        {
+                          n: 'path',
+                          a: {
+                            d: 'M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z',
+                          },
+                          c: [],
+                        },
+                        {
+                          n: 'path',
+                          a: { d: 'M19 10v2a7 7 0 0 1-14 0v-2' },
+                          c: [],
+                        },
+                        {
+                          n: 'line',
+                          a: { x1: '12', x2: '12', y1: '19', y2: '22' },
+                          c: [],
+                        },
+                      ],
+                    },
+                    'Speaking · Question 3 of 11',
+                  ],
+                },
+                '\n    ',
+                {
+                  n: 'div',
+                  a: {
+                    style: 'display: flex; align-items: center; gap: 12px;',
+                  },
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'div',
+                      a: {
+                        role: 'timer',
+                        'aria-label':
+                          'Section time left: 14 minutes 30 seconds',
+                        style:
+                          'display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 9999px; background: var(--surface-2); font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums;',
+                      },
+                      c: [
+                        {
+                          n: 'svg',
+                          a: {
+                            width: '18',
+                            height: '18',
+                            viewBox: '0 0 24 24',
+                            fill: 'none',
+                            stroke: 'currentColor',
+                            'stroke-width': '2',
+                            'stroke-linecap': 'round',
+                            'stroke-linejoin': 'round',
+                            'aria-hidden': 'true',
+                          },
+                          c: [
+                            {
+                              n: 'circle',
+                              a: { cx: '12', cy: '12', r: '10' },
+                              c: [],
+                            },
+                            {
+                              n: 'polyline',
+                              a: { points: '12 6 12 12 16 14' },
+                              c: [],
+                            },
+                          ],
+                        },
+                        '14:30',
+                      ],
+                    },
+                    '\n      ',
+                    {
+                      n: 'span',
+                      a: {
+                        role: 'status',
+                        style:
+                          'display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted);',
+                      },
+                      c: [
+                        {
+                          n: 'svg',
+                          a: {
+                            width: '16',
+                            height: '16',
+                            viewBox: '0 0 24 24',
+                            fill: 'none',
+                            stroke: 'currentColor',
+                            'stroke-width': '2',
+                            'stroke-linecap': 'round',
+                            'stroke-linejoin': 'round',
+                            'aria-hidden': 'true',
+                          },
+                          c: [
+                            { n: 'path', a: { d: 'M20 6 9 17l-5-5' }, c: [] },
+                          ],
+                        },
+                        'Saved',
+                      ],
+                    },
+                    '\n      ',
+                    {
+                      n: 'button',
+                      a: {
+                        type: 'button',
+                        style:
+                          'height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 14px; font-weight: 600;',
+                      },
+                      c: ['Submit section'],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n  ',
+              ],
+            },
+            '\n\n  ',
+            {
+              n: 'main',
+              a: {
+                style:
+                  'flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 28px 24px;',
+              },
+              c: [
+                '\n    ',
+                {
+                  n: 'div',
+                  a: {
+                    style:
+                      'max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;',
+                  },
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'div',
+                      a: {
+                        style:
+                          'display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px;',
+                      },
+                      c: [
+                        '\n        ',
+                        {
+                          n: 'div',
+                          a: {},
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'p',
+                              a: {
+                                style:
+                                  'margin: 0 0 4px; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--navy);',
+                              },
+                              c: ['Question 3 · Describe a picture'],
+                            },
+                            '\n          ',
+                            {
+                              n: 'h1',
+                              a: {
+                                style:
+                                  'margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;',
+                              },
+                              c: [
+                                'Describe the picture in as much detail as you can.',
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n        ',
+                        {
+                          n: 'ol',
+                          a: {
+                            'aria-label': 'Steps',
+                            style:
+                              'list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; font-weight: 500;',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'sc-for',
+                              a: {
+                                list: '{{steps}}',
+                                as: 's',
+                                'hint-placeholder-count': '3',
+                              },
+                              c: [
+                                '\n            ',
+                                {
+                                  n: 'li',
+                                  a: {
+                                    'aria-current': '{{s.current}}',
+                                    style: '{{s.style}}',
+                                  },
+                                  c: [
+                                    {
+                                      n: 'span',
+                                      a: { style: '{{s.dot}}' },
+                                      c: ['{{s.mark}}'],
+                                    },
+                                    '{{s.label}}',
+                                  ],
+                                },
+                                '\n          ',
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n      ',
+                      ],
+                    },
+                    '\n\n      ',
+                    {
+                      n: 'div',
+                      a: {
+                        style: 'display: flex; flex-wrap: wrap; gap: 24px;',
+                      },
+                      c: [
+                        '\n        ',
+                        {
+                          n: 'figure',
+                          a: {
+                            style:
+                              'flex: 1 1 520px; min-width: 0; margin: 0; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--surface-2); aspect-ratio: 4 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--muted);',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'svg',
+                              a: {
+                                width: '40',
+                                height: '40',
+                                viewBox: '0 0 24 24',
+                                fill: 'none',
+                                stroke: 'currentColor',
+                                'stroke-width': '1.5',
+                                'stroke-linecap': 'round',
+                                'stroke-linejoin': 'round',
+                                'aria-hidden': 'true',
+                              },
+                              c: [
+                                {
+                                  n: 'rect',
+                                  a: {
+                                    width: '18',
+                                    height: '18',
+                                    x: '3',
+                                    y: '3',
+                                    rx: '2',
+                                  },
+                                  c: [],
+                                },
+                                {
+                                  n: 'circle',
+                                  a: { cx: '9', cy: '9', r: '2' },
+                                  c: [],
+                                },
+                                {
+                                  n: 'path',
+                                  a: {
+                                    d: 'm21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21',
+                                  },
+                                  c: [],
+                                },
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'figcaption',
+                              a: {
+                                style: 'font-size: 14px; line-height: 20px;',
+                              },
+                              c: [
+                                '[Question image: people buying fruit at an outdoor market]',
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n\n        ',
+                        {
+                          n: 'section',
+                          a: {
+                            'aria-label': 'Response',
+                            style:
+                              'flex: 1 1 340px; min-width: 0; padding: 28px; border-radius: 12px; background: var(--surface); border: 1px solid var(--separator); box-shadow: var(--shadow-surface); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center;',
+                          },
+                          c: [
+                            '\n          ',
+                            {
+                              n: 'sc-if',
+                              a: {
+                                value: '{{isPrep}}',
+                                'hint-placeholder-val': '{{true}}',
+                              },
+                              c: [
+                                '\n            ',
+                                {
+                                  n: 'p',
+                                  a: {
+                                    style:
+                                      'margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--navy);',
+                                  },
+                                  c: ['Preparation time'],
+                                },
+                                '\n            ',
+                                {
+                                  n: 'div',
+                                  a: {
+                                    role: 'timer',
+                                    'aria-label':
+                                      'Preparation time left: 38 seconds',
+                                    style:
+                                      'position: relative; width: 168px; height: 168px;',
+                                  },
+                                  c: [
+                                    '\n              ',
+                                    {
+                                      n: 'svg',
+                                      a: {
+                                        width: '168',
+                                        height: '168',
+                                        viewBox: '0 0 168 168',
+                                        'aria-hidden': 'true',
+                                      },
+                                      c: [
+                                        {
+                                          n: 'circle',
+                                          a: {
+                                            cx: '84',
+                                            cy: '84',
+                                            r: '76',
+                                            fill: 'none',
+                                            stroke: 'var(--surface-3)',
+                                            'stroke-width': '8',
+                                          },
+                                          c: [],
+                                        },
+                                        {
+                                          n: 'circle',
+                                          a: {
+                                            cx: '84',
+                                            cy: '84',
+                                            r: '76',
+                                            fill: 'none',
+                                            stroke: 'var(--navy)',
+                                            'stroke-width': '8',
+                                            'stroke-linecap': 'round',
+                                            'stroke-dasharray': '477.5',
+                                            'stroke-dashoffset': '74',
+                                            transform: 'rotate(-90 84 84)',
+                                          },
+                                          c: [],
+                                        },
+                                      ],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'span',
+                                      a: {
+                                        style:
+                                          'position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums;',
+                                      },
+                                      c: ['0:38'],
+                                    },
+                                    '\n            ',
+                                  ],
+                                },
+                                '\n            ',
+                                {
+                                  n: 'p',
+                                  a: {
+                                    style:
+                                      'margin: 0; font-size: 14px; line-height: 20px; color: var(--muted);',
+                                  },
+                                  c: [
+                                    'Recording starts automatically after 45 seconds.',
+                                  ],
+                                },
+                                '\n          ',
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'sc-if',
+                              a: {
+                                value: '{{isRec}}',
+                                'hint-placeholder-val': '{{false}}',
+                              },
+                              c: [
+                                '\n            ',
+                                {
+                                  n: 'p',
+                                  a: {
+                                    style:
+                                      'margin: 0; display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; font-weight: 600;',
+                                  },
+                                  c: [
+                                    {
+                                      n: 'span',
+                                      a: {
+                                        'aria-hidden': 'true',
+                                        style:
+                                          'width: 10px; height: 10px; border-radius: 9999px; background: var(--accent);',
+                                      },
+                                      c: [],
+                                    },
+                                    'Recording',
+                                  ],
+                                },
+                                '\n            ',
+                                {
+                                  n: 'div',
+                                  a: {
+                                    role: 'timer',
+                                    'aria-label':
+                                      'Response time left: 24 seconds',
+                                    style:
+                                      'position: relative; width: 168px; height: 168px;',
+                                  },
+                                  c: [
+                                    '\n              ',
+                                    {
+                                      n: 'svg',
+                                      a: {
+                                        width: '168',
+                                        height: '168',
+                                        viewBox: '0 0 168 168',
+                                        'aria-hidden': 'true',
+                                      },
+                                      c: [
+                                        {
+                                          n: 'circle',
+                                          a: {
+                                            cx: '84',
+                                            cy: '84',
+                                            r: '76',
+                                            fill: 'none',
+                                            stroke: 'var(--surface-3)',
+                                            'stroke-width': '8',
+                                          },
+                                          c: [],
+                                        },
+                                        {
+                                          n: 'circle',
+                                          a: {
+                                            cx: '84',
+                                            cy: '84',
+                                            r: '76',
+                                            fill: 'none',
+                                            stroke: 'var(--accent)',
+                                            'stroke-width': '8',
+                                            'stroke-linecap': 'round',
+                                            'stroke-dasharray': '477.5',
+                                            'stroke-dashoffset': '95',
+                                            transform: 'rotate(-90 84 84)',
+                                          },
+                                          c: [],
+                                        },
+                                      ],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'span',
+                                      a: {
+                                        style:
+                                          'position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums;',
+                                      },
+                                      c: ['0:24'],
+                                    },
+                                    '\n            ',
+                                  ],
+                                },
+                                '\n            ',
+                                {
+                                  n: 'div',
+                                  a: {
+                                    role: 'meter',
+                                    'aria-label': 'Microphone level',
+                                    'aria-valuenow': '62',
+                                    'aria-valuemin': '0',
+                                    'aria-valuemax': '100',
+                                    style:
+                                      'display: flex; align-items: center; gap: 10px;',
+                                  },
+                                  c: [
+                                    '\n              ',
+                                    {
+                                      n: 'svg',
+                                      a: {
+                                        width: '18',
+                                        height: '18',
+                                        viewBox: '0 0 24 24',
+                                        fill: 'none',
+                                        stroke: 'currentColor',
+                                        'stroke-width': '2',
+                                        'stroke-linecap': 'round',
+                                        'stroke-linejoin': 'round',
+                                        'aria-hidden': 'true',
+                                        style: 'color: var(--muted);',
+                                      },
+                                      c: [
+                                        {
+                                          n: 'path',
+                                          a: {
+                                            d: 'M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z',
+                                          },
+                                          c: [],
+                                        },
+                                        {
+                                          n: 'path',
+                                          a: {
+                                            d: 'M19 10v2a7 7 0 0 1-14 0v-2',
+                                          },
+                                          c: [],
+                                        },
+                                        {
+                                          n: 'line',
+                                          a: {
+                                            x1: '12',
+                                            x2: '12',
+                                            y1: '19',
+                                            y2: '22',
+                                          },
+                                          c: [],
+                                        },
+                                      ],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'div',
+                                      a: {
+                                        'aria-hidden': 'true',
+                                        style:
+                                          'display: flex; align-items: flex-end; gap: 3px; height: 28px;',
+                                      },
+                                      c: [
+                                        '\n                ',
+                                        {
+                                          n: 'sc-for',
+                                          a: {
+                                            list: '{{bars}}',
+                                            as: 'b',
+                                            'hint-placeholder-count': '16',
+                                          },
+                                          c: [
+                                            {
+                                              n: 'span',
+                                              a: { style: '{{b.style}}' },
+                                              c: [],
+                                            },
+                                          ],
+                                        },
+                                        '\n              ',
+                                      ],
+                                    },
+                                    '\n            ',
+                                  ],
+                                },
+                                '\n            ',
+                                {
+                                  n: 'p',
+                                  a: {
+                                    style:
+                                      'margin: 0; font-size: 14px; line-height: 20px; color: var(--muted);',
+                                  },
+                                  c: ['Speak clearly. You have 30 seconds.'],
+                                },
+                                '\n          ',
+                              ],
+                            },
+                            '\n          ',
+                            {
+                              n: 'sc-if',
+                              a: {
+                                value: '{{isDone}}',
+                                'hint-placeholder-val': '{{false}}',
+                              },
+                              c: [
+                                '\n            ',
+                                {
+                                  n: 'span',
+                                  a: {
+                                    'aria-hidden': 'true',
+                                    style:
+                                      'width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; border-radius: 9999px; background: var(--success); color: var(--success-fg);',
+                                  },
+                                  c: [
+                                    {
+                                      n: 'svg',
+                                      a: {
+                                        width: '32',
+                                        height: '32',
+                                        viewBox: '0 0 24 24',
+                                        fill: 'none',
+                                        stroke: 'currentColor',
+                                        'stroke-width': '2.5',
+                                        'stroke-linecap': 'round',
+                                        'stroke-linejoin': 'round',
+                                      },
+                                      c: [
+                                        {
+                                          n: 'path',
+                                          a: { d: 'M20 6 9 17l-5-5' },
+                                          c: [],
+                                        },
+                                      ],
+                                    },
+                                  ],
+                                },
+                                '\n            ',
+                                {
+                                  n: 'div',
+                                  a: {},
+                                  c: [
+                                    '\n              ',
+                                    {
+                                      n: 'p',
+                                      a: {
+                                        style:
+                                          'margin: 0; font-size: 20px; line-height: 28px; font-weight: 600;',
+                                      },
+                                      c: ['Response saved'],
+                                    },
+                                    '\n              ',
+                                    {
+                                      n: 'p',
+                                      a: {
+                                        style:
+                                          'margin: 4px 0 0; font-size: 14px; line-height: 20px; color: var(--muted);',
+                                      },
+                                      c: [
+                                        '30 seconds recorded. The next question starts in 5 seconds.',
+                                      ],
+                                    },
+                                    '\n            ',
+                                  ],
+                                },
+                                '\n            ',
+                                {
+                                  n: 'button',
+                                  a: {
+                                    type: 'button',
+                                    style:
+                                      'height: 44px; padding: 0 20px; border: 0; border-radius: 8px; background: var(--accent); color: var(--accent-fg); font-size: 14px; font-weight: 600;',
+                                  },
+                                  c: ['Next question'],
+                                },
+                                '\n          ',
+                              ],
+                            },
+                            '\n        ',
+                          ],
+                        },
+                        '\n      ',
+                      ],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n  ',
+              ],
+            },
+            '\n\n  ',
+            {
+              n: 'nav',
+              a: {
+                'aria-label': 'Question navigator',
+                style:
+                  'flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 10px 20px; background: var(--surface); border-top: 1px solid var(--border);',
+              },
+              c: [
+                '\n    ',
+                {
+                  n: 'ul',
+                  a: {
+                    style:
+                      'list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px;',
+                  },
+                  c: [
+                    '\n      ',
+                    {
+                      n: 'sc-for',
+                      a: {
+                        list: '{{nav}}',
+                        as: 'b',
+                        'hint-placeholder-count': '11',
+                      },
+                      c: [
+                        '\n        ',
+                        {
+                          n: 'li',
+                          a: {},
+                          c: [
+                            {
+                              n: 'span',
+                              a: {
+                                role: 'img',
+                                'aria-label': '{{b.aria}}',
+                                style: '{{b.style}}',
+                              },
+                              c: ['{{b.n}}'],
+                            },
+                          ],
+                        },
+                        '\n      ',
+                      ],
+                    },
+                    '\n    ',
+                  ],
+                },
+                '\n    ',
+                {
+                  n: 'span',
+                  a: {
+                    style:
+                      'flex: 1 1 200px; font-size: 12px; line-height: 16px; color: var(--muted); text-align: right;',
+                  },
+                  c: [
+                    "Speaking questions run one at a time and can't be revisited.",
+                  ],
+                },
+                '\n  ',
+              ],
+            },
+            '\n',
+          ],
+        },
+        '\n',
+      ];
+    </script>
+    <script>
+      /* Minimal standalone runtime for exported MyEnglish design screens. */
+      (function () {
+        var SVG_NS = 'http://www.w3.org/2000/svg';
+        var TPL = window.__DC_TPL__;
+        var PROPS_DEF = window.__DC_PROPS__ || {};
+        var HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
+        var WHOLE = /^\{\{\s*([^}]+?)\s*\}\}$/;
+
+        function DCLogic(props) {
+          this.props = props || {};
+          this.state = {};
         }
-        continue;
-      }
-      if (n.n === 'sc-if') {
-        if (resolve(n.a.value || '', scope)) build(n.c, parent, scope, inSvg);
-        continue;
-      }
-      var svg = inSvg || n.n === 'svg';
-      var el = svg ? document.createElementNS(SVG_NS, n.n) : document.createElement(n.n);
-      build(n.c, el, scope, svg && n.n !== 'foreignObject');
-      applyAttrs(el, n.a, scope, svg);
-      parent.appendChild(el);
-    }
-  }
+        DCLogic.prototype.setState = function (p) {
+          var next = typeof p === 'function' ? p(this.state, this.props) : p;
+          this.state = Object.assign({}, this.state, next);
+          schedule();
+        };
+        DCLogic.prototype.forceUpdate = function () {
+          schedule();
+        };
+        window.DCLogic = DCLogic;
 
-  function applyAttrs(el, attrs, scope, svg) {
-    var later = [];
-    for (var name in attrs) {
-      if (/^hint-/.test(name)) continue;
-      var raw = attrs[name];
-      var v = raw.indexOf('{{') < 0 ? raw : resolve(raw, scope);
-      if (/^on[A-Z]/.test(name) || (/^on/.test(name) && typeof v === 'function')) {
-        if (typeof v !== 'function') continue;
-        var ev = name.slice(2).toLowerCase();
-        if (ev === 'change') {
-          var tag = el.tagName.toLowerCase(); var type = (attrs.type || 'text').toLowerCase();
-          if (tag === 'textarea' || (tag === 'input' && !/^(checkbox|radio|range|file)$/.test(type))) ev = 'input';
+        function lookup(expr, scope) {
+          expr = expr.trim();
+          if (expr === 'true') return true;
+          if (expr === 'false') return false;
+          if (expr === 'null') return null;
+          if (/^-?\d+(\.\d+)?$/.test(expr)) return Number(expr);
+          if (/^(['"]).*\1$/.test(expr)) return expr.slice(1, -1);
+          var parts = expr.split('.');
+          var cur;
+          for (var i = scope.length - 1; i >= 0; i--) {
+            if (
+              scope[i] &&
+              Object.prototype.hasOwnProperty.call(scope[i], parts[0])
+            ) {
+              cur = scope[i][parts[0]];
+              break;
+            }
+          }
+          for (var j = 1; j < parts.length && cur != null; j++)
+            cur = cur[parts[j]];
+          return cur;
         }
-        el.addEventListener(ev, v);
-        continue;
-      }
-      var lname = name.toLowerCase();
-      if (!svg && BOOL_PROPS[lname]) {
-        var on = v === '' || v === true || v === 'true' || v === lname;
-        if (lname === 'readonly') el.readOnly = on; else el[lname] = on;
-        if (on) el.setAttribute(lname, '');
-        continue;
-      }
-      if (!svg && lname === 'value') { later.push(v == null ? '' : String(v)); continue; }
-      if (v === false || v == null) continue;
-      el.setAttribute(name === 'className' ? 'class' : name === 'htmlFor' ? 'for' : name, v === true ? 'true' : String(v));
-    }
-    if (later.length) {
-      var val = later[0];
-      if (el.tagName === 'TEXTAREA') el.value = val; else { el.setAttribute('value', val); el.value = val; }
-    }
-  }
+        function resolve(val, scope) {
+          var m = WHOLE.exec(val);
+          if (m) return lookup(m[1], scope);
+          return val.replace(HOLE, function (_, e) {
+            var v = lookup(e, scope);
+            return v == null ? '' : String(v);
+          });
+        }
 
-  var root, comp, pending = false;
-  function allEls() { return root.getElementsByTagName('*'); }
-  function render() {
-    pending = false;
-    var els = allEls(), scrolls = [], focusIdx = -1, sel = null;
-    for (var i = 0; i < els.length; i++) {
-      if (els[i].scrollTop || els[i].scrollLeft) scrolls.push([i, els[i].scrollTop, els[i].scrollLeft]);
-      if (els[i] === document.activeElement) {
-        focusIdx = i;
-        try { sel = [els[i].selectionStart, els[i].selectionEnd]; } catch (e) { sel = null; }
+        var BOOL_PROPS = {
+          checked: 1,
+          disabled: 1,
+          readonly: 1,
+          selected: 1,
+          multiple: 1,
+          required: 1,
+        };
+
+        function build(nodes, parent, scope, inSvg) {
+          for (var i = 0; i < nodes.length; i++) {
+            var n = nodes[i];
+            if (typeof n === 'string') {
+              parent.appendChild(
+                document.createTextNode(
+                  n.indexOf('{{') < 0
+                    ? n
+                    : (function () {
+                        var v = resolve(n, scope);
+                        return v == null ? '' : String(v);
+                      })(),
+                ),
+              );
+              continue;
+            }
+            if (n.n === 'sc-for') {
+              var list = resolve(n.a.list || '', scope) || [];
+              var as = n.a.as || 'item';
+              for (var k = 0; k < list.length; k++) {
+                var s = {};
+                s[as] = list[k];
+                s.$index = k;
+                build(n.c, parent, scope.concat([s]), inSvg);
+              }
+              continue;
+            }
+            if (n.n === 'sc-if') {
+              if (resolve(n.a.value || '', scope))
+                build(n.c, parent, scope, inSvg);
+              continue;
+            }
+            var svg = inSvg || n.n === 'svg';
+            var el = svg
+              ? document.createElementNS(SVG_NS, n.n)
+              : document.createElement(n.n);
+            build(n.c, el, scope, svg && n.n !== 'foreignObject');
+            applyAttrs(el, n.a, scope, svg);
+            parent.appendChild(el);
+          }
+        }
+
+        function applyAttrs(el, attrs, scope, svg) {
+          var later = [];
+          for (var name in attrs) {
+            if (/^hint-/.test(name)) continue;
+            var raw = attrs[name];
+            var v = raw.indexOf('{{') < 0 ? raw : resolve(raw, scope);
+            if (
+              /^on[A-Z]/.test(name) ||
+              (/^on/.test(name) && typeof v === 'function')
+            ) {
+              if (typeof v !== 'function') continue;
+              var ev = name.slice(2).toLowerCase();
+              if (ev === 'change') {
+                var tag = el.tagName.toLowerCase();
+                var type = (attrs.type || 'text').toLowerCase();
+                if (
+                  tag === 'textarea' ||
+                  (tag === 'input' &&
+                    !/^(checkbox|radio|range|file)$/.test(type))
+                )
+                  ev = 'input';
+              }
+              el.addEventListener(ev, v);
+              continue;
+            }
+            var lname = name.toLowerCase();
+            if (!svg && BOOL_PROPS[lname]) {
+              var on = v === '' || v === true || v === 'true' || v === lname;
+              if (lname === 'readonly') el.readOnly = on;
+              else el[lname] = on;
+              if (on) el.setAttribute(lname, '');
+              continue;
+            }
+            if (!svg && lname === 'value') {
+              later.push(v == null ? '' : String(v));
+              continue;
+            }
+            if (v === false || v == null) continue;
+            el.setAttribute(
+              name === 'className'
+                ? 'class'
+                : name === 'htmlFor'
+                  ? 'for'
+                  : name,
+              v === true ? 'true' : String(v),
+            );
+          }
+          if (later.length) {
+            var val = later[0];
+            if (el.tagName === 'TEXTAREA') el.value = val;
+            else {
+              el.setAttribute('value', val);
+              el.value = val;
+            }
+          }
+        }
+
+        var root,
+          comp,
+          pending = false;
+        function allEls() {
+          return root.getElementsByTagName('*');
+        }
+        function render() {
+          pending = false;
+          var els = allEls(),
+            scrolls = [],
+            focusIdx = -1,
+            sel = null;
+          for (var i = 0; i < els.length; i++) {
+            if (els[i].scrollTop || els[i].scrollLeft)
+              scrolls.push([i, els[i].scrollTop, els[i].scrollLeft]);
+            if (els[i] === document.activeElement) {
+              focusIdx = i;
+              try {
+                sel = [els[i].selectionStart, els[i].selectionEnd];
+              } catch (e) {
+                sel = null;
+              }
+            }
+          }
+          var wy = window.scrollY;
+          var vals = comp.renderVals ? comp.renderVals() : {};
+          var frag = document.createDocumentFragment();
+          build(TPL, frag, [vals], false);
+          root.replaceChildren(frag);
+          els = allEls();
+          scrolls.forEach(function (s) {
+            if (els[s[0]]) {
+              els[s[0]].scrollTop = s[1];
+              els[s[0]].scrollLeft = s[2];
+            }
+          });
+          if (focusIdx >= 0 && els[focusIdx]) {
+            els[focusIdx].focus({ preventScroll: true });
+            if (sel && sel[0] != null) {
+              try {
+                els[focusIdx].setSelectionRange(sel[0], sel[1]);
+              } catch (e) {}
+            }
+          }
+          window.scrollTo(0, wy);
+        }
+        function schedule() {
+          if (!pending && root) {
+            pending = true;
+            Promise.resolve().then(render);
+          }
+        }
+
+        function tweaks(props) {
+          var keys = Object.keys(PROPS_DEF).filter(function (k) {
+            return k[0] !== '$' && PROPS_DEF[k] && PROPS_DEF[k].editor;
+          });
+          if (!keys.length) return;
+          var box = document.createElement('details');
+          box.id = 'dc-tweaks';
+          box.innerHTML = '<summary>Preview options</summary>';
+          var body = document.createElement('div');
+          keys.forEach(function (k) {
+            var d = PROPS_DEF[k];
+            var row = document.createElement('label');
+            var span = document.createElement('span');
+            span.textContent = k;
+            row.appendChild(span);
+            var input;
+            if (d.editor === 'enum') {
+              input = document.createElement('select');
+              (d.options || []).forEach(function (o) {
+                var op = document.createElement('option');
+                op.value = o;
+                op.textContent = o;
+                input.appendChild(op);
+              });
+              input.value = props[k];
+              input.addEventListener('change', function () {
+                props[k] = input.value;
+                schedule();
+              });
+            } else if (d.editor === 'boolean') {
+              input = document.createElement('input');
+              input.type = 'checkbox';
+              input.checked = !!props[k];
+              input.addEventListener('change', function () {
+                props[k] = input.checked;
+                schedule();
+              });
+            } else if (
+              d.editor === 'range' ||
+              d.editor === 'int' ||
+              d.editor === 'float'
+            ) {
+              input = document.createElement('input');
+              input.type = 'range';
+              input.min = d.min != null ? d.min : 0;
+              input.max = d.max != null ? d.max : 100;
+              input.step = d.step || 1;
+              input.value = props[k];
+              input.addEventListener('input', function () {
+                props[k] = Number(input.value);
+                schedule();
+              });
+            } else {
+              input = document.createElement('input');
+              input.value = props[k] == null ? '' : props[k];
+              input.addEventListener('input', function () {
+                props[k] = input.value;
+                schedule();
+              });
+            }
+            row.appendChild(input);
+            body.appendChild(row);
+          });
+          box.appendChild(body);
+          var st = document.createElement('style');
+          st.textContent =
+            '#dc-tweaks{position:fixed;left:12px;bottom:84px;opacity:.92;z-index:99999;font:13px/1.4 system-ui,sans-serif;background:#fff;color:#222;border:1px solid #ccc;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-width:260px}#dc-tweaks summary{cursor:pointer;padding:8px 12px;font-weight:600}#dc-tweaks div{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}#dc-tweaks label{display:flex;justify-content:space-between;align-items:center;gap:12px}#dc-tweaks select,#dc-tweaks input{font:inherit}@media print{#dc-tweaks{display:none}}';
+          document.head.appendChild(st);
+          document.body.appendChild(box);
+        }
+
+        window.__dcMount = function (Component) {
+          var props = {};
+          Object.keys(PROPS_DEF).forEach(function (k) {
+            if (k[0] !== '$' && PROPS_DEF[k] && 'default' in PROPS_DEF[k])
+              props[k] = PROPS_DEF[k].default;
+          });
+          root = document.getElementById('dc-root');
+          comp = new Component(props);
+          comp.props = props;
+          render();
+          if (comp.componentDidMount) comp.componentDidMount();
+          tweaks(props);
+        };
+      })();
+    </script>
+    <script>
+      class Component extends DCLogic {
+        renderVals() {
+          const stage = this.props.stage ?? 'record';
+          const idx = { prep: 0, record: 1, done: 2 }[stage];
+          const steps = ['Prepare · 45s', 'Respond · 30s', 'Done'].map(
+            (label, i) => ({
+              label,
+              current: i === idx ? 'step' : 'false',
+              mark: i < idx ? '✓' : String(i + 1),
+              style:
+                'display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 9999px; ' +
+                (i === idx
+                  ? 'background: var(--navy-soft); color: var(--navy); font-weight: 600;'
+                  : 'color: var(--muted);'),
+              dot:
+                'width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 9999px; font-size: 12px; font-weight: 700; ' +
+                (i === idx
+                  ? 'background: var(--navy); color: var(--navy-fg);'
+                  : i < idx
+                    ? 'background: var(--success); color: var(--success-fg);'
+                    : 'border: 1px solid var(--field-border);'),
+            }),
+          );
+          const lv = [
+            30, 55, 80, 60, 95, 70, 45, 85, 65, 40, 75, 50, 30, 20, 12, 8,
+          ];
+          const bars = lv.map((h, i) => ({
+            style:
+              'width: 5px; border-radius: 2px; height: ' +
+              h +
+              '%; background: ' +
+              (i < 11 ? 'var(--success)' : 'var(--surface-3)') +
+              ';',
+          }));
+          const nav = Array.from({ length: 11 }, (_, i) => {
+            const n = i + 1;
+            const a = n < 3;
+            const cur = n === 3;
+            return {
+              n,
+              aria:
+                'Question ' +
+                n +
+                (a ? ', answered' : cur ? ', current' : ', not started'),
+              style:
+                'width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 14px; font-weight: 600; ' +
+                (a
+                  ? 'background: var(--navy); color: var(--navy-fg);'
+                  : 'border: 1px solid var(--field-border);') +
+                (cur
+                  ? ' box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--foreground);'
+                  : ''),
+            };
+          });
+          return {
+            rootClass:
+              (this.props.theme ?? 'light') === 'dark' ? 'me dark' : 'me',
+            steps,
+            bars,
+            nav,
+            isPrep: stage === 'prep',
+            isRec: stage === 'record',
+            isDone: stage === 'done',
+          };
+        }
       }
-    }
-    var wy = window.scrollY;
-    var vals = comp.renderVals ? comp.renderVals() : {};
-    var frag = document.createDocumentFragment();
-    build(TPL, frag, [vals], false);
-    root.replaceChildren(frag);
-    els = allEls();
-    scrolls.forEach(function (s) { if (els[s[0]]) { els[s[0]].scrollTop = s[1]; els[s[0]].scrollLeft = s[2]; } });
-    if (focusIdx >= 0 && els[focusIdx]) {
-      els[focusIdx].focus({ preventScroll: true });
-      if (sel && sel[0] != null) { try { els[focusIdx].setSelectionRange(sel[0], sel[1]); } catch (e) {} }
-    }
-    window.scrollTo(0, wy);
-  }
-  function schedule() { if (!pending && root) { pending = true; Promise.resolve().then(render); } }
-
-  function tweaks(props) {
-    var keys = Object.keys(PROPS_DEF).filter(function (k) { return k[0] !== '$' && PROPS_DEF[k] && PROPS_DEF[k].editor; });
-    if (!keys.length) return;
-    var box = document.createElement('details');
-    box.id = 'dc-tweaks';
-    box.innerHTML = '<summary>Preview options</summary>';
-    var body = document.createElement('div');
-    keys.forEach(function (k) {
-      var d = PROPS_DEF[k];
-      var row = document.createElement('label');
-      var span = document.createElement('span'); span.textContent = k; row.appendChild(span);
-      var input;
-      if (d.editor === 'enum') {
-        input = document.createElement('select');
-        (d.options || []).forEach(function (o) { var op = document.createElement('option'); op.value = o; op.textContent = o; input.appendChild(op); });
-        input.value = props[k];
-        input.addEventListener('change', function () { props[k] = input.value; schedule(); });
-      } else if (d.editor === 'boolean') {
-        input = document.createElement('input'); input.type = 'checkbox'; input.checked = !!props[k];
-        input.addEventListener('change', function () { props[k] = input.checked; schedule(); });
-      } else if (d.editor === 'range' || d.editor === 'int' || d.editor === 'float') {
-        input = document.createElement('input'); input.type = 'range';
-        input.min = d.min != null ? d.min : 0; input.max = d.max != null ? d.max : 100; input.step = d.step || 1; input.value = props[k];
-        input.addEventListener('input', function () { props[k] = Number(input.value); schedule(); });
-      } else {
-        input = document.createElement('input'); input.value = props[k] == null ? '' : props[k];
-        input.addEventListener('input', function () { props[k] = input.value; schedule(); });
-      }
-      row.appendChild(input); body.appendChild(row);
-    });
-    box.appendChild(body);
-    var st = document.createElement('style');
-    st.textContent = '#dc-tweaks{position:fixed;left:12px;bottom:84px;opacity:.92;z-index:99999;font:13px/1.4 system-ui,sans-serif;background:#fff;color:#222;border:1px solid #ccc;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.15);max-width:260px}#dc-tweaks summary{cursor:pointer;padding:8px 12px;font-weight:600}#dc-tweaks div{padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}#dc-tweaks label{display:flex;justify-content:space-between;align-items:center;gap:12px}#dc-tweaks select,#dc-tweaks input{font:inherit}@media print{#dc-tweaks{display:none}}';
-    document.head.appendChild(st);
-    document.body.appendChild(box);
-  }
-
-  window.__dcMount = function (Component) {
-    var props = {};
-    Object.keys(PROPS_DEF).forEach(function (k) { if (k[0] !== '$' && PROPS_DEF[k] && 'default' in PROPS_DEF[k]) props[k] = PROPS_DEF[k].default; });
-    root = document.getElementById('dc-root');
-    comp = new Component(props);
-    comp.props = props;
-    render();
-    if (comp.componentDidMount) comp.componentDidMount();
-    tweaks(props);
-  };
-})();
-
-</script>
-<script>
-class Component extends DCLogic {
-  renderVals() {
-    const stage = this.props.stage ?? 'record';
-    const idx = { prep: 0, record: 1, done: 2 }[stage];
-    const steps = ['Prepare · 45s', 'Respond · 30s', 'Done'].map((label, i) => ({
-      label, current: i === idx ? 'step' : 'false', mark: i < idx ? '✓' : String(i + 1),
-      style: 'display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 9999px; ' + (i === idx ? 'background: var(--navy-soft); color: var(--navy); font-weight: 600;' : 'color: var(--muted);'),
-      dot: 'width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 9999px; font-size: 12px; font-weight: 700; ' +
-        (i === idx ? 'background: var(--navy); color: var(--navy-fg);' : i < idx ? 'background: var(--success); color: var(--success-fg);' : 'border: 1px solid var(--field-border);')
-    }));
-    const lv = [30, 55, 80, 60, 95, 70, 45, 85, 65, 40, 75, 50, 30, 20, 12, 8];
-    const bars = lv.map((h, i) => ({ style: 'width: 5px; border-radius: 2px; height: ' + h + '%; background: ' + (i < 11 ? 'var(--success)' : 'var(--surface-3)') + ';' }));
-    const nav = Array.from({ length: 11 }, (_, i) => {
-      const n = i + 1; const a = n < 3; const cur = n === 3;
-      return { n, aria: 'Question ' + n + (a ? ', answered' : cur ? ', current' : ', not started'),
-        style: 'width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 14px; font-weight: 600; ' +
-          (a ? 'background: var(--navy); color: var(--navy-fg);' : 'border: 1px solid var(--field-border);') + (cur ? ' box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--foreground);' : '') };
-    });
-    return { rootClass: (this.props.theme ?? 'light') === 'dark' ? 'me dark' : 'me', steps, bars, nav,
-      isPrep: stage === 'prep', isRec: stage === 'record', isDone: stage === 'done' };
-  }
-}
-window.__dcMount(Component);
-</script>
-</body>
+      window.__dcMount(Component);
+    </script>
+  </body>
 </html>
