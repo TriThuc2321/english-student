@@ -32,3 +32,16 @@ export async function api<T = unknown>(
 
   return data as T;
 }
+
+export function apiErrorField(error: unknown, field: string): unknown {
+  if (!(error instanceof ApiError)) return undefined;
+  const { data } = error;
+  return typeof data === 'object' && data !== null
+    ? (data as Record<string, unknown>)[field]
+    : undefined;
+}
+
+export function apiErrorCode(error: unknown): string | null {
+  const code = apiErrorField(error, 'code');
+  return typeof code === 'string' ? code : null;
+}

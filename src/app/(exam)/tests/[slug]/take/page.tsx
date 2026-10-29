@@ -23,5 +23,12 @@ export default async function TakeTestPage({
   if (!test) notFound();
 
   const picked = pickSections(test, parseSectionIds(sections));
-  return <ExamRunner test={picked.test} sectionIds={picked.sectionIds} />;
+  // A new section selection is a different attempt, so the runner starts fresh.
+  return (
+    <ExamRunner
+      key={picked.sectionIds?.join(',') ?? 'full'}
+      test={picked.test}
+      sectionIds={picked.sectionIds}
+    />
+  );
 }

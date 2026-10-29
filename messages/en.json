@@ -234,7 +234,68 @@
       "goTo": "Go to question {n}",
       "timerRunning": "The timer keeps running: {time} left.",
       "back": "Back to test",
-      "confirm": "Submit section"
+      "confirm": "Submit section",
+      "error": "We couldn't submit this section. Check your connection and try again.",
+      "submitting": "Submitting…"
+    },
+    "attemptError": {
+      "title": "We couldn't open this test",
+      "body": "Check your connection and try again. Your saved answers are safe.",
+      "retry": "Try again"
     }
+  },
+  "results": {
+    "fullTest": "Full test",
+    "practice": "Practice",
+    "expired": "Expired, auto-submitted",
+    "submittedMeta": "Submitted {date} · took {duration}",
+    "backToLibrary": "Back to library",
+    "retake": "Retake test",
+    "scoreLabel": "Score",
+    "totalToeic": "Total score",
+    "totalIelts": "Overall band (estimated)",
+    "outOf": "/ {max}",
+    "totalIeltsNote": "Based on Listening and Reading. Writing and Speaking are graded later.",
+    "rawCorrect": "{correct} / {total} correct",
+    "gradingPending": "Grading pending",
+    "noScore": "—",
+    "sectionsLabel": "Sections",
+    "answersTitle": "Your answers · {section}",
+    "legend": {
+      "correct": "Correct {count}",
+      "incorrect": "Incorrect {count}",
+      "blank": "Blank {count}",
+      "pending": "Pending {count}"
+    },
+    "status": {
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "blank": "Blank",
+      "pending": "Pending"
+    },
+    "questionAria": "Question {n}, {status}",
+    "focusTitle": "Where to focus",
+    "byPart": "By part",
+    "byType": "By question type",
+    "partFallback": "Part {order}",
+    "needsWork": "Needs work",
+    "noBreakdown": "Nothing to break down yet for this section.",
+    "questionN": "Question {n}",
+    "questionsRange": "Questions {from}–{to}",
+    "promptFallback": "See the test for the full question.",
+    "yourAnswer": "Your answer",
+    "noAnswer": "No answer",
+    "correctAnswer": "Correct answer",
+    "gradedByTeacher": "Graded by a teacher later",
+    "alsoAccepted": "Also accepted: {list}",
+    "explanation": "Explanation",
+    "noExplanation": "No explanation for this question yet.",
+    "evidence": "Evidence",
+    "paragraph": "Paragraph {label}",
+    "previous": "Previous",
+    "next": "Next",
+    "transcripts": "Transcripts",
+    "transcriptN": "Transcript {n}",
+    "emptySection": "This section has no questions."
   }
 }
