@@ -1,67 +1,163 @@
 'use client';
 
-import { Chip, Tabs } from '@heroui/react';
+import type { IconType } from 'react-icons';
+
+import { Button, cn, ToggleButton, ToggleButtonGroup } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import {
+  LuBookOpen,
+  LuCheck,
+  LuChevronLeft,
+  LuHeadphones,
+  LuLoaderCircle,
+  LuMic,
+  LuPenLine,
+  LuTriangleAlert,
+} from 'react-icons/lu';
 
 import type { StudentTestDetail } from '@/types/student-test';
 
+import type { SaveStatus } from './useExamPersistence';
+
 import { ExamTimer } from './examTimer';
+import { TEXT_SIZES, type TextSize } from './useExamTextSize';
+
+const SKILL_ICON: Record<string, IconType> = {
+  LISTENING: LuHeadphones,
+  READING: LuBookOpen,
+  WRITING: LuPenLine,
+  SPEAKING: LuMic,
+};
+
+const TEXT_SIZE_CLASS: Record<TextSize, string> = {
+  sm: 'text-[13px]',
+  md: 'text-base',
+  lg: 'text-[19px]',
+};
 
 type ExamHeaderProps = {
   test: StudentTestDetail;
+  practice: boolean;
   sectionId: number;
+  submitted: number[];
   remaining: number | null;
-  onSelectSection: (id: number) => void;
+  saveStatus: SaveStatus;
+  textSize: TextSize;
+  onTextSize: (size: TextSize) => void;
+  onSubmit: (() => void) | null;
   exitHref: string;
 };
 
 export function ExamHeader({
   test,
+  practice,
   sectionId,
+  submitted,
   remaining,
-  onSelectSection,
+  saveStatus,
+  textSize,
+  onTextSize,
+  onSubmit,
   exitHref,
 }: ExamHeaderProps) {
   const t = useTranslations();
   const sections = [...test.testSections].sort((a, b) => a.order - b.order);
 
   return (
-    <header className="border-border bg-surface flex flex-wrap items-center gap-x-4 gap-y-2 border-b px-4 py-2">
-      <Link
-        href={exitHref}
-        className="text-muted hover:text-foreground text-sm font-medium"
-      >
-        ← {t('taking.exit')}
-      </Link>
-      <div className="flex min-w-0 items-center gap-2">
-        <h1 className="truncate text-sm font-semibold">{test.title}</h1>
-        <Chip size="sm" variant="soft">
-          {t(`exam.${test.examType}`)}
-        </Chip>
+    <header className="border-border bg-surface flex flex-none flex-wrap items-center gap-x-5 gap-y-3 border-b px-5 py-2.5">
+      <div className="flex min-w-0 flex-[1_1_260px] items-center gap-2">
+        <Link
+          href={exitHref}
+          aria-label={t('taking.exit')}
+          className="text-muted hover:text-foreground hover:bg-default -ml-2 grid size-10 flex-none place-items-center rounded-lg"
+        >
+          <LuChevronLeft aria-hidden className="size-5" />
+        </Link>
+        <div className="flex min-w-0 flex-col">
+          <h1 className="truncate text-sm font-semibold">{test.title}</h1>
+          <span className="text-muted text-xs">
+            {t(`exam.${test.examType}`)} ·{' '}
+            {practice ? t('taking.practice') : t('taking.fullTest')}
+          </span>
+        </div>
       </div>
       {sections.length > 1 && (
-        <Tabs
-          selectedKey={String(sectionId)}
-          onSelectionChange={(key) => onSelectSection(Number(key))}
+        <ol
+          aria-label={t('taking.intro.sections')}
+          className="flex items-center gap-1 text-sm font-medium"
         >
-          <Tabs.ListContainer>
-            <Tabs.List aria-label={t('taking.intro.sections')}>
-              {sections.map((section) => (
-                <Tabs.Tab key={section.id} id={String(section.id)}>
-                  {t(`exam.skill.${section.skill}`)}
-                  <Tabs.Indicator />
-                </Tabs.Tab>
-              ))}
-            </Tabs.List>
-          </Tabs.ListContainer>
-        </Tabs>
+          {sections.map((section) => {
+            const current = section.id === sectionId;
+            const done = !current && submitted.includes(section.id);
+            const Icon = done
+              ? LuCheck
+              : (SKILL_ICON[section.skill] ?? LuBookOpen);
+            return (
+              <li
+                key={section.id}
+                aria-current={current ? 'step' : undefined}
+                className={cn(
+                  'flex items-center gap-1.5 rounded px-2.5 py-1.5',
+                  current
+                    ? 'bg-brand-navy-soft text-brand-navy font-semibold'
+                    : 'text-muted',
+                )}
+              >
+                <Icon aria-hidden className="size-4" />
+                {t(`exam.skill.${section.skill}`)}
+              </li>
+            );
+          })}
+        </ol>
       )}
-      {remaining !== null && (
-        <div className="ml-auto">
-          <ExamTimer seconds={remaining} />
-        </div>
-      )}
+      <div className="flex flex-wrap items-center gap-3">
+        {remaining !== null && <ExamTimer seconds={remaining} />}
+        <output
+          className={cn(
+            'flex min-w-16 items-center gap-1.5 text-xs',
+            saveStatus === 'failed' ? 'text-danger' : 'text-muted',
+          )}
+        >
+          {saveStatus === 'saving' && (
+            <LuLoaderCircle aria-hidden className="size-4 animate-spin" />
+          )}
+          {saveStatus === 'saved' && <LuCheck aria-hidden className="size-4" />}
+          {saveStatus === 'failed' && (
+            <LuTriangleAlert aria-hidden className="size-4" />
+          )}
+          {t(`taking.saveStatus.${saveStatus}`)}
+        </output>
+        <ToggleButtonGroup
+          aria-label={t('taking.textSize.label')}
+          selectionMode="single"
+          disallowEmptySelection
+          selectedKeys={[textSize]}
+          onSelectionChange={(keys) => {
+            const [next] = keys;
+            if (next) onTextSize(next as TextSize);
+          }}
+          className="bg-default gap-0.5 rounded-lg p-[3px]"
+        >
+          {TEXT_SIZES.map((size) => (
+            <ToggleButton
+              key={size}
+              id={size}
+              size="sm"
+              aria-label={t(`taking.textSize.${size}`)}
+              className={cn(
+                'data-[selected=true]:bg-segment text-muted data-[selected=true]:text-foreground data-[selected=true]:shadow-surface h-8 w-[34px] min-w-0 rounded-md bg-transparent px-0 font-bold',
+                TEXT_SIZE_CLASS[size],
+              )}
+            >
+              A
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+        {onSubmit && (
+          <Button onPress={onSubmit}>{t('taking.submitSection')}</Button>
+        )}
+      </div>
     </header>
   );
 }

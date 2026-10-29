@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import type { StudentTestListItem } from '@/types/student-test';
@@ -39,13 +39,28 @@ describe('TestCard', () => {
       'IELTS Academic',
       'Practice Test 1',
       'Cambridge IELTS 18',
-      'Listening · 30 min',
-      'Reading · 60 min',
-      '160 min',
-      'Published October 20, 2026',
+      '2 h 40 min',
+      'Added October 20, 2026',
     ]) {
       expect(screen.getByText(text)).toBeInTheDocument();
     }
+    const sections = screen.getByRole('list', { name: 'Sections' });
+    expect(
+      within(sections)
+        .getAllByRole('listitem')
+        .map((item) => item.textContent),
+    ).toEqual(['Listening30 min', 'Reading60 min']);
+  });
+
+  it('formats whole hours and short durations', () => {
+    const { unmount } = renderWithIntl(
+      <TestCard test={{ ...test, durationMinutes: 120 }} />,
+    );
+    expect(screen.getByText('2 h')).toBeInTheDocument();
+    unmount();
+
+    renderWithIntl(<TestCard test={{ ...test, durationMinutes: 45 }} />);
+    expect(screen.getByText('45 min')).toBeInTheDocument();
   });
 
   it('omits null fields', () => {
@@ -72,6 +87,7 @@ describe('TestCard', () => {
   it('translates to Vietnamese', () => {
     renderWithIntl(<TestCard test={test} />, { locale: LOCALE.VI });
 
-    expect(screen.getByText('Nghe · 30 phút')).toBeInTheDocument();
+    expect(screen.getByText('Nghe')).toBeInTheDocument();
+    expect(screen.getByText('2 giờ 40 phút')).toBeInTheDocument();
   });
 });

@@ -2,15 +2,17 @@
 
 import { cn, Tabs } from '@heroui/react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentTestPart } from '@/types/student-test';
 
 import { toPassageView } from '@/lib/exam/group-view';
 
+import { PartAudioCard, PartHeading } from './partHeading';
 import { GroupView } from './questions/groupView';
 import { PassagePane } from './questions/parts';
+import { TEXT_ZOOM, type TextSize } from './useExamTextSize';
 
 type PartViewProps = {
   part: StudentTestPart | null;
@@ -21,6 +23,8 @@ type PartViewProps = {
   flagged: number[];
   onToggleFlag: (n: number) => void;
   focusRequest?: FocusRequest | null;
+  onActiveQuestion?: (n: number) => void;
+  textSize?: TextSize;
 };
 
 export type FocusRequest = { n: number; seq: number };
@@ -36,6 +40,8 @@ export function PartView({
   flagged,
   onToggleFlag,
   focusRequest = null,
+  onActiveQuestion,
+  textSize = 'md',
 }: PartViewProps) {
   const t = useTranslations('taking');
   const [tab, setTab] = useState<'passage' | 'questions'>('questions');
@@ -63,11 +69,28 @@ export function PartView({
     return () => cancelAnimationFrame(frame);
   }, [seq, target]);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const onActiveRef = useRef(onActiveQuestion);
+  useEffect(() => {
+    onActiveRef.current = onActiveQuestion;
+  });
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const onFocusIn = (e: FocusEvent) => {
+      const anchor = (e.target as Element).closest('[id^="q-"]');
+      const n = anchor ? Number(anchor.id.slice(2)) : NaN;
+      if (Number.isInteger(n)) onActiveRef.current?.(n);
+    };
+    el.addEventListener('focusin', onFocusIn);
+    return () => el.removeEventListener('focusin', onFocusIn);
+  }, []);
+
   const groups = part
     ? [...part.questionGroups].sort((a, b) => a.order - b.order)
     : [];
 
-  if (!part || groups.length === 0) {
+  if (!part) {
     return (
       <p className="text-muted py-16 text-center text-sm">{t('emptyPart')}</p>
     );
@@ -79,26 +102,41 @@ export function PartView({
       : null;
 
   const questions = (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4">
-      {groups.map((group) => (
-        <GroupView
-          key={group.id}
-          group={group}
-          answers={answers}
-          setAnswer={onAnswer}
-          readOnly={readOnly}
-          flagged={flagged}
-          toggleFlag={onToggleFlag}
-        />
-      ))}
-    </div>
+    <>
+      <PartAudioCard part={part} index={index} />
+      <div
+        className={cn(
+          'mx-auto flex w-full max-w-[920px] flex-col gap-7 px-4 pt-5 pb-16 sm:px-6',
+          TEXT_ZOOM[textSize],
+        )}
+      >
+        <PartHeading part={part} index={index} />
+        {groups.length === 0 && (
+          <p className="text-muted py-16 text-center text-sm">
+            {t('emptyPart')}
+          </p>
+        )}
+        {groups.map((group) => (
+          <GroupView
+            key={group.id}
+            group={group}
+            answers={answers}
+            setAnswer={onAnswer}
+            readOnly={readOnly}
+            flagged={flagged}
+            toggleFlag={onToggleFlag}
+          />
+        ))}
+      </div>
+    </>
   );
 
   if (!sharedPassage) {
     return (
       <section
         aria-label={part.title ?? t('partFallback', { n: index + 1 })}
-        className="min-h-0 overflow-y-auto"
+        ref={sectionRef}
+        className="min-h-0 flex-1 overflow-y-auto"
       >
         {questions}
       </section>
@@ -108,7 +146,8 @@ export function PartView({
   return (
     <section
       aria-label={part.title ?? t('partFallback', { n: index + 1 })}
-      className="flex min-h-0 flex-col lg:grid lg:grid-cols-2"
+      ref={sectionRef}
+      className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-2"
     >
       <Tabs
         className="lg:hidden"
@@ -130,14 +169,18 @@ export function PartView({
       </Tabs>
       <div
         className={cn(
-          'min-h-0 overflow-y-auto lg:block',
+          'bg-surface-secondary border-border min-h-0 overflow-y-auto lg:block lg:border-r',
           tab === 'passage' ? 'block' : 'hidden',
         )}
       >
-        <PassagePane
-          passage={sharedPassage}
-          className="max-h-none border-0 p-4 md:border-r-0"
-        />
+        <div
+          className={cn('mx-auto px-4 pt-7 pb-14 sm:px-8', TEXT_ZOOM[textSize])}
+        >
+          <PassagePane
+            passage={sharedPassage}
+            className="bg-surface shadow-surface max-h-none rounded-xl border px-6 py-5 md:border-r md:border-b"
+          />
+        </div>
       </div>
       <div
         className={cn(

@@ -215,18 +215,7 @@ const server = createServer((req, res) => {
     if (token === 'e2e-error') return error(res, 500, 'Tests failed');
 
     if (pathname === '/api/student/tests') {
-      const isToeicLr = searchParams.get('examType') === 'TOEIC_LR';
-      if (
-        isToeicLr &&
-        (token === 'e2e-row-error' || token === 'e2e-row-error-empty')
-      ) {
-        return error(res, 500, 'Row failed');
-      }
-      return listTests(
-        res,
-        searchParams,
-        token === 'e2e-empty' || token === 'e2e-row-error-empty',
-      );
+      return listTests(res, searchParams, token === 'e2e-empty');
     }
 
     const slug = pathname.match(/^\/api\/student\/tests\/([^/]+)$/)?.[1];

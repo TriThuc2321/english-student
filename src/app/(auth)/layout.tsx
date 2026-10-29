@@ -4,10 +4,8 @@ type AuthLayoutProps = {
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="bg-background flex h-screen w-screen items-center justify-center">
-      <div className="bg-surface w-full max-w-lg rounded-3xl p-10 shadow-xl">
-        {children}
-      </div>
+    <div className="bg-background flex min-h-screen flex-col items-center justify-center gap-6 px-4 py-12">
+      {children}
     </div>
   );
 }

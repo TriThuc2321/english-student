@@ -4,6 +4,7 @@ import type { ExamState } from './reducer';
 
 import {
   clearExamDraft,
+  draftMatchesSections,
   hasExamDraft,
   loadExamDraft,
   saveExamDraft,
@@ -15,6 +16,7 @@ const state: ExamState = {
   partId: 2,
   remaining: { 1: 1200 },
   flagged: { 1: [2] },
+  submitted: [],
 };
 
 describe('exam draft', () => {
@@ -24,6 +26,39 @@ describe('exam draft', () => {
   it('round-trips a saved state', () => {
     saveExamDraft('x', state);
     expect(hasExamDraft('x')).toBe(true);
+    expect(loadExamDraft('x')).toEqual(state);
+  });
+
+  it('round-trips the practice section selection', () => {
+    saveExamDraft('x', state, [1, 3]);
+    expect(loadExamDraft('x')).toEqual({ ...state, sectionIds: [1, 3] });
+  });
+
+  it('matches drafts to the same section selection only', () => {
+    expect(draftMatchesSections(state, null)).toBe(true);
+    expect(draftMatchesSections(state, [1])).toBe(false);
+    const practice = { ...state, sectionIds: [3, 1] };
+    expect(draftMatchesSections(practice, [1, 3])).toBe(true);
+    expect(draftMatchesSections(practice, [1])).toBe(false);
+    expect(draftMatchesSections(practice, [1, 2])).toBe(false);
+    expect(draftMatchesSections(practice, null)).toBe(false);
+  });
+
+  it('returns null for malformed section ids', () => {
+    localStorage.setItem(
+      'exam-draft:x',
+      JSON.stringify({ ...state, version: 1, sectionIds: ['a'] }),
+    );
+    expect(loadExamDraft('x')).toBeNull();
+  });
+
+  it('defaults submitted for drafts saved before it existed', () => {
+    const legacy: Partial<ExamState> = { ...state };
+    delete legacy.submitted;
+    localStorage.setItem(
+      'exam-draft:x',
+      JSON.stringify({ ...legacy, version: 1 }),
+    );
     expect(loadExamDraft('x')).toEqual(state);
   });
 

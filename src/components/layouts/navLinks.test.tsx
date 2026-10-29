@@ -17,6 +17,14 @@ beforeEach(() => {
 });
 
 describe('NavLinks', () => {
+  it('links Tests to the library at /', () => {
+    renderWithIntl(<NavLinks orientation="horizontal" />);
+
+    const link = screen.getByRole('link', { name: 'Tests' });
+    expect(link).toHaveAttribute('href', '/');
+    expect(link).toHaveAttribute('aria-current', 'page');
+  });
+
   it('marks Tests active on /tests/practice-test-1', () => {
     onPath('/tests/practice-test-1');
     renderWithIntl(<NavLinks orientation="horizontal" />);
@@ -25,16 +33,13 @@ describe('NavLinks', () => {
       'aria-current',
       'page',
     );
-    expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute(
-      'aria-current',
-    );
   });
 
-  it('marks Home active only on /', () => {
-    onPath('/tests');
+  it('does not mark Tests active on unrelated paths', () => {
+    onPath('/testsuite');
     renderWithIntl(<NavLinks orientation="horizontal" />);
 
-    expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Tests' })).not.toHaveAttribute(
       'aria-current',
     );
   });

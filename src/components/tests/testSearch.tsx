@@ -48,7 +48,7 @@ export default function TestSearch({ params }: TestSearchProps) {
       value={value}
       onChange={setValue}
       maxLength={SEARCH_MAX_LENGTH}
-      className="w-full sm:max-w-xs"
+      className="w-full"
     >
       <SearchField.Group>
         <SearchField.SearchIcon />

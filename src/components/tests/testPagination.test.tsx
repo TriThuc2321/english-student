@@ -35,6 +35,6 @@ describe('TestPagination', () => {
     );
 
     await userEvent.click(screen.getByRole('button', { name: '2' }));
-    expect(push).toHaveBeenCalledWith('/tests?exam=TOEIC_LR&q=x&page=2');
+    expect(push).toHaveBeenCalledWith('/?exam=TOEIC_LR&q=x&page=2');
   });
 });

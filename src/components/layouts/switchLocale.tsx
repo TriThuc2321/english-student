@@ -20,6 +20,7 @@ import { setUserLocale } from '@/i18n/actions';
 
 export default function SwitchLocale() {
   const t = useTranslations('locale');
+  const tCommon = useTranslations('common');
   const locale = useLocale();
   const [isPending, startTransition] = useTransition();
 
@@ -37,6 +38,7 @@ export default function SwitchLocale() {
         variant="tertiary"
         isIconOnly
         isPending={isPending}
+        aria-label={tCommon('switchLocale')}
         className="rounded-full"
       >
         {locale === LOCALE.VI ? (
@@ -47,7 +49,7 @@ export default function SwitchLocale() {
       </Button>
 
       <DropdownPopover placement="bottom right">
-        <DropdownMenu aria-label="Switch locale">
+        <DropdownMenu aria-label={tCommon('switchLocale')}>
           <DropdownItem
             id={LOCALE.VI}
             textValue={t('vi')}

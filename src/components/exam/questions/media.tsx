@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@heroui/react';
+import { Button, cn } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 
@@ -14,9 +14,15 @@ type ExamAudioProps = {
   media: StudentMedia;
   startMs?: number | null;
   endMs?: number | null;
+  className?: string;
 };
 
-export function ExamAudio({ media, startMs, endMs }: ExamAudioProps) {
+export function ExamAudio({
+  media,
+  startMs,
+  endMs,
+  className,
+}: ExamAudioProps) {
   const t = useTranslations('taking.audio');
   const ref = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
@@ -41,7 +47,12 @@ export function ExamAudio({ media, startMs, endMs }: ExamAudioProps) {
   };
 
   return (
-    <div className="bg-default mb-3 flex items-center gap-3 rounded-full px-3 py-1.5">
+    <div
+      className={cn(
+        'bg-default mb-3 flex items-center gap-3 rounded-full px-3 py-1.5',
+        className,
+      )}
+    >
       {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- no transcripts are served */}
       <audio
         ref={ref}

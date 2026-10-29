@@ -52,3 +52,34 @@ export function isAnswered(value: Answer | undefined, count: number): boolean {
   if (typeof value === 'string') return value.trim().length > 0;
   return value.length === count;
 }
+
+export function parseSectionIds(
+  param: string | string[] | undefined,
+): number[] | null {
+  const raw = Array.isArray(param) ? param.join(',') : param;
+  if (!raw) return null;
+  const ids = raw
+    .split(',')
+    .map(Number)
+    .filter((id) => Number.isInteger(id) && id > 0);
+  return ids.length > 0 ? [...new Set(ids)] : null;
+}
+
+// Unknown ids are dropped; a selection with nothing left (or covering everything) runs the full test.
+export function pickSections(
+  test: StudentTestDetail,
+  ids: number[] | null,
+): { test: StudentTestDetail; sectionIds: number[] | null } {
+  if (!ids) return { test, sectionIds: null };
+  const testSections = test.testSections.filter((s) => ids.includes(s.id));
+  if (
+    testSections.length === 0 ||
+    testSections.length === test.testSections.length
+  ) {
+    return { test, sectionIds: null };
+  }
+  return {
+    test: { ...test, testSections },
+    sectionIds: byOrder(testSections).map((s) => s.id),
+  };
+}

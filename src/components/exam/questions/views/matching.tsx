@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 import { useExamGroup } from '../context';
-import { FlagBadge, Hint, KeySelect, OptionsBox, QRow } from '../parts';
+import { FlagToggle, Hint, KeySelect, OptionsBox, QNum, QRow } from '../parts';
 import { GroupAudio, GroupImage } from './groupMedia';
 
 export const MatchingView = () => {
@@ -29,8 +29,8 @@ export const MatchingView = () => {
       {allowReuse && <Hint>{t('allowReuse')}</Hint>}
       {group.questions.map((q) => (
         <QRow key={q.n} n={q.n}>
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span>{q.prompt}</span>
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+            <span className="mt-0.5">{q.prompt}</span>
             <KeySelect
               n={q.n}
               options={options}
@@ -71,7 +71,11 @@ export const MapView = () => {
             {group.questions.map((q) => (
               <tr key={q.n} id={`q-${q.n}`}>
                 <td className="border-border border p-2">
-                  <FlagBadge n={q.n} /> {q.prompt}
+                  <div className="flex items-center gap-2">
+                    <QNum>{q.n}</QNum>
+                    <span className="min-w-0 flex-1">{q.prompt}</span>
+                    <FlagToggle n={q.n} />
+                  </div>
                 </td>
                 {options.map((o) => (
                   <td

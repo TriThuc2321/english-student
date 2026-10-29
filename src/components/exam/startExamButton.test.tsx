@@ -20,6 +20,7 @@ const draft: ExamState = {
   partId: 1,
   remaining: { 1: 1200 },
   flagged: {},
+  submitted: [],
 };
 
 describe('StartExamButton', () => {

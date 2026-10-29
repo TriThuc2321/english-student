@@ -40,10 +40,3 @@ export const EXAM_CLASSES: Record<ExamType, { soft: string; bar: string }> = {
   TOEIC_LR: TOEIC_CLASSES,
   TOEIC_SW: TOEIC_CLASSES,
 };
-
-export const SKILL_CLASSES: Record<SkillType, string> = {
-  LISTENING: 'bg-skill-listening-soft text-skill-listening',
-  READING: 'bg-skill-reading-soft text-skill-reading',
-  WRITING: 'bg-skill-writing-soft text-skill-writing',
-  SPEAKING: 'bg-skill-speaking-soft text-skill-speaking',
-};

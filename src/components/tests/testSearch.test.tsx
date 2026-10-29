@@ -39,7 +39,7 @@ describe('TestSearch', () => {
 
     advance(1);
     expect(replace).toHaveBeenCalledTimes(1);
-    expect(replace).toHaveBeenCalledWith('/tests?q=cam');
+    expect(replace).toHaveBeenCalledWith('/?q=cam');
   });
 
   it('keeps exam and drops page', async () => {
@@ -50,7 +50,7 @@ describe('TestSearch', () => {
 
     await user.type(input(), 'a');
     advance(300);
-    expect(replace).toHaveBeenCalledWith('/tests?exam=TOEIC_SW&q=a');
+    expect(replace).toHaveBeenCalledWith('/?exam=TOEIC_SW&q=a');
   });
 
   it('syncs when q changes from outside', () => {
