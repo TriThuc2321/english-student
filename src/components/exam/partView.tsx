@@ -106,7 +106,7 @@ export function PartView({
       <PartAudioCard part={part} index={index} />
       <div
         className={cn(
-          'mx-auto flex w-full max-w-[920px] flex-col gap-9 px-4 pt-5 pb-16 sm:px-6',
+          'mx-auto flex w-full max-w-[920px] flex-col gap-7 px-4 pt-5 pb-16 sm:px-6',
           TEXT_ZOOM[textSize],
         )}
       >
@@ -174,10 +174,7 @@ export function PartView({
         )}
       >
         <div
-          className={cn(
-            'mx-auto max-w-[680px] px-4 pt-7 pb-14 sm:px-8',
-            TEXT_ZOOM[textSize],
-          )}
+          className={cn('mx-auto px-4 pt-7 pb-14 sm:px-8', TEXT_ZOOM[textSize])}
         >
           <PassagePane
             passage={sharedPassage}

@@ -1,6 +1,5 @@
 'use client';
 
-import { Chip } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 
@@ -8,6 +7,7 @@ import type { Answer } from '@/lib/exam/structure';
 import type { StudentQuestionGroup } from '@/types/student-test';
 
 import { toGroupView } from '@/lib/exam/group-view';
+import { isAnswered } from '@/lib/exam/structure';
 
 import { ExamGroupContext } from './context';
 import { PassagePane } from './parts';
@@ -17,17 +17,17 @@ const KEYWORDS =
   /\b(ONE|TWO|THREE|NO MORE THAN|AND\/OR A NUMBER|ONLY|TRUE|FALSE|NOT GIVEN|YES|NO)\b/;
 
 const Instruction = ({ text }: { text: string }) => (
-  <span className="text-foreground/80 basis-full text-sm leading-relaxed whitespace-pre-line">
+  <p className="text-muted whitespace-pre-line">
     {text.split(KEYWORDS).map((part, i) =>
       i % 2 ? (
-        <b key={i} className="text-accent font-semibold">
+        <b key={i} className="text-foreground font-semibold">
           {part}
         </b>
       ) : (
         part
       ),
     )}
-  </span>
+  </p>
 );
 
 type GroupViewProps = {
@@ -61,29 +61,49 @@ export function GroupView({
         ? `${from}`
         : `${from}–${to}`;
 
+  let total = 0;
+  let done = 0;
+  for (const q of view.questions) {
+    const size = Math.max(q.nTo, q.n) - q.n + 1;
+    total += size;
+    if (isAnswered(answers[q.n], size)) done += size;
+  }
+  const headingId = `group-${group.id}-heading`;
+
   return (
     <ExamGroupContext.Provider
       value={{ group: view, answers, setAnswer, readOnly, flagged, toggleFlag }}
     >
-      <section className="flex min-w-0 flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+      <section
+        aria-labelledby={range ? headingId : undefined}
+        className="bg-surface border-separator shadow-surface flex min-w-0 flex-col gap-3 overflow-hidden rounded-xl border pb-4"
+      >
+        <header className="bg-brand-navy-soft flex flex-col gap-1 px-5 py-4">
+          <div className="flex items-center justify-between gap-3 text-xs leading-4">
+            <span className="text-brand-navy font-semibold tracking-[.08em] uppercase">
+              {t(`questionType.${view.type}`)}
+            </span>
+            {total > 0 && (
+              <span className="text-muted">
+                {t('groupAnswered', { answered: done, total })}
+              </span>
+            )}
+          </div>
           {range && (
-            <Chip color="accent" size="sm" variant="soft">
-              <Chip.Label className="font-semibold">
-                {t('questionsRange', { range })}
-              </Chip.Label>
-            </Chip>
+            <h3 id={headingId} className="text-lg leading-[26px] font-bold">
+              {t('questionsRange', { range })}
+            </h3>
           )}
           {view.instruction && <Instruction text={view.instruction} />}
-        </div>
+        </header>
         {view.passages.map((passage, i) => (
           <PassagePane
             key={i}
             passage={passage}
-            className="bg-default/40 rounded-field max-h-none border-0 md:border-r-0"
+            className="bg-surface-secondary mx-3 max-h-none rounded-[10px] border-0 px-[18px] py-3.5 sm:mx-4 md:border-r-0"
           />
         ))}
-        <div className="min-w-0">
+        <div className="min-w-0 px-2 sm:px-3">
           <View />
         </div>
       </section>

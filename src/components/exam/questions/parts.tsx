@@ -289,15 +289,15 @@ export const PassagePane = ({
       className,
     )}
   >
-    <div className="max-w-[70ch]">
+    <div>
       <h4 className="mb-2 text-lg font-bold">{passage.title}</h4>
       {passage.subtitle && (
         <p className="text-muted mb-3">{passage.subtitle}</p>
       )}
       {passage.paragraphs.map((p, i) => (
-        <p key={i} className="mb-4">
+        <p key={i} className="mb-4 text-justify">
           {p.label && (
-            <span className="bg-accent-soft text-accent-soft-foreground mr-1.5 inline-grid size-5 place-items-center rounded text-xs font-bold">
+            <span className="bg-accent-soft text-accent-soft-foreground mr-1.5 inline-grid size-5 place-items-center rounded text-justify text-xs font-bold">
               {p.label}
             </span>
           )}
