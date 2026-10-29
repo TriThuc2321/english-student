@@ -6,6 +6,7 @@ export const ROUTES = {
     sectionIds?.length
       ? `/tests/${slug}/take?sections=${sectionIds.join(',')}`
       : `/tests/${slug}/take`,
+  attemptResult: (id: string) => `/attempts/${id}/result`,
 };
 
 export const SESSION_EXPIRED_PATH = '/api/session/expired';

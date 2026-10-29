@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { ExamState } from '@/lib/exam/reducer';
 
-import { saveExamDraft } from '@/lib/exam/draft';
+import { clearExamDraft, saveExamDraft } from '@/lib/exam/draft';
 
 const DEBOUNCE_MS = 500;
 const INTERVAL_MS = 5000;
@@ -14,7 +14,7 @@ export function useExamPersistence(
   state: ExamState,
   enabled: boolean,
   sectionIds?: number[] | null,
-): SaveStatus {
+): { status: SaveStatus; discard: () => void } {
   const [status, setStatus] = useState<SaveStatus>('saved');
   // Timers and listeners must write the latest state, not the one they closed over.
   const stateRef = useRef(state);
@@ -27,11 +27,13 @@ export function useExamPersistence(
   const prevRef = useRef<ExamState | null>(null);
   const prevSectionRef = useRef<number | null>(null);
   const dirtyRef = useRef(false);
+  // Once the attempt is closed, the unmount flush must not bring the draft back.
+  const discardedRef = useRef(false);
   const { answers, flagged, partId, sectionId, remaining, submitted } = state;
 
   // Only changed state is written, so an idle second tab never overwrites a newer draft with stale state.
   const writeIfDirty = useCallback(() => {
-    if (!dirtyRef.current) return;
+    if (!dirtyRef.current || discardedRef.current) return;
     dirtyRef.current = false;
     setStatus(
       saveExamDraft(slug, stateRef.current, sectionIdsRef.current)
@@ -82,5 +84,11 @@ export function useExamPersistence(
     };
   }, [enabled, writeIfDirty]);
 
-  return status;
+  const discard = useCallback(() => {
+    discardedRef.current = true;
+    dirtyRef.current = false;
+    clearExamDraft(slug);
+  }, [slug]);
+
+  return { status, discard };
 }

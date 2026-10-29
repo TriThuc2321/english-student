@@ -234,7 +234,68 @@
       "goTo": "Đến câu {n}",
       "timerRunning": "Đồng hồ vẫn tiếp tục chạy: còn {time}.",
       "back": "Quay lại bài thi",
-      "confirm": "Nộp phần thi"
+      "confirm": "Nộp phần thi",
+      "error": "Chưa nộp được phần thi này. Hãy kiểm tra kết nối rồi thử lại.",
+      "submitting": "Đang nộp…"
+    },
+    "attemptError": {
+      "title": "Không mở được bài thi",
+      "body": "Hãy kiểm tra kết nối rồi thử lại. Câu trả lời đã lưu vẫn an toàn.",
+      "retry": "Thử lại"
     }
+  },
+  "results": {
+    "fullTest": "Toàn bộ đề",
+    "practice": "Luyện tập",
+    "expired": "Hết giờ, đã tự nộp",
+    "submittedMeta": "Nộp lúc {date} · làm trong {duration}",
+    "backToLibrary": "Về thư viện đề",
+    "retake": "Làm lại",
+    "scoreLabel": "Điểm",
+    "totalToeic": "Tổng điểm",
+    "totalIelts": "Band tổng (ước tính)",
+    "outOf": "/ {max}",
+    "totalIeltsNote": "Tính từ Listening và Reading. Writing và Speaking sẽ được chấm sau.",
+    "rawCorrect": "Đúng {correct} / {total}",
+    "gradingPending": "Đang chờ chấm",
+    "noScore": "—",
+    "sectionsLabel": "Phần thi",
+    "answersTitle": "Bài làm của bạn · {section}",
+    "legend": {
+      "correct": "Đúng {count}",
+      "incorrect": "Sai {count}",
+      "blank": "Bỏ trống {count}",
+      "pending": "Chờ chấm {count}"
+    },
+    "status": {
+      "correct": "Đúng",
+      "incorrect": "Sai",
+      "blank": "Bỏ trống",
+      "pending": "Chờ chấm"
+    },
+    "questionAria": "Câu {n}, {status}",
+    "focusTitle": "Cần tập trung vào đâu",
+    "byPart": "Theo phần",
+    "byType": "Theo dạng câu hỏi",
+    "partFallback": "Phần {order}",
+    "needsWork": "Cần cải thiện",
+    "noBreakdown": "Phần thi này chưa có dữ liệu để phân tích.",
+    "questionN": "Câu {n}",
+    "questionsRange": "Câu {from}–{to}",
+    "promptFallback": "Xem đề để đọc đầy đủ câu hỏi.",
+    "yourAnswer": "Câu trả lời của bạn",
+    "noAnswer": "Chưa trả lời",
+    "correctAnswer": "Đáp án đúng",
+    "gradedByTeacher": "Giáo viên sẽ chấm sau",
+    "alsoAccepted": "Cũng chấp nhận: {list}",
+    "explanation": "Giải thích",
+    "noExplanation": "Câu này chưa có giải thích.",
+    "evidence": "Dẫn chứng",
+    "paragraph": "Đoạn {label}",
+    "previous": "Câu trước",
+    "next": "Câu sau",
+    "transcripts": "Transcript",
+    "transcriptN": "Transcript {n}",
+    "emptySection": "Phần thi này không có câu hỏi."
   }
 }

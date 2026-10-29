@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Modal } from '@heroui/react';
+import { Button, Modal, Spinner } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 
 import type { PartGroup } from './questionNavigator';
@@ -14,6 +14,8 @@ type SubmitModalProps = {
   groups: PartGroup[];
   flagged: number[];
   remaining: number | null;
+  isSubmitting?: boolean;
+  hasError?: boolean;
   onClose: () => void;
   onConfirm: () => void;
   onGoTo: (partId: number, from: number) => void;
@@ -25,6 +27,8 @@ export function SubmitModal({
   groups,
   flagged,
   remaining,
+  isSubmitting = false,
+  hasError = false,
   onClose,
   onConfirm,
   onGoTo,
@@ -120,12 +124,30 @@ export function SubmitModal({
                 {t('timerRunning', { time: formatClock(remaining) })}
               </p>
             )}
+            {hasError && (
+              <p role="alert" className="text-danger text-sm">
+                {t('error')}
+              </p>
+            )}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onPress={onClose}>
+            <Button
+              variant="secondary"
+              isDisabled={isSubmitting}
+              onPress={onClose}
+            >
               {t('back')}
             </Button>
-            <Button onPress={onConfirm}>{t('confirm')}</Button>
+            <Button isPending={isSubmitting} onPress={onConfirm}>
+              {isSubmitting ? (
+                <>
+                  <Spinner color="current" size="sm" />
+                  {t('submitting')}
+                </>
+              ) : (
+                t('confirm')
+              )}
+            </Button>
           </Modal.Footer>
         </Modal.Dialog>
       </Modal.Container>

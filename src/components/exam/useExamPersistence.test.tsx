@@ -101,4 +101,19 @@ describe('useExamPersistence', () => {
     act(() => vi.advanceTimersByTime(5000));
     expect(loadExamDraft('t')).toBeNull();
   });
+
+  it('keeps a discarded draft cleared, even with pending changes at unmount', () => {
+    const { rerender, result, unmount } = setup();
+    rerender({ state: { ...base, remaining: { 1: 590 } }, enabled: true });
+    act(() => vi.advanceTimersByTime(5000));
+    rerender({ state: { ...base, remaining: { 1: 589 } }, enabled: true });
+    act(() => result.current.discard());
+    expect(loadExamDraft('t')).toBeNull();
+    act(() => {
+      vi.advanceTimersByTime(6000);
+      window.dispatchEvent(new Event('pagehide'));
+    });
+    unmount();
+    expect(loadExamDraft('t')).toBeNull();
+  });
 });
