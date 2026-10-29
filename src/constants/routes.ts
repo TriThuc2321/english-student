@@ -6,6 +6,8 @@ export const ROUTES = {
     sectionIds?.length
       ? `/tests/${slug}/take?sections=${sectionIds.join(',')}`
       : `/tests/${slug}/take`,
+  ATTEMPTS: '/attempts',
+  attempts: (page = 1) => (page > 1 ? `/attempts?page=${page}` : '/attempts'),
   attemptResult: (id: string) => `/attempts/${id}/result`,
 };
 

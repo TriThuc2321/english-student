@@ -1,9 +1,14 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { makeAttempt, makeAttemptResult } from '@/test/fixtures/attempt';
+import {
+  makeAttempt,
+  makeAttemptListItem,
+  makeAttemptResult,
+} from '@/test/fixtures/attempt';
+import { makeTest } from '@/test/fixtures/student-test';
 
-import { getAttemptResult } from './attempts';
+import { getAttemptContent, getAttemptResult, getAttempts } from './attempts';
 import { ApiError } from './client';
 
 vi.mock('next/headers', () => ({
@@ -64,5 +69,40 @@ describe('getAttemptResult', () => {
 
     const error = await getAttemptResult('broken').catch((e: unknown) => e);
     expect(error).toBeInstanceOf(ApiError);
+  });
+});
+
+describe('getAttempts', () => {
+  it('passes paging and status filters', async () => {
+    const page = {
+      data: [makeAttemptListItem()],
+      meta: { page: 2, take: 10, totalCount: 11 },
+    };
+    respond(200, page);
+
+    await expect(
+      getAttempts({ page: 2, take: 10, status: 'GRADED' }),
+    ).resolves.toEqual(page);
+    expect(String(fetchMock.mock.calls[0][0])).toMatch(
+      /\/api\/student\/attempts\?page=2&take=10&status=GRADED$/,
+    );
+  });
+});
+
+describe('getAttemptContent', () => {
+  it('returns the content of the attempt', async () => {
+    const test = makeTest();
+    respond(200, test);
+
+    await expect(getAttemptContent('a1')).resolves.toEqual(test);
+    expect(String(fetchMock.mock.calls[0][0])).toMatch(
+      /\/api\/student\/attempts\/a1\/content$/,
+    );
+  });
+
+  it.each([404, 400])('returns null for %d', async (status) => {
+    respond(status, { message: 'Not found', statusCode: status });
+
+    await expect(getAttemptContent(`gone-${status}`)).resolves.toBeNull();
   });
 });

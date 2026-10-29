@@ -152,3 +152,7 @@ export function makeAttemptResult(
     ...overrides,
   };
 }
+
+export const makeAttemptListItem = (
+  overrides: Partial<AttemptListItem> = {},
+): AttemptListItem => makeAttemptResult({}, overrides).attempt;
