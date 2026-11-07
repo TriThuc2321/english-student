@@ -8,6 +8,7 @@ import { makeTest } from '@/test/fixtures/student-test';
 import {
   chunk,
   diffAnswers,
+  MAX_ESSAY_LENGTH,
   remainingFromAttempt,
   responseFor,
   stateFromAttempt,
@@ -38,6 +39,8 @@ describe('responseFor', () => {
     ['MULTIPLE_CHOICE', '', null],
     ['MULTIPLE_CHOICE_MULTI', [], null],
     ['OPINION_ESSAY', 'An essay', null],
+    ['IELTS_WRITING_TASK_2', ' An essay ', { text: 'An essay' }],
+    ['IELTS_SPEAKING_PART_1', '42', null],
   ] as const)('maps a %s answer %j', (type, value, expected) => {
     expect(responseFor(group(type), value as string | string[])).toEqual(
       expected,
@@ -59,6 +62,91 @@ describe('responseFor', () => {
   it('cuts text to the length the API accepts', () => {
     const response = responseFor(group('SHORT_ANSWER'), 'x'.repeat(300));
     expect(response).toEqual({ text: 'x'.repeat(255) });
+  });
+});
+
+describe('essays', () => {
+  it('saves an essay as text up to 20,000 characters', () => {
+    expect(MAX_ESSAY_LENGTH).toBe(20_000);
+    expect(
+      responseFor(group('IELTS_WRITING_TASK_1'), 'a'.repeat(25_000)),
+    ).toEqual({ text: 'a'.repeat(20_000) });
+    const essay = 'word '.repeat(60).trim();
+    expect(responseFor(group('IELTS_WRITING_TASK_2'), essay)).toEqual({
+      text: essay,
+    });
+  });
+
+  it('still clips short answers at 255', () => {
+    expect(responseFor(group('SHORT_ANSWER'), 'x'.repeat(300))).toEqual({
+      text: 'x'.repeat(255),
+    });
+  });
+});
+
+// One IELTS Speaking question (id 50, number 1) in section 40.
+const speakingTest = () => {
+  const base = makeTest();
+  const [listening] = base.testSections;
+  const [part] = listening.testParts;
+  const [g] = part.questionGroups;
+  return makeTest({
+    testSections: [
+      {
+        ...listening,
+        id: 40,
+        skill: 'SPEAKING',
+        testParts: [
+          {
+            ...part,
+            id: 400,
+            questionGroups: [
+              {
+                ...g,
+                id: 4000,
+                questionType: 'IELTS_SPEAKING_PART_1',
+                questions: [
+                  { ...g.questions[0], id: 50, numberFrom: 1, numberTo: 1 },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+};
+
+describe('recordings', () => {
+  const empty = { answers: {}, flagged: {} };
+
+  it('skips Speaking questions even when only the flag changed', () => {
+    const next = { answers: {}, flagged: { 40: [1] }, submitted: [] };
+    expect(diffAnswers(speakingTest(), empty, next)).toEqual([]);
+  });
+
+  it('never sends a Speaking answer', () => {
+    const next = { answers: { 40: { 1: '42' } }, flagged: {}, submitted: [] };
+    expect(diffAnswers(speakingTest(), empty, next)).toEqual([]);
+  });
+
+  it('restores a recording as an answered value', () => {
+    const attempt = makeAttempt({
+      sections: [
+        attemptSection(40, { skill: 'SPEAKING', status: 'IN_PROGRESS' }),
+      ],
+      answers: [
+        {
+          questionId: 50,
+          response: { mediaId: 42 },
+          flagged: false,
+          answeredAt: '2026-10-27T19:05:00.000Z',
+        },
+      ],
+    });
+    expect(stateFromAttempt(speakingTest(), attempt).answers).toEqual({
+      40: { 1: '42' },
+    });
   });
 });
 

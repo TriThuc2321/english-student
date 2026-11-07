@@ -9,9 +9,17 @@ import type {
 import type { ExamState } from './reducer';
 import type { Answer } from './structure';
 
-type ResponseField = 'key' | 'keys' | 'text' | 'summary' | null;
+type ResponseField =
+  | 'key'
+  | 'keys'
+  | 'text'
+  | 'essay'
+  | 'summary'
+  | 'audio'
+  | null;
 
-// Mirrors QUESTION_ANSWER_KINDS in english-service; null types are graded by a person and can't be saved.
+// Mirrors responseField in english-service. 'audio' answers are recordings saved through the audio endpoints;
+// null types are not answerable yet.
 const RESPONSE_FIELDS: Record<QuestionType, ResponseField> = {
   MULTIPLE_CHOICE: 'key',
   MULTIPLE_CHOICE_MULTI: 'keys',
@@ -43,15 +51,16 @@ const RESPONSE_FIELDS: Record<QuestionType, ResponseField> = {
   WRITE_SENTENCE_PICTURE: null,
   RESPOND_WRITTEN_REQUEST: null,
   OPINION_ESSAY: null,
-  IELTS_WRITING_TASK_1: null,
-  IELTS_WRITING_TASK_2: null,
-  IELTS_SPEAKING_PART_1: null,
-  IELTS_SPEAKING_PART_2: null,
-  IELTS_SPEAKING_PART_3: null,
+  IELTS_WRITING_TASK_1: 'essay',
+  IELTS_WRITING_TASK_2: 'essay',
+  IELTS_SPEAKING_PART_1: 'audio',
+  IELTS_SPEAKING_PART_2: 'audio',
+  IELTS_SPEAKING_PART_3: 'audio',
 };
 
 // The API rejects longer text, and one rejected item fails the whole batch.
 const MAX_TEXT_LENGTH = 255;
+export const MAX_ESSAY_LENGTH = 20_000;
 
 export const SAVE_BATCH_SIZE = 200;
 
@@ -75,7 +84,12 @@ export function indexTestQuestions(test: StudentTestDetail) {
   return list;
 }
 
-function fieldOf(group: StudentQuestionGroup): 'key' | 'keys' | 'text' | null {
+export const isRecordedQuestion = (type: QuestionType) =>
+  RESPONSE_FIELDS[type] === 'audio';
+
+function fieldOf(
+  group: StudentQuestionGroup,
+): Exclude<ResponseField, 'summary'> {
   const field = RESPONSE_FIELDS[group.questionType];
   if (field !== 'summary') return field;
   return group.content?.options?.length ? 'key' : 'text';
@@ -87,7 +101,7 @@ export function responseFor(
   value: Answer | undefined,
 ): AttemptResponse | null {
   const field = fieldOf(group);
-  if (field === null || value === undefined) return null;
+  if (field === null || field === 'audio' || value === undefined) return null;
   if (field === 'keys') {
     const keys = [...new Set(Array.isArray(value) ? value : [value])].filter(
       (k) => k.trim(),
@@ -97,16 +111,20 @@ export function responseFor(
   const single = Array.isArray(value) ? (value[0] ?? '') : value;
   const trimmed = single.trim();
   if (!trimmed) return null;
-  return field === 'key'
-    ? { key: trimmed }
-    : { text: trimmed.slice(0, MAX_TEXT_LENGTH) };
+  if (field === 'key') return { key: trimmed };
+  return {
+    text: trimmed.slice(
+      0,
+      field === 'essay' ? MAX_ESSAY_LENGTH : MAX_TEXT_LENGTH,
+    ),
+  };
 }
 
 function answerFromResponse(response: AttemptResponse | null): Answer | null {
   if (!response) return null;
   if ('key' in response) return response.key;
   if ('keys' in response) return response.keys;
-  if ('mediaId' in response) return null;
+  if ('mediaId' in response) return String(response.mediaId);
   return response.text;
 }
 
@@ -184,6 +202,8 @@ export function diffAnswers(
   const items: SaveAnswerItem[] = [];
   for (const { question, group, sectionId } of indexTestQuestions(test)) {
     if (next.submitted.includes(sectionId)) continue;
+    // The server rejects any autosave item for a recorded question, flag-only ones included.
+    if (isRecordedQuestion(group.questionType)) continue;
     const n = question.numberFrom;
     const response = responseFor(group, next.answers[sectionId]?.[n]);
     const flagged = (next.flagged[sectionId] ?? []).includes(n);
