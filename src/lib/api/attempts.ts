@@ -8,7 +8,7 @@ import { apiGet } from './server';
 export type AttemptResultLookup =
   | { status: 'ok'; result: AttemptResult }
   | { status: 'notFound' }
-  | { status: 'notGraded'; testSlug: string };
+  | { status: 'inProgress'; testSlug: string };
 
 export const getAttemptResult = cache(
   async (id: string): Promise<AttemptResultLookup> => {
@@ -25,11 +25,12 @@ export const getAttemptResult = cache(
       ) {
         return { status: 'notFound' };
       }
+      // The API only refuses a result while the attempt is still being taken.
       if (apiErrorCode(error) === 'ATTEMPT_NOT_GRADED') {
         const attempt = await apiGet<Attempt>(
           `/student/attempts/${encodeURIComponent(id)}`,
         );
-        return { status: 'notGraded', testSlug: attempt.testSlug };
+        return { status: 'inProgress', testSlug: attempt.testSlug };
       }
       throw error;
     }
