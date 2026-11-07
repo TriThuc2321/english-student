@@ -303,6 +303,22 @@
     "next": "Next",
     "transcripts": "Transcripts",
     "transcriptN": "Transcript {n}",
-    "emptySection": "This section has no questions."
+    "emptySection": "This section has no questions.",
+    "grading": "Being graded",
+    "totalIeltsFinal": "Overall band",
+    "assessmentTitle": "Teacher's grade · Band {band}",
+    "teacherFeedback": "Teacher feedback",
+    "sampleAnswer": "Sample answer",
+    "yourRecording": "Your recording",
+    "taskBand": "{task} · Band {band}",
+    "criteria": {
+      "TA": "Task Achievement",
+      "TR": "Task Response",
+      "CC": "Coherence and Cohesion",
+      "LR": "Lexical Resource",
+      "GRA": "Grammatical Range and Accuracy",
+      "FC": "Fluency and Coherence",
+      "P": "Pronunciation"
+    }
   }
 }

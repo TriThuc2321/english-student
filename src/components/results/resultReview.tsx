@@ -13,6 +13,8 @@ import type {
   SectionResult,
 } from '@/lib/results/view';
 
+import { AssessmentPanel } from './assessmentPanel';
+
 const CELL_CLASSES: Record<NumberStatus, string> = {
   correct: 'bg-success text-success-foreground border border-success',
   incorrect: 'bg-danger-soft text-foreground border-2 border-danger',
@@ -76,6 +78,9 @@ export function ResultReview({ sections }: ResultReviewProps) {
 
   const content = (
     <>
+      {section.assessment && (
+        <AssessmentPanel assessment={section.assessment} />
+      )}
       <AnswerGrid
         title={t('results.answersTitle', { section: sectionName(section) })}
         section={section}
@@ -332,16 +337,36 @@ function ReviewPanel({
         {item.prompt ?? t('results.promptFallback')}
       </p>
       <div className="bg-surface-secondary rounded-lg px-3.5 py-3">
-        <p className="text-muted text-xs">{t('results.yourAnswer')}</p>
-        <p className="mt-0.5 font-semibold">
-          {item.yourAnswer.length > 0
-            ? item.yourAnswer.map(formatPart).join(', ')
-            : t('results.noAnswer')}
-        </p>
+        {item.audioUrl ? (
+          <>
+            <p className="text-muted text-xs">{t('results.yourRecording')}</p>
+            {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- the student's own recording has no captions to offer */}
+            <audio controls src={item.audioUrl} className="mt-1.5 w-full" />
+          </>
+        ) : (
+          <>
+            <p className="text-muted text-xs">{t('results.yourAnswer')}</p>
+            <p
+              className={`mt-0.5 ${item.sample === null ? 'font-semibold' : 'max-h-96 overflow-y-auto text-sm leading-6 whitespace-pre-line'}`}
+            >
+              {item.yourAnswer.length > 0
+                ? item.yourAnswer.map(formatPart).join(', ')
+                : t('results.noAnswer')}
+            </p>
+          </>
+        )}
       </div>
       <div className="border-border rounded-lg border border-dashed px-3.5 py-3">
-        <p className="text-muted text-xs">{t('results.correctAnswer')}</p>
-        {item.correctAnswer ? (
+        <p className="text-muted text-xs">
+          {item.sample === null
+            ? t('results.correctAnswer')
+            : t('results.sampleAnswer')}
+        </p>
+        {item.sample !== null ? (
+          <p className="mt-0.5 max-h-96 overflow-y-auto text-sm leading-6 whitespace-pre-line">
+            {item.sample}
+          </p>
+        ) : item.correctAnswer ? (
           <>
             <p className="mt-0.5 font-semibold">
               {item.correctAnswer.map(formatPart).join(', ')}

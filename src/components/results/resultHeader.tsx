@@ -1,7 +1,7 @@
 import { buttonVariants, Chip } from '@heroui/react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { LuClock, LuRotateCcw } from 'react-icons/lu';
+import { LuClock, LuHourglass, LuRotateCcw } from 'react-icons/lu';
 
 import type { Locale } from '@/i18n';
 import type { AttemptListItem } from '@/types/attempt';
@@ -54,6 +54,12 @@ export function ResultHeader({ attempt }: ResultHeaderProps) {
             >
               <LuClock aria-hidden className="size-3" />
               {t('results.expired')}
+            </Chip>
+          )}
+          {attempt.sections.some((s) => s.gradingStatus === 'PENDING') && (
+            <Chip size="sm" variant="soft">
+              <LuHourglass aria-hidden className="size-3" />
+              {t('results.grading')}
             </Chip>
           )}
         </div>

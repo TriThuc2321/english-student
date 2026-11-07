@@ -303,6 +303,22 @@
     "next": "Câu sau",
     "transcripts": "Transcript",
     "transcriptN": "Transcript {n}",
-    "emptySection": "Phần thi này không có câu hỏi."
+    "emptySection": "Phần thi này không có câu hỏi.",
+    "grading": "Đang chấm",
+    "totalIeltsFinal": "Band tổng",
+    "assessmentTitle": "Điểm giáo viên chấm · Band {band}",
+    "teacherFeedback": "Nhận xét của giáo viên",
+    "sampleAnswer": "Bài mẫu",
+    "yourRecording": "Bản ghi âm của bạn",
+    "taskBand": "{task} · Band {band}",
+    "criteria": {
+      "TA": "Task Achievement",
+      "TR": "Task Response",
+      "CC": "Coherence and Cohesion",
+      "LR": "Lexical Resource",
+      "GRA": "Grammatical Range and Accuracy",
+      "FC": "Fluency and Coherence",
+      "P": "Pronunciation"
+    }
   }
 }
