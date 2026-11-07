@@ -54,16 +54,19 @@ export const FlagToggle = ({ n }: { n: number }) => {
   );
 };
 
-export const QRow = ({ n, label, children }: QRowProps) => (
-  <div
-    id={`q-${n}`}
-    className="rounded-field mb-1.5 grid grid-cols-[auto_1fr_auto] gap-2.5 border border-transparent p-2"
-  >
-    <QNum>{label ?? n}</QNum>
-    <div className="min-w-0">{children}</div>
-    <FlagToggle n={n} />
-  </div>
-);
+export const QRow = ({ n, label, children }: QRowProps) => {
+  const { anchorId } = useExamGroup();
+  return (
+    <div
+      id={anchorId(n)}
+      className="rounded-field mb-1.5 grid grid-cols-[auto_1fr_auto] gap-2.5 border border-transparent p-2"
+    >
+      <QNum>{label ?? n}</QNum>
+      <div className="min-w-0">{children}</div>
+      <FlagToggle n={n} />
+    </div>
+  );
+};
 
 export const QNum = ({ children }: { children: ReactNode }) => (
   <span className="bg-accent-soft text-accent-soft-foreground rounded-field inline-grid h-7 min-w-7 shrink-0 place-items-center px-1.5 align-middle text-[13px] leading-none font-bold">
@@ -98,7 +101,7 @@ type BlankProps = {
 
 export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
   const t = useTranslations('taking');
-  const { answers, setAnswer, readOnly } = useExamGroup();
+  const { answers, setAnswer, readOnly, anchorId } = useExamGroup();
   const value = (answers[n] as string | undefined) ?? '';
   const label = t('answerLabel', { n });
 
@@ -107,7 +110,7 @@ export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
       <QNum>{n}</QNum>
       {options ? (
         <select
-          id={`q-${n}`}
+          id={anchorId(n)}
           aria-label={label}
           className={fieldClass}
           value={value}
@@ -119,7 +122,7 @@ export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
         </select>
       ) : (
         <input
-          id={`q-${n}`}
+          id={anchorId(n)}
           aria-label={label}
           autoComplete="off"
           spellCheck={false}

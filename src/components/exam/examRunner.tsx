@@ -148,7 +148,7 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
   const [textSize, setTextSize] = useExamTextSize();
   const [active, setActive] = useState<{
     sectionId: number;
-    n: number;
+    questionId: number;
   } | null>(null);
   // Never reset: PartView only re-triggers on a new seq, even after the request was cleared.
   const focusSeq = useRef(0);
@@ -218,7 +218,7 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
         dispatch({
           type: 'recorded',
           sectionId: q.sectionId,
-          n: q.question.numberFrom,
+          questionId,
           value: String(mediaId),
         });
       },
@@ -274,10 +274,10 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
   const groups = partGroups(section, sectionAnswers);
   const allNumbers = groups.flatMap((g) => g.numbers);
 
-  const goToQuestion = (partId: number, from: number) => {
+  const goToQuestion = (partId: number, questionId: number) => {
     dispatch({ type: 'goTo', sectionId: section.id, partId });
     setFocus({
-      n: from,
+      questionId,
       seq: ++focusSeq.current,
       sectionId: section.id,
       partId,
@@ -397,18 +397,22 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
             part={part}
             index={Math.max(partIndex, 0)}
             answers={sectionAnswers}
-            onAnswer={(n: number, value: Answer) =>
-              dispatch({ type: 'answer', n, value })
+            onAnswer={(questionId: number, value: Answer) =>
+              dispatch({ type: 'answer', questionId, value })
             }
             readOnly={locked}
             flagged={sectionFlagged}
-            onToggleFlag={(n) => dispatch({ type: 'toggleFlag', n })}
+            onToggleFlag={(questionId) =>
+              dispatch({ type: 'toggleFlag', questionId })
+            }
             focusRequest={
               focus?.sectionId === section.id && focus.partId === state.partId
                 ? focus
                 : null
             }
-            onActiveQuestion={(n) => setActive({ sectionId: section.id, n })}
+            onActiveQuestion={(questionId) =>
+              setActive({ sectionId: section.id, questionId })
+            }
             textSize={textSize}
           />
         </AttemptAudioContext.Provider>
@@ -416,7 +420,9 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
       <QuestionNavigator
         section={section}
         partId={state.partId}
-        activeQuestion={active?.sectionId === section.id ? active.n : null}
+        activeQuestion={
+          active?.sectionId === section.id ? active.questionId : null
+        }
         answers={sectionAnswers}
         flagged={sectionFlagged}
         onSelect={goToQuestion}

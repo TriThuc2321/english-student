@@ -60,7 +60,7 @@ type ResultReviewProps = {
 export function ResultReview({ sections }: ResultReviewProps) {
   const t = useTranslations();
   const [sectionId, setSectionId] = useState(sections[0]?.sectionId);
-  const [selected, setSelected] = useState<Record<number, number>>({});
+  const [selected, setSelected] = useState<Record<number, string>>({});
   const transcriptsHeading = useId();
 
   const section =
@@ -69,10 +69,10 @@ export function ResultReview({ sections }: ResultReviewProps) {
 
   const items = section.items;
   const current =
-    items.find((item) => item.n === selected[section.sectionId]) ?? items[0];
+    items.find((item) => item.key === selected[section.sectionId]) ?? items[0];
   const index = current ? items.indexOf(current) : -1;
-  const select = (n: number) =>
-    setSelected((prev) => ({ ...prev, [section.sectionId]: n }));
+  const select = (key: string) =>
+    setSelected((prev) => ({ ...prev, [section.sectionId]: key }));
 
   const sectionName = (s: SectionResult) => t(`exam.skill.${s.skill}`);
 
@@ -84,7 +84,7 @@ export function ResultReview({ sections }: ResultReviewProps) {
       <AnswerGrid
         title={t('results.answersTitle', { section: sectionName(section) })}
         section={section}
-        selectedN={current?.n ?? null}
+        selectedKey={current?.key ?? null}
         onSelect={select}
       />
       <FocusBreakdown section={section} />
@@ -156,9 +156,9 @@ export function ResultReview({ sections }: ResultReviewProps) {
       {current && (
         <ReviewPanel
           item={current}
-          onPrev={index > 0 ? () => select(items[index - 1].n) : null}
+          onPrev={index > 0 ? () => select(items[index - 1].key) : null}
           onNext={
-            index < items.length - 1 ? () => select(items[index + 1].n) : null
+            index < items.length - 1 ? () => select(items[index + 1].key) : null
           }
         />
       )}
@@ -169,13 +169,13 @@ export function ResultReview({ sections }: ResultReviewProps) {
 function AnswerGrid({
   title,
   section,
-  selectedN,
+  selectedKey,
   onSelect,
 }: {
   title: string;
   section: SectionResult;
-  selectedN: number | null;
-  onSelect: (n: number) => void;
+  selectedKey: string | null;
+  onSelect: (key: string) => void;
 }) {
   const t = useTranslations('results');
   const headingId = useId();
@@ -208,9 +208,9 @@ function AnswerGrid({
       ) : (
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-1.5">
           {section.items.map((item) => {
-            const on = item.n === selectedN;
+            const on = item.key === selectedKey;
             return (
-              <li key={item.n}>
+              <li key={item.key}>
                 <button
                   type="button"
                   aria-pressed={on}
@@ -218,7 +218,7 @@ function AnswerGrid({
                     n: item.n,
                     status: t(`status.${item.status}`),
                   })}
-                  onClick={() => onSelect(item.n)}
+                  onClick={() => onSelect(item.key)}
                   className={`flex h-11 w-full cursor-pointer flex-col items-center justify-center gap-px rounded-lg text-sm font-semibold tabular-nums ${CELL_CLASSES[item.status]} ${on ? 'ring-foreground ring-offset-surface ring-2 ring-offset-2' : ''}`}
                 >
                   {item.n}

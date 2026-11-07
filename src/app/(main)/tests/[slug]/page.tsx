@@ -107,11 +107,11 @@ export default async function TestIntroPage({
   const questions: IntroQuestion[] = sorted.flatMap((section) => {
     const sizes = new Map<number, number>();
     for (const slot of questionSlots(section)) {
-      sizes.set(slot.from, (sizes.get(slot.from) ?? 0) + 1);
+      sizes.set(slot.questionId, (sizes.get(slot.questionId) ?? 0) + 1);
     }
-    return [...sizes].map(([from, size]) => ({
+    return [...sizes].map(([questionId, size]) => ({
       sectionId: section.id,
-      from,
+      questionId,
       size,
     }));
   });

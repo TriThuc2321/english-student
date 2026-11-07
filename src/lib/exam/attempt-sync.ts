@@ -172,13 +172,13 @@ export function stateFromAttempt(
   for (const saved of attempt.answers) {
     const q = byId.get(saved.questionId);
     if (!q) continue;
-    const n = q.question.numberFrom;
+    const id = q.question.id;
     const value = answerFromResponse(saved.response);
     if (value !== null) {
-      answers[q.sectionId] = { ...answers[q.sectionId], [n]: value };
+      answers[q.sectionId] = { ...answers[q.sectionId], [id]: value };
     }
     if (saved.flagged) {
-      flagged[q.sectionId] = [...(flagged[q.sectionId] ?? []), n];
+      flagged[q.sectionId] = [...(flagged[q.sectionId] ?? []), id];
     }
   }
 
@@ -204,15 +204,15 @@ export function diffAnswers(
     if (next.submitted.includes(sectionId)) continue;
     // The server rejects any autosave item for a recorded question, flag-only ones included.
     if (isRecordedQuestion(group.questionType)) continue;
-    const n = question.numberFrom;
-    const response = responseFor(group, next.answers[sectionId]?.[n]);
-    const flagged = (next.flagged[sectionId] ?? []).includes(n);
+    const id = question.id;
+    const response = responseFor(group, next.answers[sectionId]?.[id]);
+    const flagged = (next.flagged[sectionId] ?? []).includes(id);
     const responseChanged = !sameResponse(
-      responseFor(group, saved.answers[sectionId]?.[n]),
+      responseFor(group, saved.answers[sectionId]?.[id]),
       response,
     );
     const flagChanged =
-      (saved.flagged[sectionId] ?? []).includes(n) !== flagged;
+      (saved.flagged[sectionId] ?? []).includes(id) !== flagged;
     if (!responseChanged && !flagChanged) continue;
     items.push({ questionId: question.id, response, flagged });
   }

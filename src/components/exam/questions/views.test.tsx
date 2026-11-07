@@ -86,7 +86,26 @@ describe('question views', () => {
   it('MCQ reports the chosen option', async () => {
     const { setAnswer } = setup(fixtureGroup(3010));
     await userEvent.click(screen.getByRole('radio', { name: /In the office/ }));
-    expect(setAnswer).toHaveBeenCalledWith(5, 'B');
+    expect(setAnswer).toHaveBeenCalledWith(4, 'B');
+  });
+
+  it('saves and reads answers by question id, not number', async () => {
+    const group = inlineGroup({
+      questionType: 'IELTS_WRITING_TASK_2',
+      content: null,
+      questions: [{ ...fixtureGroup(3000).questions[0], id: 99 }],
+    });
+    const { setAnswer, toggleFlag } = setup(group, {
+      answers: { 1: 'stale by number', 99: 'saved essay' },
+    });
+
+    const box = screen.getByLabelText('Answer 1');
+    expect(box).toHaveValue('saved essay');
+    await userEvent.type(box, '!');
+    expect(setAnswer).toHaveBeenLastCalledWith(99, 'saved essay!');
+    await userEvent.click(screen.getByRole('button', { name: /flag/i }));
+    expect(toggleFlag).toHaveBeenCalledWith(99);
+    expect(document.getElementById('q-99')).not.toBeNull();
   });
 
   it('MCQ radios are disabled when read-only', () => {
@@ -135,7 +154,7 @@ describe('question views', () => {
   });
 
   it('matching disables keys used by another question when reuse is off', () => {
-    setup(fixtureGroup(3100), { answers: { 1: 'i' } });
+    setup(fixtureGroup(3100), { answers: { 10: 'i' } });
     const second = screen.getByLabelText('Answer 2');
     expect(within(second).getByRole('option', { name: 'i' })).toBeDisabled();
     const first = screen.getByLabelText('Answer 1');
@@ -289,7 +308,7 @@ describe('IELTS speaking recorder', () => {
   });
 
   it('starts as saved when the question already has a recording', () => {
-    setupSpeaking({ answers: { 1: '42' } });
+    setupSpeaking({ answers: { 77: '42' } });
     expect(screen.getByText('Recording saved')).toBeVisible();
   });
 

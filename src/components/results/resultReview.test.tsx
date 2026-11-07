@@ -177,3 +177,34 @@ describe('ResultReview teacher grading', () => {
     expect(screen.getByText('Pronunciation')).toBeVisible();
   });
 });
+
+describe('ResultReview repeated numbers', () => {
+  it('reviews each question when two share a number', async () => {
+    const user = userEvent.setup();
+    const task = (questionId: number, text: string) =>
+      resultQuestion(questionId, 30, 1, {
+        response: { text },
+        answer: { sample: 'A model answer.' },
+      });
+    const result = makeAttemptResult(
+      { questions: [task(1, 'Task one essay'), task(4, 'Task two essay')] },
+      {
+        sections: [
+          attemptSection(30, { skill: 'WRITING', gradingStatus: 'GRADED' }),
+        ],
+      },
+    );
+    renderWithIntl(
+      <ResultReview sections={buildResultView(result, makeTest()).sections} />,
+    );
+
+    const cells = screen.getAllByRole('button', { name: 'Question 1, Graded' });
+    expect(cells).toHaveLength(2);
+    await user.click(cells[1]);
+
+    expect(cells[1]).toHaveAttribute('aria-pressed', 'true');
+    expect(cells[0]).toHaveAttribute('aria-pressed', 'false');
+    expect(panel().getByText('Task two essay')).toBeVisible();
+    expect(panel().getByText('Where will the tour start?')).toBeVisible();
+  });
+});

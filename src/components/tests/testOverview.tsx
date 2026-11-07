@@ -39,7 +39,11 @@ import { isAnswered } from '@/lib/exam/structure';
 import { SKILL_ICONS } from './skillBadges';
 import { useFormatDuration } from './useFormatDuration';
 
-export type IntroQuestion = { sectionId: number; from: number; size: number };
+export type IntroQuestion = {
+  sectionId: number;
+  questionId: number;
+  size: number;
+};
 
 export type OverviewSection = {
   id: number;
@@ -89,7 +93,7 @@ function summarize(
   for (const q of questions) {
     if (sectionIds && !sectionIds.includes(q.sectionId)) continue;
     total += q.size;
-    if (isAnswered(draft.answers[q.sectionId]?.[q.from], q.size)) {
+    if (isAnswered(draft.answers[q.sectionId]?.[q.questionId], q.size)) {
       answered += q.size;
     }
   }

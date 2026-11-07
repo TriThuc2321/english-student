@@ -24,9 +24,9 @@ describe('examReducer', () => {
   });
 
   it('keeps answers per section', () => {
-    let s = run(initial(), { type: 'answer', n: 1, value: 'x' });
+    let s = run(initial(), { type: 'answer', questionId: 1, value: 'x' });
     s = run(s, { type: 'goTo', sectionId: 31 });
-    s = run(s, { type: 'answer', n: 1, value: 'y' });
+    s = run(s, { type: 'answer', questionId: 1, value: 'y' });
     expect(s.answers[30][1]).toBe('x');
     expect(s.answers[31][1]).toBe('y');
   });
@@ -34,16 +34,16 @@ describe('examReducer', () => {
   it('stores a confirmed recording even after the section locks', () => {
     let s = run(initial(), { type: 'tick', seconds: 1800 });
     expect(isSectionLocked(s, 30)).toBe(true);
-    s = run(s, { type: 'answer', n: 1, value: 'ignored' });
+    s = run(s, { type: 'answer', questionId: 1, value: 'ignored' });
     expect(s.answers[30]?.[1]).toBeUndefined();
-    s = run(s, { type: 'recorded', sectionId: 30, n: 1, value: '42' });
+    s = run(s, { type: 'recorded', sectionId: 30, questionId: 1, value: '42' });
     expect(s.answers[30][1]).toBe('42');
   });
 
   it('toggles flags', () => {
-    let s = run(initial(), { type: 'toggleFlag', n: 2 });
+    let s = run(initial(), { type: 'toggleFlag', questionId: 2 });
     expect(s.flagged[30]).toEqual([2]);
-    s = run(s, { type: 'toggleFlag', n: 2 });
+    s = run(s, { type: 'toggleFlag', questionId: 2 });
     expect(Object.values(s.flagged).flat()).toEqual([]);
   });
 
@@ -80,7 +80,7 @@ describe('examReducer', () => {
     expect(s.remaining[30]).toBe(0);
     expect(isSectionLocked(s, 30)).toBe(true);
     expect(s.submitted).toEqual([30]);
-    s = run(s, { type: 'answer', n: 1, value: 'x' });
+    s = run(s, { type: 'answer', questionId: 1, value: 'x' });
     expect(s.answers[30]?.[1]).toBeUndefined();
   });
 

@@ -98,7 +98,7 @@ function saveDraft(overrides: Partial<ExamDraft>) {
   localStorage.setItem(
     'exam-draft:practice-test-1',
     JSON.stringify({
-      version: 1,
+      version: 2,
       answers: {},
       sectionId: 30,
       partId: 300,

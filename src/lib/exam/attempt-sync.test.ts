@@ -145,13 +145,13 @@ describe('recordings', () => {
       ],
     });
     expect(stateFromAttempt(speakingTest(), attempt).answers).toEqual({
-      40: { 1: '42' },
+      40: { 50: '42' },
     });
   });
 });
 
 describe('stateFromAttempt', () => {
-  it('maps saved answers and flags to question numbers', () => {
+  it('maps saved answers and flags to question ids', () => {
     const attempt = makeAttempt({
       answers: [
         {
@@ -182,7 +182,7 @@ describe('stateFromAttempt', () => {
     });
 
     expect(stateFromAttempt(makeTest(), attempt)).toEqual({
-      answers: { 30: { 1: 'Smith', 3: ['A', 'C'] }, 31: { 1: 'i' } },
+      answers: { 30: { 1: 'Smith', 3: ['A', 'C'] }, 31: { 10: 'i' } },
       flagged: { 30: [3] },
       remaining: { 30: 1800 },
       submitted: [],
@@ -224,14 +224,32 @@ describe('diffAnswers', () => {
   it('sends changed answers and flags only', () => {
     const saved = { answers: { 30: { 1: 'Smith' } }, flagged: {} };
     const next = {
-      answers: { 30: { 1: 'Smith', 2: 'CB2' }, 31: { 1: '' } },
-      flagged: { 30: [5] },
+      answers: { 30: { 1: 'Smith', 2: 'CB2' }, 31: { 10: '' } },
+      flagged: { 30: [4] },
       submitted: [],
     };
 
     expect(diffAnswers(test, saved, next)).toEqual([
       { questionId: 2, response: { text: 'CB2' }, flagged: false },
       { questionId: 4, response: null, flagged: true },
+    ]);
+  });
+
+  it('keeps questions that share a number apart', () => {
+    const shared = makeTest();
+    const [q4] =
+      shared.testSections[0].testParts[1].questionGroups[0].questions;
+    q4.numberFrom = 1;
+    q4.numberTo = 1;
+    const next = {
+      answers: { 30: { 1: 'first', 4: 'second' } },
+      flagged: {},
+      submitted: [],
+    };
+
+    expect(diffAnswers(shared, empty, next)).toEqual([
+      { questionId: 1, response: { text: 'first' }, flagged: false },
+      { questionId: 4, response: { key: 'second' }, flagged: false },
     ]);
   });
 

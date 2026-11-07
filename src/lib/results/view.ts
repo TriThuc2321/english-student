@@ -30,6 +30,9 @@ export type NumberStatus =
 export type AnswerPart = { key: string | null; text: string | null };
 
 export type ReviewItem = {
+  // Unique within a section; question numbers can repeat (e.g. each Writing task starts at 1).
+  key: string;
+  questionId: number;
   n: number;
   from: number;
   to: number;
@@ -354,6 +357,8 @@ function sectionResult(
       const status = numberStatus(q, n, gradingStatus);
       counts[status]++;
       items.push({
+        key: `${q.questionId}-${n}`,
+        questionId: q.questionId,
         n,
         from: q.numberFrom,
         to: q.numberTo,

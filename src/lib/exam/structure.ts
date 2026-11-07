@@ -7,7 +7,12 @@ export type Answer = string | string[];
 
 export type PartRef = { sectionId: number; partId: number | null };
 
-export type QuestionSlot = { n: number; from: number; partId: number };
+export type QuestionSlot = {
+  n: number;
+  from: number;
+  questionId: number;
+  partId: number;
+};
 
 const byOrder = <T extends { order: number }>(items: T[]) =>
   [...items].sort((a, b) => a.order - b.order);
@@ -31,7 +36,12 @@ export function questionSlots(
     for (const group of byOrder(part.questionGroups)) {
       for (const q of byOrder(group.questions)) {
         for (let n = q.numberFrom; n <= q.numberTo; n++) {
-          slots.push({ n, from: q.numberFrom, partId: part.id });
+          slots.push({
+            n,
+            from: q.numberFrom,
+            questionId: q.id,
+            partId: part.id,
+          });
         }
       }
     }
