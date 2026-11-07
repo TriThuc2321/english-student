@@ -10,10 +10,13 @@ test.beforeEach(async ({ signIn }) => {
 test('submits a practice section and opens its result', async ({ page }) => {
   await page.goto(READING_ONLY);
 
+  const optionA = page.getByRole('radio', { name: /Option A/ }).first();
+  // The radio is visually hidden behind its letter badge, so pick it through its label.
   await page
-    .getByRole('radio', { name: /Option A/ })
+    .locator('label', { has: page.getByRole('radio', { name: /Option A/ }) })
     .first()
-    .check();
+    .click();
+  await expect(optionA).toBeChecked();
   await expect(page.getByText('Saved')).toBeVisible();
 
   await page.getByRole('button', { name: 'Submit section' }).click();

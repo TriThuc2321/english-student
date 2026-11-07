@@ -253,6 +253,7 @@ type MockSection = {
   startedAt: string | null;
   deadlineAt: string | null;
   submittedAt: string | null;
+  gradingStatus: 'AUTO_GRADED' | 'PENDING' | 'GRADED' | null;
   rawScore: number | null;
   maxScore: number | null;
   scaledScore: number | null;
@@ -341,6 +342,7 @@ function gradeAttempt(attempt: MockAttempt, now: string) {
     section.rawScore = raw;
     section.maxScore = max;
     section.scaledScore = max ? Math.round((raw / max) * 18) / 2 : null;
+    section.gradingStatus = 'AUTO_GRADED';
   }
   attempt.status = 'GRADED';
   attempt.submittedAt = now;
@@ -373,6 +375,7 @@ function createAttempt(
       startedAt: null,
       deadlineAt: null,
       submittedAt: null,
+      gradingStatus: null,
       rawScore: null,
       maxScore: null,
       scaledScore: null,
@@ -447,6 +450,7 @@ function toResultDto(attempt: MockAttempt) {
         };
       }),
     transcripts: [],
+    assessments: [],
   };
 }
 
