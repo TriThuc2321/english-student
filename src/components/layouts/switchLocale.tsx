@@ -24,8 +24,7 @@ export default function SwitchLocale() {
   const locale = useLocale();
   const [isPending, startTransition] = useTransition();
 
-  const iconClasses =
-    'text-xs size-5 text-default-500 pointer-events-none shrink-0';
+  const iconClasses = 'size-5 rounded-full pointer-events-none shrink-0';
 
   const onSwitchLocale = (next: Locale) => {
     if (next === locale) return;
@@ -35,7 +34,7 @@ export default function SwitchLocale() {
   return (
     <Dropdown>
       <Button
-        variant="tertiary"
+        variant="ghost"
         isIconOnly
         isPending={isPending}
         aria-label={tCommon('switchLocale')}

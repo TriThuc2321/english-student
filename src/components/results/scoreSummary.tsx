@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import type { ResultView } from '@/lib/results/view';
 
 import { SKILL_ICONS } from '@/components/tests/skillBadges';
+import { SKILL_CLASSES } from '@/constants/exam';
 
 type ScoreSummaryProps = {
   view: ResultView;
@@ -15,11 +16,11 @@ export function ScoreSummary({ view }: ScoreSummaryProps) {
   return (
     <section
       aria-label={t('results.scoreLabel')}
-      className="bg-surface border-separator shadow-surface flex flex-wrap gap-4 rounded-2xl border p-6"
+      className="bg-surface shadow-surface flex flex-wrap gap-4 rounded-2xl p-6"
     >
       {total && (
         <div className="flex flex-[1_1_240px] flex-col justify-center gap-1 py-2 pr-6 pl-2">
-          <p className="text-brand-navy text-xs font-semibold tracking-[0.08em] uppercase">
+          <p className="eyebrow">
             {total.kind === 'toeic'
               ? t('results.totalToeic')
               : total.estimate
@@ -27,7 +28,7 @@ export function ScoreSummary({ view }: ScoreSummaryProps) {
                 : t('results.totalIeltsFinal')}
           </p>
           <p className="flex items-baseline gap-2">
-            <span className="text-6xl leading-none font-extrabold tracking-tight">
+            <span className="text-6xl leading-none font-semibold tracking-tighter tabular-nums">
               {total.kind === 'toeic' ? total.score : total.band.toFixed(1)}
             </span>
             <span className="text-muted text-lg">
@@ -62,11 +63,18 @@ export function ScoreSummary({ view }: ScoreSummaryProps) {
               key={s.sectionId}
               className="bg-surface-secondary flex flex-col gap-1 rounded-xl p-4"
             >
-              <span className="flex items-center gap-1.5 text-sm font-semibold">
-                <Icon aria-hidden className="text-brand-navy size-4" />
+              <span className="flex items-center gap-2 text-sm font-medium">
+                <span
+                  aria-hidden
+                  className={`grid size-7 place-items-center rounded-lg ${SKILL_CLASSES[s.skill]}`}
+                >
+                  <Icon className="size-3.5" />
+                </span>
                 {t(`exam.skill.${s.skill}`)}
               </span>
-              <span className="text-[32px] leading-10 font-bold">{score}</span>
+              <span className="mt-1 text-3xl leading-10 font-semibold tracking-tight tabular-nums">
+                {score}
+              </span>
               <span className="text-muted text-[13px] leading-[18px]">
                 {s.pending
                   ? t('results.gradingPending')

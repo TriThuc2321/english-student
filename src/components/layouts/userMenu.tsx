@@ -26,7 +26,7 @@ export default function UserMenu({ profile }: UserMenuProps) {
     <Dropdown>
       <Dropdown.Trigger
         aria-label={t('common.userMenu')}
-        className="rounded-full"
+        className="ring-offset-background hover:ring-border rounded-full ring-2 ring-transparent ring-offset-2 transition-shadow"
       >
         <Avatar size="sm">
           <Avatar.Image alt="" src={avatarSrc} />

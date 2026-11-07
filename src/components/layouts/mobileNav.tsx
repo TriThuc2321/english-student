@@ -14,7 +14,7 @@ export default function MobileNav() {
   return (
     <>
       <Button
-        variant="tertiary"
+        variant="ghost"
         isIconOnly
         aria-label={t('nav.openMenu')}
         className="rounded-full md:hidden"

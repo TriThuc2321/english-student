@@ -39,43 +39,43 @@ export default async function Home({ searchParams }: PageProps<'/'>) {
   const isFiltered = Boolean(params.exam || params.q);
 
   return (
-    <div className="flex flex-col gap-6 md:pt-2">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-bold tracking-tight">
-            {t('tests.libraryTitle')}
-          </h1>
-          <p className="text-muted">{t('tests.subtitle')}</p>
-        </div>
-        <div className="w-full sm:w-96">
+    <div className="flex flex-col gap-6 md:pt-4">
+      <div className="flex flex-col gap-1.5">
+        <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
+          {t('tests.libraryTitle')}
+        </h1>
+        <p className="text-muted text-base">{t('tests.subtitle')}</p>
+      </div>
+      <div className="flex flex-col-reverse gap-3 md:flex-row md:items-center md:justify-between">
+        <nav
+          aria-label={t('tests.examFilter')}
+          className="bg-default -mx-4 flex w-fit max-w-[calc(100%+2rem)] [scrollbar-width:none] gap-1 overflow-x-auto rounded-full p-1 md:mx-0 md:max-w-full"
+        >
+          {[undefined, ...EXAM_TYPES].map((exam) => {
+            const active = params.exam === exam;
+            return (
+              <Link
+                key={exam ?? 'all'}
+                href={buildTestsHref({ exam, q: params.q })}
+                aria-current={active ? 'page' : undefined}
+                className={cn(
+                  'flex h-8 shrink-0 items-center rounded-full px-3.5 text-sm font-medium transition-colors',
+                  active
+                    ? 'bg-surface text-foreground shadow-surface'
+                    : 'text-muted hover:text-foreground',
+                )}
+              >
+                {exam ? t(`exam.${exam}`) : t('tests.all')}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="w-full md:w-80">
           <TestSearch params={params} />
         </div>
       </div>
-      <nav
-        aria-label={t('tests.examFilter')}
-        className="-mx-4 flex [scrollbar-width:none] gap-2 overflow-x-auto px-4 pb-0.5 md:mx-0 md:px-0"
-      >
-        {[undefined, ...EXAM_TYPES].map((exam) => {
-          const active = params.exam === exam;
-          return (
-            <Link
-              key={exam ?? 'all'}
-              href={buildTestsHref({ exam, q: params.q })}
-              aria-current={active ? 'page' : undefined}
-              className={cn(
-                'flex h-10 shrink-0 items-center rounded-full border px-4 text-sm font-semibold transition-colors',
-                active
-                  ? 'border-brand-navy bg-brand-navy text-brand-navy-foreground'
-                  : 'border-separator bg-surface text-foreground hover:border-border hover:bg-surface-secondary',
-              )}
-            >
-              {exam ? t(`exam.${exam}`) : t('tests.all')}
-            </Link>
-          );
-        })}
-      </nav>
       {data.length === 0 ? (
-        <div className="border-border flex flex-col items-center gap-3 rounded-xl border border-dashed px-6 py-16 text-center">
+        <div className="border-border flex flex-col items-center gap-3 rounded-2xl border border-dashed px-6 py-16 text-center">
           <span
             aria-hidden
             className="bg-brand-navy-soft text-brand-navy flex size-14 items-center justify-center rounded-full"
@@ -101,10 +101,10 @@ export default async function Home({ searchParams }: PageProps<'/'>) {
         </div>
       ) : (
         <>
-          <p className="text-muted text-sm">
+          <p className="text-muted -mb-2 text-sm">
             {t('tests.summary', { from, to, total: meta.totalCount })}
           </p>
-          <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,340px),1fr))] gap-4">
+          <ul className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-4">
             {data.map((test) => (
               <li key={test.id}>
                 <TestCard test={test} />

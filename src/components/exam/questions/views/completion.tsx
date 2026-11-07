@@ -17,8 +17,19 @@ import { GroupAudio, GroupImage } from './groupMedia';
 const textBlank = (n: number) => <Blank n={n} />;
 
 const Line = ({ children }: { children: ReactNode }) => (
-  <div className="mb-2 leading-[3rem]">{children}</div>
+  <div className="mb-2 leading-10">{children}</div>
 );
+
+const BULLET = /^[-•*·–]\s+/;
+
+// A bare heading must also open a block (start, after a blank line or after another
+// heading) and have content under it, so a short sentence inside a note stays a line.
+const isBareHeading = (line: string, opensBlock: boolean, next?: string) =>
+  opensBlock &&
+  !!next?.trim() &&
+  !line.includes('{{') &&
+  line.length <= 60 &&
+  !/[.:;,?!]$/.test(line);
 
 // Form / note / flow-chart: one template, every {{n}} is a text box
 export const TemplateView = () => {
@@ -33,7 +44,7 @@ export const TemplateView = () => {
           {lines.map((line, i) => (
             <Fragment key={i}>
               {i > 0 && <LuArrowDown className="text-muted my-1 size-4" />}
-              <div className="border-border rounded-field w-full border px-4 py-2 text-center leading-[3rem]">
+              <div className="border-border w-full rounded-xl border px-4 py-2 text-center leading-10">
                 {fillTemplate(line, textBlank)}
               </div>
             </Fragment>
@@ -43,32 +54,66 @@ export const TemplateView = () => {
     );
   }
 
-  // '# ' starts a heading, '- ' a bullet; anything else is a plain line
+  // '# ' starts a heading and '- ' a bullet. Imported notes often use '•' bullets and bare
+  // short lines as headings, so those are recognised too.
   const blocks: ReactNode[] = [];
   let bullets: ReactNode[] = [];
+  let headings = 0;
+  let opensBlock = true;
   const flush = () => {
     if (!bullets.length) return;
     blocks.push(
-      <ul key={blocks.length} className="mb-2 list-disc pl-6">
+      <ul
+        key={blocks.length}
+        className="marker:text-muted mb-3 list-disc space-y-1 pl-6"
+      >
         {bullets}
       </ul>,
     );
     bullets = [];
   };
-  lines.forEach((line, i) => {
-    if (line.startsWith('# ')) {
+  const heading = (text: string) => {
+    flush();
+    const isTitle = headings === 0;
+    headings += 1;
+    blocks.push(
+      isTitle ? (
+        <h5
+          key={blocks.length}
+          className="mb-3 text-lg font-semibold tracking-tight"
+        >
+          {fillTemplate(text, textBlank)}
+        </h5>
+      ) : (
+        <h6
+          key={blocks.length}
+          className="text-muted mt-4 mb-1.5 text-sm font-semibold tracking-wide uppercase"
+        >
+          {fillTemplate(text, textBlank)}
+        </h6>
+      ),
+    );
+  };
+  lines.forEach((raw, i) => {
+    const line = raw.trim();
+    const bullet = BULLET.exec(line);
+    const atBlockStart = opensBlock;
+    opensBlock = false;
+    if (!line) {
       flush();
-      blocks.push(
-        <h5 key={blocks.length} className="mt-2 mb-1 font-bold">
-          {fillTemplate(line.slice(2), textBlank)}
-        </h5>,
-      );
-    } else if (line.startsWith('- ')) {
+      opensBlock = true;
+    } else if (line.startsWith('# ')) {
+      heading(line.slice(2));
+      opensBlock = true;
+    } else if (bullet) {
       bullets.push(
-        <li key={i} className="leading-[3rem]">
-          {fillTemplate(line.slice(2), textBlank)}
+        <li key={i} className="pl-1 leading-10">
+          {fillTemplate(line.slice(bullet[0].length), textBlank)}
         </li>,
       );
+    } else if (isBareHeading(line, atBlockStart, lines[i + 1])) {
+      heading(line);
+      opensBlock = true;
     } else {
       flush();
       blocks.push(
@@ -84,8 +129,8 @@ export const TemplateView = () => {
       <div
         className={
           group.variant === 'form'
-            ? 'border-border rounded-field mx-auto max-w-xl border p-4'
-            : ''
+            ? 'border-border mx-auto max-w-xl rounded-xl border p-5'
+            : 'px-2.5 py-1'
         }
       >
         {blocks}
@@ -104,7 +149,7 @@ export const SentenceView = () => {
           key={q.n}
           className="mb-2 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2"
         >
-          <div className="leading-[3rem]">
+          <div className="leading-10">
             {fillTemplate(q.prompt ?? '', (n) => (
               <Blank n={n} withFlag={n !== q.n} />
             ))}
@@ -125,7 +170,7 @@ export const SummaryView = () => {
   return (
     <>
       <GroupAudio />
-      <p className="mb-3 leading-[3rem]">
+      <p className="mb-3 leading-10">
         {fillTemplate(template, (n) => (
           <Blank n={n} options={options} />
         ))}
@@ -154,7 +199,7 @@ export const TableView = () => {
                 {headers.map((h) => (
                   <th
                     key={h}
-                    className="border-border bg-default border p-2 text-left"
+                    className="border-border bg-surface-secondary border px-3 py-2 text-left font-semibold"
                   >
                     {h}
                   </th>
@@ -166,7 +211,7 @@ export const TableView = () => {
             {rows.map((row, r) => (
               <tr key={r}>
                 {row.map((cell, c) => (
-                  <td key={c} className="border-border border p-2">
+                  <td key={c} className="border-border border px-3 py-2">
                     {fillTemplate(cell, textBlank)}
                   </td>
                 ))}

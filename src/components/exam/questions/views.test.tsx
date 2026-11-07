@@ -153,6 +153,30 @@ describe('question views', () => {
     expect(screen.getByLabelText('Answer 9')).toBeInTheDocument();
   });
 
+  it('turns bare note lines into headings and bullet glyphs into list items', () => {
+    setup(
+      inlineGroup({
+        content: {
+          template:
+            'The Dead Sea Scrolls\nDiscovery\n• threw a {{1}}\n• went into the {{2}}',
+        },
+      }),
+    );
+    expect(
+      screen.getByRole('heading', { name: 'The Dead Sea Scrolls' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Discovery' }),
+    ).toBeInTheDocument();
+    const items = screen.getAllByRole('listitem');
+    expect(items.map((li) => li.textContent)).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('threw a'),
+        expect.stringContaining('went into the'),
+      ]),
+    );
+  });
+
   it('matching disables keys used by another question when reuse is off', () => {
     setup(fixtureGroup(3100), { answers: { 10: 'i' } });
     const second = screen.getByLabelText('Answer 2');

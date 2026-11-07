@@ -2,18 +2,20 @@
 
 import { cn, Tabs } from '@heroui/react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentTestPart } from '@/types/student-test';
 
-import { toPassageView } from '@/lib/exam/group-view';
+import { toGroupView, toPassageView } from '@/lib/exam/group-view';
 
 import { PartAudioCard, PartHeading } from './partHeading';
 import { questionAnchorId } from './questions/context';
 import { GroupView } from './questions/groupView';
 import { PassagePane } from './questions/parts';
+import { SplitHandle } from './splitHandle';
 import { TEXT_ZOOM, type TextSize } from './useExamTextSize';
+import { useSplitRatio } from './useSplitRatio';
 
 type PartViewProps = {
   part: StudentTestPart | null;
@@ -47,6 +49,7 @@ export function PartView({
 }: PartViewProps) {
   const t = useTranslations('taking');
   const [tab, setTab] = useState<'passage' | 'questions'>('questions');
+  const [ratio, setRatio] = useSplitRatio();
 
   const [seenSeq, setSeenSeq] = useState(focusRequest?.seq);
   if (focusRequest && focusRequest.seq !== seenSeq) {
@@ -98,6 +101,9 @@ export function PartView({
     );
   }
 
+  const writing =
+    groups.length > 0 && groups.every((g) => toGroupView(g).view === 'write');
+
   const sharedPassage =
     part.passage && groups.some((g) => g.passages.length === 0)
       ? toPassageView(part.passage)
@@ -108,7 +114,8 @@ export function PartView({
       <PartAudioCard part={part} index={index} />
       <div
         className={cn(
-          'mx-auto flex w-full max-w-[920px] flex-col gap-7 px-4 pt-5 pb-16 sm:px-6',
+          'mx-auto flex w-full flex-col gap-6 px-4 pt-6 pb-20 sm:px-6',
+          writing ? 'max-w-[1280px]' : 'max-w-[920px]',
           TEXT_ZOOM[textSize],
         )}
       >
@@ -149,7 +156,8 @@ export function PartView({
     <section
       aria-label={part.title ?? t('partFallback', { n: index + 1 })}
       ref={sectionRef}
-      className="flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-2"
+      style={{ '--split': `${ratio}%` } as CSSProperties}
+      className="flex min-h-0 flex-1 flex-col lg:flex-row"
     >
       <Tabs
         className="lg:hidden"
@@ -171,22 +179,30 @@ export function PartView({
       </Tabs>
       <div
         className={cn(
-          'bg-surface-secondary border-border min-h-0 overflow-y-auto lg:block lg:border-r',
+          'bg-surface min-h-0 overflow-y-auto lg:block lg:w-(--split) lg:flex-none',
           tab === 'passage' ? 'block' : 'hidden',
         )}
       >
         <div
-          className={cn('mx-auto px-4 pt-7 pb-14 sm:px-8', TEXT_ZOOM[textSize])}
+          className={cn(
+            'mx-auto px-5 pt-8 pb-16 sm:px-10',
+            TEXT_ZOOM[textSize],
+          )}
         >
           <PassagePane
             passage={sharedPassage}
-            className="bg-surface shadow-surface max-h-none rounded-xl border px-6 py-5 md:border-r md:border-b"
+            className="max-h-none overflow-visible border-0 p-0 md:border-0"
           />
         </div>
       </div>
+      <SplitHandle
+        containerRef={sectionRef}
+        ratio={ratio}
+        onChange={setRatio}
+      />
       <div
         className={cn(
-          'min-h-0 overflow-y-auto lg:block',
+          'min-h-0 min-w-0 flex-1 overflow-y-auto lg:block',
           tab === 'questions' ? 'block' : 'hidden',
         )}
       >

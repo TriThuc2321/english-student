@@ -57,6 +57,19 @@ export function sectionDurationSeconds(
   return minutes === null ? null : minutes * 60;
 }
 
+// A section without its own duration inherits the test's, so the total is a sum, not the test field.
+export function totalDurationMinutes(test: {
+  durationMinutes: number | null;
+  testSections: { durationMinutes: number | null }[];
+}): number | null {
+  let total: number | null = null;
+  for (const section of test.testSections) {
+    const minutes = section.durationMinutes ?? test.durationMinutes;
+    if (minutes !== null) total = (total ?? 0) + minutes;
+  }
+  return total ?? test.durationMinutes;
+}
+
 export function isAnswered(value: Answer | undefined, count: number): boolean {
   if (value === undefined) return false;
   if (typeof value === 'string') return value.trim().length > 0;

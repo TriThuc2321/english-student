@@ -84,7 +84,7 @@ export const MapView = () => {
                   >
                     <input
                       type="radio"
-                      className="accent-accent"
+                      className="accent-brand-navy"
                       name={`${group.id}-${q.n}`}
                       aria-label={optionLabel(q.n, o.key)}
                       checked={answers[q.n] === o.key}

@@ -8,11 +8,11 @@
 [data-theme='default'] {
   --accent: oklch(54.61% 0.2051 25.98);
   --accent-foreground: oklch(99.11% 0 0);
-  --background: oklch(97.02% 0.0018 27.74);
-  --border: oklch(91% 0.002 271);
+  --background: oklch(98.4% 0.0025 270);
+  --border: oklch(92.4% 0.004 270);
   --danger: oklch(43.46% 0.1757 27.74);
   --danger-foreground: oklch(98% 0.0194 27.64);
-  --default: oklch(96.416% 0.00011 271.152);
+  --default: oklch(95.8% 0.004 270);
   --default-foreground: oklch(21.03% 0.0059 27.99);
   --field-background: oklch(100% 0 27.99);
   --field-border: oklch(80% 0.004 270);
@@ -26,14 +26,14 @@
   --scrollbar: oklch(87.1% 0 27.99);
   --segment: oklch(100% 0 27.99);
   --segment-foreground: oklch(21.03% 0 27.99);
-  --separator: oklch(94.8% 0 27.99);
+  --separator: oklch(93.8% 0.004 270);
   --success: oklch(73.31% 0.1932 150.75);
   --success-foreground: oklch(15% 0.03 150.75);
   --surface: oklch(100% 0 27.99);
   --surface-foreground: oklch(21.03% 0 27.99);
-  --surface-secondary: oklch(95.24% 0 27.99);
+  --surface-secondary: oklch(97.2% 0.003 270);
   --surface-secondary-foreground: oklch(21.03% 0 27.99);
-  --surface-tertiary: oklch(93.73% 0 27.99);
+  --surface-tertiary: oklch(95.2% 0.004 270);
   --surface-tertiary-foreground: oklch(21.03% 0 27.99);
   --warning: oklch(78.48% 0.159 72.51);
   --warning-foreground: oklch(15% 0.03 72.51);
@@ -42,8 +42,11 @@
   --accent-soft: color-mix(in oklch, var(--accent) 7%, var(--surface));
   --danger-soft: color-mix(in oklch, var(--danger) 8%, var(--surface));
 
-  --surface-shadow: 0 1px 2px 0 rgb(24 24 24 / 0.06);
-  --overlay-shadow: 0 12px 32px -8px rgb(24 24 24 / 0.18);
+  --surface-shadow:
+    0 0 0 1px rgb(24 24 40 / 0.06), 0 1px 2px 0 rgb(24 24 40 / 0.04);
+  --overlay-shadow:
+    0 0 0 1px rgb(24 24 40 / 0.06), 0 16px 40px -12px rgb(24 24 40 / 0.22);
+  --field-shadow: none;
 
   /* Logo navy is #2f338a; each exam/skill hue is a text-on-soft pair kept at AA contrast. */
   --brand-navy: oklch(37.46% 0.142 275.16);
@@ -63,10 +66,10 @@
   --skill-speaking-soft: oklch(94.5% 0.035 300);
 
   --card-hover-shadow:
-    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    0 0 0 1px rgb(24 24 40 / 0.1), 0 12px 24px -12px rgb(24 24 40 / 0.18);
 
-  --radius: 0.25rem;
-  --field-radius: 0.5rem;
+  --radius: 0.5rem;
+  --field-radius: 0.625rem;
 
   --font-sans: var(--font-inter);
 }
@@ -146,6 +149,20 @@
   --color-skill-writing-soft: var(--skill-writing-soft);
   --color-skill-speaking: var(--skill-speaking);
   --color-skill-speaking-soft: var(--skill-speaking-soft);
+}
+
+@layer base {
+  html {
+    font-feature-settings: 'cv11', 'ss01';
+  }
+}
+
+@utility surface-card {
+  @apply bg-surface shadow-surface rounded-2xl;
+}
+
+@utility eyebrow {
+  @apply text-muted text-xs font-medium tracking-wide uppercase;
 }
 
 [data-theme='dark'] [data-hide-on-theme='dark'],

@@ -9,6 +9,7 @@ import {
   pickSections,
   questionSlots,
   sectionDurationSeconds,
+  totalDurationMinutes,
 } from './structure';
 
 describe('partSequence', () => {
@@ -90,5 +91,31 @@ describe('pickSections', () => {
       sectionIds: null,
     });
     expect(pickSections(full, null)).toEqual({ test: full, sectionIds: null });
+  });
+});
+
+describe('totalDurationMinutes', () => {
+  it('sums sections, falling back to the test duration for each section without one', () => {
+    expect(
+      totalDurationMinutes({
+        durationMinutes: 1,
+        testSections: [{ durationMinutes: null }, { durationMinutes: null }],
+      }),
+    ).toBe(2);
+    expect(
+      totalDurationMinutes({
+        durationMinutes: 160,
+        testSections: [{ durationMinutes: 30 }, { durationMinutes: 60 }],
+      }),
+    ).toBe(90);
+  });
+
+  it('is null when nothing has a duration', () => {
+    expect(
+      totalDurationMinutes({
+        durationMinutes: null,
+        testSections: [{ durationMinutes: null }],
+      }),
+    ).toBeNull();
   });
 });
