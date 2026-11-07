@@ -130,6 +130,7 @@ function responseParts(
     return response.key.trim() ? [choice(response.key, options)] : [];
   }
   if ('keys' in response) return response.keys.map((k) => choice(k, options));
+  if ('mediaId' in response) return [];
   return response.text.trim() ? [{ key: null, text: response.text }] : [];
 }
 

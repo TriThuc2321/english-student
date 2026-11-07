@@ -142,7 +142,12 @@
       "EXPRESS_OPINION": "Express an opinion",
       "WRITE_SENTENCE_PICTURE": "Write a sentence",
       "RESPOND_WRITTEN_REQUEST": "Respond to a written request",
-      "OPINION_ESSAY": "Opinion essay"
+      "OPINION_ESSAY": "Opinion essay",
+      "IELTS_WRITING_TASK_1": "Writing Task 1",
+      "IELTS_WRITING_TASK_2": "Writing Task 2",
+      "IELTS_SPEAKING_PART_1": "Speaking Part 1",
+      "IELTS_SPEAKING_PART_2": "Speaking Part 2",
+      "IELTS_SPEAKING_PART_3": "Speaking Part 3"
     },
     "navQuestion": "Question {n}, {status, select, answered {answered} other {not answered}}{flagged, select, yes {, flagged} other {}}",
     "passage": "Passage",

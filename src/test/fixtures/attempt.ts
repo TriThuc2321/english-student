@@ -20,6 +20,7 @@ export const attemptSection = (
   startedAt: '2026-10-27T19:00:00.000Z',
   deadlineAt: null,
   submittedAt: '2026-10-27T19:30:00.000Z',
+  gradingStatus: 'AUTO_GRADED',
   rawScore: null,
   maxScore: null,
   scaledScore: null,
@@ -44,6 +45,7 @@ export const resultQuestion = (
   answer: { key: 'A' },
   explanation: null,
   evidence: null,
+  audioUrl: null,
   ...overrides,
 });
 
@@ -149,6 +151,7 @@ export function makeAttemptResult(
       }),
     ],
     transcripts: [{ mediaId: 1, transcript: 'Good morning, how can I help?' }],
+    assessments: [],
     ...overrides,
   };
 }

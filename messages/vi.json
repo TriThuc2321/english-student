@@ -142,7 +142,12 @@
       "EXPRESS_OPINION": "Nêu ý kiến",
       "WRITE_SENTENCE_PICTURE": "Viết câu theo tranh",
       "RESPOND_WRITTEN_REQUEST": "Trả lời yêu cầu bằng văn bản",
-      "OPINION_ESSAY": "Bài luận nêu ý kiến"
+      "OPINION_ESSAY": "Bài luận nêu ý kiến",
+      "IELTS_WRITING_TASK_1": "Writing Task 1",
+      "IELTS_WRITING_TASK_2": "Writing Task 2",
+      "IELTS_SPEAKING_PART_1": "Speaking Part 1",
+      "IELTS_SPEAKING_PART_2": "Speaking Part 2",
+      "IELTS_SPEAKING_PART_3": "Speaking Part 3"
     },
     "navQuestion": "Câu {n}, {status, select, answered {đã trả lời} other {chưa trả lời}}{flagged, select, yes {, đã đánh dấu} other {}}",
     "passage": "Bài đọc",

@@ -43,6 +43,11 @@ const RESPONSE_FIELDS: Record<QuestionType, ResponseField> = {
   WRITE_SENTENCE_PICTURE: null,
   RESPOND_WRITTEN_REQUEST: null,
   OPINION_ESSAY: null,
+  IELTS_WRITING_TASK_1: null,
+  IELTS_WRITING_TASK_2: null,
+  IELTS_SPEAKING_PART_1: null,
+  IELTS_SPEAKING_PART_2: null,
+  IELTS_SPEAKING_PART_3: null,
 };
 
 // The API rejects longer text, and one rejected item fails the whole batch.
@@ -101,6 +106,7 @@ function answerFromResponse(response: AttemptResponse | null): Answer | null {
   if (!response) return null;
   if ('key' in response) return response.key;
   if ('keys' in response) return response.keys;
+  if ('mediaId' in response) return null;
   return response.text;
 }
 
