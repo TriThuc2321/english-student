@@ -3,7 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
 import { buildResultView } from '@/lib/results/view';
-import { makeAttemptResult } from '@/test/fixtures/attempt';
+import {
+  attemptSection,
+  makeAttemptResult,
+  resultQuestion,
+} from '@/test/fixtures/attempt';
 import { makeTest } from '@/test/fixtures/student-test';
 import { renderWithIntl } from '@/test/render';
 
@@ -80,5 +84,127 @@ describe('ResultReview', () => {
     );
     expect(panel().getByText('ii · A journey across continents')).toBeVisible();
     expect(screen.getByText('Needs work')).toBeInTheDocument();
+  });
+});
+
+const essay = 'First paragraph of my essay.\n\n' + 'word '.repeat(60).trim();
+
+const renderGraded = (skill: 'WRITING' | 'SPEAKING') => {
+  const result = makeAttemptResult(
+    {
+      questions: [
+        resultQuestion(1, 30, 1, {
+          response: skill === 'WRITING' ? { text: essay } : { mediaId: 9 },
+          answer: { sample: 'A model answer.' },
+          audioUrl: skill === 'SPEAKING' ? 'https://signed.test/a.webm' : null,
+        }),
+      ],
+      assessments: [
+        {
+          attemptSectionId: 'as-30',
+          band: 6.5,
+          entries: [
+            skill === 'WRITING'
+              ? {
+                  partId: 300,
+                  criteria: { TR: 7, CC: 6, LR: 7, GRA: 6 },
+                  band: 6.5,
+                  feedback: 'Clear position throughout.',
+                }
+              : {
+                  partId: null,
+                  criteria: { FC: 7, LR: 6, GRA: 6, P: 7 },
+                  band: 6.5,
+                  feedback: null,
+                },
+          ],
+        },
+      ],
+    },
+    {
+      sections: [
+        attemptSection(30, {
+          skill,
+          gradingStatus: 'GRADED',
+          scaledScore: 6.5,
+        }),
+      ],
+    },
+  );
+  return renderWithIntl(
+    <ResultReview sections={buildResultView(result, makeTest()).sections} />,
+  );
+};
+
+describe('ResultReview teacher grading', () => {
+  it('shows criteria and feedback for a graded Writing section', () => {
+    renderGraded('WRITING');
+
+    const grade = within(
+      screen.getByRole('region', { name: "Teacher's grade · Band 6.5" }),
+    );
+    expect(grade.getByText('Part 1 · Band 6.5')).toBeVisible();
+    expect(grade.getByText('Task Response')).toBeVisible();
+    expect(grade.getByText('Grammatical Range and Accuracy')).toBeVisible();
+    expect(grade.getAllByText('7.0')).toHaveLength(2);
+    expect(grade.getByText('Clear position throughout.')).toBeVisible();
+  });
+
+  it('shows the full essay and the sample', () => {
+    renderGraded('WRITING');
+
+    expect(
+      screen.getByRole('button', { name: 'Question 1, Graded' }),
+    ).toBeInTheDocument();
+    expect(
+      panel().getByText((_, el) => el?.textContent === essay, {
+        selector: 'p',
+      }),
+    ).toBeVisible();
+    expect(panel().getByText('Sample answer')).toBeVisible();
+    expect(panel().getByText('A model answer.')).toBeVisible();
+  });
+
+  it('plays the recording', () => {
+    const { container } = renderGraded('SPEAKING');
+
+    expect(container.querySelector('audio')).toHaveAttribute(
+      'src',
+      'https://signed.test/a.webm',
+    );
+    expect(panel().getByText('Your recording')).toBeVisible();
+    expect(panel().queryByText('Not answered')).toBeNull();
+    expect(screen.getByText('Pronunciation')).toBeVisible();
+  });
+});
+
+describe('ResultReview repeated numbers', () => {
+  it('reviews each question when two share a number', async () => {
+    const user = userEvent.setup();
+    const task = (questionId: number, text: string) =>
+      resultQuestion(questionId, 30, 1, {
+        response: { text },
+        answer: { sample: 'A model answer.' },
+      });
+    const result = makeAttemptResult(
+      { questions: [task(1, 'Task one essay'), task(4, 'Task two essay')] },
+      {
+        sections: [
+          attemptSection(30, { skill: 'WRITING', gradingStatus: 'GRADED' }),
+        ],
+      },
+    );
+    renderWithIntl(
+      <ResultReview sections={buildResultView(result, makeTest()).sections} />,
+    );
+
+    const cells = screen.getAllByRole('button', { name: 'Question 1, Graded' });
+    expect(cells).toHaveLength(2);
+    await user.click(cells[1]);
+
+    expect(cells[1]).toHaveAttribute('aria-pressed', 'true');
+    expect(cells[0]).toHaveAttribute('aria-pressed', 'false');
+    expect(panel().getByText('Task two essay')).toBeVisible();
+    expect(panel().getByText('Where will the tour start?')).toBeVisible();
   });
 });

@@ -46,7 +46,7 @@ export const MatchingView = () => {
 // Map / plan labelling: one row per place, one radio column per letter
 export const MapView = () => {
   const t = useTranslations('taking');
-  const { group, answers, setAnswer, readOnly } = useExamGroup();
+  const { group, answers, setAnswer, readOnly, anchorId } = useExamGroup();
   const options = group.content?.options ?? [];
   const optionLabel = (n: number, key: string) =>
     t('answerLabel', { n: `${n} ${key}` });
@@ -69,7 +69,7 @@ export const MapView = () => {
           </thead>
           <tbody>
             {group.questions.map((q) => (
-              <tr key={q.n} id={`q-${q.n}`}>
+              <tr key={q.n} id={anchorId(q.n)}>
                 <td className="border-border border p-2">
                   <div className="flex items-center gap-2">
                     <QNum>{q.n}</QNum>

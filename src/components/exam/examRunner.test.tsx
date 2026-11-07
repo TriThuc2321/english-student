@@ -14,6 +14,7 @@ import {
   saveAttemptAnswers,
   submitAttempt,
   submitAttemptSection,
+  uploadAttemptAudio,
 } from '@/lib/api/attempts-client';
 import { ApiError } from '@/lib/api/client';
 import {
@@ -39,7 +40,29 @@ vi.mock('@/lib/api/attempts-client', () => ({
   saveAttemptAnswers: vi.fn(),
   submitAttempt: vi.fn(),
   submitAttemptSection: vi.fn(),
+  uploadAttemptAudio: vi.fn(),
 }));
+vi.mock('./useRecorder', async () => {
+  const { useState } = await import('react');
+  return {
+    useRecorder: () => {
+      const [state, setState] = useState<'idle' | 'recording'>('idle');
+      return {
+        state,
+        error: null,
+        elapsedMs: 0,
+        start: async () => {
+          setState('recording');
+          return true;
+        },
+        stop: async () => {
+          setState('idle');
+          return new Blob(['voice'], { type: 'audio/webm' });
+        },
+      };
+    },
+  };
+});
 
 const SERVER_NOW = '2026-10-27T19:00:00.000Z';
 const secondsFromNow = (s: number) =>
@@ -75,7 +98,7 @@ function saveDraft(overrides: Partial<ExamDraft>) {
   localStorage.setItem(
     'exam-draft:practice-test-1',
     JSON.stringify({
-      version: 1,
+      version: 2,
       answers: {},
       sectionId: 30,
       partId: 300,
@@ -399,5 +422,192 @@ describe('ExamRunner', () => {
     const second = container.querySelector('audio');
     expect(second).not.toBeNull();
     expect(second).not.toBe(first);
+  });
+});
+
+// A test with a single section holding one IELTS Writing or Speaking question.
+function productiveTest(
+  skill: 'WRITING' | 'SPEAKING',
+): ReturnType<typeof makeTest> {
+  const [listening] = test.testSections;
+  const [part] = listening.testParts;
+  const [group] = part.questionGroups;
+  return makeTest({
+    testSections: [
+      {
+        ...listening,
+        id: 40,
+        skill,
+        testParts: [
+          {
+            ...part,
+            id: 400,
+            audio: null,
+            questionGroups: [
+              {
+                ...group,
+                id: 4000,
+                questionType:
+                  skill === 'WRITING'
+                    ? 'IELTS_WRITING_TASK_2'
+                    : 'IELTS_SPEAKING_PART_1',
+                questions: [
+                  {
+                    ...group.questions[0],
+                    id: 77,
+                    numberFrom: 1,
+                    numberTo: 1,
+                    prompt: 'Describe your hometown.',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+}
+
+describe('ExamRunner with Writing and Speaking', () => {
+  const productiveSection = (skill: 'WRITING' | 'SPEAKING') =>
+    attemptSection(40, {
+      skill,
+      status: 'IN_PROGRESS',
+      submittedAt: null,
+      deadlineAt: secondsFromNow(900),
+    });
+
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    localStorage.clear();
+    vi.clearAllMocks();
+    vi.mocked(saveAttemptAnswers).mockResolvedValue({
+      savedAt: SERVER_NOW,
+      serverNow: SERVER_NOW,
+    });
+    vi.mocked(submitAttempt).mockResolvedValue(
+      makeAttempt({ status: 'SUBMITTED' }),
+    );
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it('autosaves an essay in a Writing section', async () => {
+    serve({ sections: [productiveSection('WRITING')] });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await renderRunner(<ExamRunner test={productiveTest('WRITING')} />);
+
+    await user.type(screen.getByLabelText('Answer 1'), 'My town is small.');
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(3100);
+    });
+
+    expect(saveAttemptAnswers).toHaveBeenLastCalledWith(
+      ATTEMPT_ID,
+      [
+        {
+          questionId: 77,
+          response: { text: 'My town is small.' },
+          flagged: false,
+        },
+      ],
+      { keepalive: false },
+    );
+  });
+
+  it('waits for an in-flight recording before submitting', async () => {
+    serve({ sections: [productiveSection('SPEAKING')] });
+    let finish: (mediaId: number) => void = () => {};
+    vi.mocked(uploadAttemptAudio).mockReturnValue(
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+    );
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await renderRunner(<ExamRunner test={productiveTest('SPEAKING')} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start recording' }));
+    await user.click(await screen.findByRole('button', { name: 'Stop' }));
+    expect(uploadAttemptAudio).toHaveBeenCalledWith(
+      ATTEMPT_ID,
+      77,
+      expect.any(Blob),
+    );
+
+    await confirmSubmit(user);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(100);
+    });
+    expect(submitAttempt).not.toHaveBeenCalled();
+
+    await act(async () => finish(42));
+    await waitFor(() => expect(submitAttempt).toHaveBeenCalledWith(ATTEMPT_ID));
+    expect(saveAttemptAnswers).not.toHaveBeenCalled();
+  });
+
+  it('uploads a recording still running when time runs out', async () => {
+    serve({
+      sections: [
+        attemptSection(40, {
+          skill: 'SPEAKING',
+          status: 'IN_PROGRESS',
+          submittedAt: null,
+          deadlineAt: secondsFromNow(5),
+        }),
+      ],
+    });
+    vi.mocked(uploadAttemptAudio).mockResolvedValue(42);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await renderRunner(<ExamRunner test={productiveTest('SPEAKING')} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start recording' }));
+    await screen.findByRole('button', { name: 'Stop' });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(6000);
+    });
+
+    expect(screen.getByText('Time is up')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(uploadAttemptAudio).toHaveBeenCalledWith(
+        ATTEMPT_ID,
+        77,
+        expect.any(Blob),
+      ),
+    );
+  });
+
+  it('uploads a recording still running before submitting', async () => {
+    serve({ sections: [productiveSection('SPEAKING')] });
+    vi.mocked(uploadAttemptAudio).mockResolvedValue(42);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await renderRunner(<ExamRunner test={productiveTest('SPEAKING')} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start recording' }));
+    await screen.findByRole('button', { name: 'Stop' });
+    await confirmSubmit(user);
+
+    await waitFor(() => expect(submitAttempt).toHaveBeenCalledWith(ATTEMPT_ID));
+    expect(
+      vi.mocked(uploadAttemptAudio).mock.invocationCallOrder[0],
+    ).toBeLessThan(vi.mocked(submitAttempt).mock.invocationCallOrder[0]);
+  });
+
+  it('submits even if the recording failed', async () => {
+    serve({ sections: [productiveSection('SPEAKING')] });
+    let fail: (error: Error) => void = () => {};
+    vi.mocked(uploadAttemptAudio).mockReturnValue(
+      new Promise((_, reject) => {
+        fail = reject;
+      }),
+    );
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await renderRunner(<ExamRunner test={productiveTest('SPEAKING')} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start recording' }));
+    await user.click(await screen.findByRole('button', { name: 'Stop' }));
+    await confirmSubmit(user);
+    await act(async () => fail(new Error('offline')));
+
+    await waitFor(() => expect(submitAttempt).toHaveBeenCalledWith(ATTEMPT_ID));
   });
 });

@@ -35,7 +35,7 @@ describe('questionSlots', () => {
   it('expands multi-number questions into one slot per number', () => {
     const slots = questionSlots(makeTest().testSections[0]);
     expect(slots.map((s) => s.n)).toEqual([1, 2, 3, 4, 5]);
-    expect(slots[3]).toEqual({ n: 4, from: 3, partId: 300 });
+    expect(slots[3]).toEqual({ n: 4, from: 3, questionId: 3, partId: 300 });
     expect(slots[4].partId).toBe(301);
   });
 });

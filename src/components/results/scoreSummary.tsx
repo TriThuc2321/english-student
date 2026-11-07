@@ -22,7 +22,9 @@ export function ScoreSummary({ view }: ScoreSummaryProps) {
           <p className="text-brand-navy text-xs font-semibold tracking-[0.08em] uppercase">
             {total.kind === 'toeic'
               ? t('results.totalToeic')
-              : t('results.totalIelts')}
+              : total.estimate
+                ? t('results.totalIelts')
+                : t('results.totalIeltsFinal')}
           </p>
           <p className="flex items-baseline gap-2">
             <span className="text-6xl leading-none font-extrabold tracking-tight">
@@ -32,16 +34,18 @@ export function ScoreSummary({ view }: ScoreSummaryProps) {
               {t('results.outOf', { max: total.max })}
             </span>
           </p>
-          <p className="text-muted mt-1 text-sm">
-            {total.kind === 'toeic'
-              ? total.parts
-                  .map(
-                    (p) =>
-                      `${t(`exam.skill.${p.skill}`)} ${p.scaledScore ?? t('results.noScore')}`,
-                  )
-                  .join(' + ')
-              : t('results.totalIeltsNote')}
-          </p>
+          {(total.kind === 'toeic' || total.estimate) && (
+            <p className="text-muted mt-1 text-sm">
+              {total.kind === 'toeic'
+                ? total.parts
+                    .map(
+                      (p) =>
+                        `${t(`exam.skill.${p.skill}`)} ${p.scaledScore ?? t('results.noScore')}`,
+                    )
+                    .join(' + ')
+                : t('results.totalIeltsNote')}
+            </p>
+          )}
         </div>
       )}
       <ul className="grid flex-[999_1_520px] grid-cols-[repeat(auto-fit,minmax(min(100%,150px),1fr))] gap-3">
@@ -64,12 +68,16 @@ export function ScoreSummary({ view }: ScoreSummaryProps) {
               </span>
               <span className="text-[32px] leading-10 font-bold">{score}</span>
               <span className="text-muted text-[13px] leading-[18px]">
-                {s.pending || s.rawScore === null || s.maxScore === null
+                {s.pending
                   ? t('results.gradingPending')
-                  : t('results.rawCorrect', {
-                      correct: s.rawScore,
-                      total: s.maxScore,
-                    })}
+                  : s.rawScore === null || s.maxScore === null
+                    ? s.scaledScore === null
+                      ? t('results.gradingPending')
+                      : t('results.status.graded')
+                    : t('results.rawCorrect', {
+                        correct: s.rawScore,
+                        total: s.maxScore,
+                      })}
               </span>
             </li>
           );

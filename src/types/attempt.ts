@@ -10,16 +10,19 @@ export type AttemptSectionStatus =
   | 'SUBMITTED'
   | 'EXPIRED';
 
+export type AttemptSectionGradingStatus = 'AUTO_GRADED' | 'PENDING' | 'GRADED';
+
 export type AttemptResponse =
   | { key: string }
   | { keys: string[] }
-  | { text: string };
+  | { text: string }
+  | { mediaId: number };
 
 export type AttemptAnswerKey =
   | { key: string }
   | { keys: string[] }
   | { accepted: string[] }
-  | { sample: unknown };
+  | { sample: unknown; rubric?: Record<string, string> };
 
 export type AttemptSection = {
   id: string;
@@ -31,6 +34,7 @@ export type AttemptSection = {
   startedAt: string | null;
   deadlineAt: string | null;
   submittedAt: string | null;
+  gradingStatus: AttemptSectionGradingStatus | null;
   rawScore: number | null;
   maxScore: number | null;
   scaledScore: number | null;
@@ -77,12 +81,27 @@ export type AttemptResultQuestion = {
   answer: AttemptAnswerKey;
   explanation: string | null;
   evidence: AttemptEvidence | null;
+  audioUrl: string | null;
+};
+
+export type AttemptAssessmentEntry = {
+  partId: number | null;
+  criteria: Record<string, number>;
+  band: number;
+  feedback: string | null;
+};
+
+export type AttemptAssessment = {
+  attemptSectionId: string;
+  band: number;
+  entries: AttemptAssessmentEntry[];
 };
 
 export type AttemptResult = {
   attempt: AttemptListItem;
   questions: AttemptResultQuestion[];
   transcripts: { mediaId: number; transcript: string }[];
+  assessments: AttemptAssessment[];
 };
 
 export type StartAttemptInput = {
@@ -95,6 +114,13 @@ export type SaveAnswerItem = {
   questionId: number;
   response: AttemptResponse | null;
   flagged?: boolean;
+};
+
+export type AttemptAudioUpload = {
+  storageKey: string;
+  uploadUrl: string;
+  headers: Record<string, string>;
+  expiresIn: number;
 };
 
 export type SaveAnswersResult = { savedAt: string; serverNow: string };

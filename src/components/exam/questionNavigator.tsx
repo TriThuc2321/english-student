@@ -12,10 +12,11 @@ import { isAnswered, questionSlots } from '@/lib/exam/structure';
 type QuestionNavigatorProps = {
   section: StudentTestSectionDetail;
   partId: number | null;
+  // Question ids, like the exam state.
   activeQuestion: number | null;
   answers: Record<number, Answer>;
   flagged: number[];
-  onSelect: (partId: number, from: number) => void;
+  onSelect: (partId: number, questionId: number) => void;
   onStep: (dir: 1 | -1) => void;
   canPrev: boolean;
   canNext: boolean;
@@ -25,7 +26,7 @@ export type PartGroup = {
   id: number;
   title: string | null;
   index: number;
-  numbers: { n: number; from: number; answered: boolean }[];
+  numbers: { n: number; from: number; questionId: number; answered: boolean }[];
 };
 
 export function partGroups(
@@ -34,7 +35,9 @@ export function partGroups(
 ) {
   const slots = questionSlots(section);
   const sizeOf = new Map<number, number>();
-  for (const s of slots) sizeOf.set(s.from, (sizeOf.get(s.from) ?? 0) + 1);
+  for (const s of slots) {
+    sizeOf.set(s.questionId, (sizeOf.get(s.questionId) ?? 0) + 1);
+  }
 
   return [...section.testParts]
     .sort((a, b) => a.order - b.order)
@@ -47,7 +50,11 @@ export function partGroups(
         .map((s) => ({
           n: s.n,
           from: s.from,
-          answered: isAnswered(answers[s.from], sizeOf.get(s.from) ?? 1),
+          questionId: s.questionId,
+          answered: isAnswered(
+            answers[s.questionId],
+            sizeOf.get(s.questionId) ?? 1,
+          ),
         })),
     }));
 }
@@ -102,7 +109,7 @@ type GridProps = {
   partId: number | null;
   current: number | null;
   flagged: number[];
-  onSelect: (partId: number, from: number) => void;
+  onSelect: (partId: number, questionId: number) => void;
   // Collapsed: only the current part shows its numbers; the others become a single jump button.
   collapsed?: boolean;
 };
@@ -133,7 +140,7 @@ function NumberGrid({
               key={group.id}
               type="button"
               disabled={!first}
-              onClick={() => first && onSelect(group.id, first.from)}
+              onClick={() => first && onSelect(group.id, first.questionId)}
               className="hover:bg-default h-10 rounded-lg px-3 text-sm font-semibold whitespace-nowrap disabled:opacity-50"
             >
               {title} <span className="text-muted font-normal">{progress}</span>
@@ -156,21 +163,21 @@ function NumberGrid({
               {title} <span className="text-muted font-normal">{progress}</span>
             </span>
             <ul className="flex flex-wrap gap-1.5 p-0.5">
-              {group.numbers.map(({ n, from, answered }) => {
-                const isFlagged = flagged.includes(from);
+              {group.numbers.map(({ n, questionId, answered }) => {
+                const isFlagged = flagged.includes(questionId);
                 return (
-                  <li key={n}>
+                  <li key={`${questionId}-${n}`}>
                     <NavNumber
                       n={n}
                       answered={answered}
                       flagged={isFlagged}
-                      current={isCurrentPart && from === current}
+                      current={isCurrentPart && questionId === current}
                       label={t('navQuestion', {
                         n,
                         status: answered ? 'answered' : 'unanswered',
                         flagged: isFlagged ? 'yes' : 'no',
                       })}
-                      onPress={() => onSelect(group.id, from)}
+                      onPress={() => onSelect(group.id, questionId)}
                     />
                   </li>
                 );
@@ -203,13 +210,13 @@ export function QuestionNavigator({
   const current = groups.find((g) => g.id === partId) ?? groups[0];
   const answered = current?.numbers.filter((x) => x.answered).length ?? 0;
   const currentQuestion =
-    current?.numbers.find((x) => x.from === activeQuestion)?.from ??
-    current?.numbers[0]?.from ??
+    current?.numbers.find((x) => x.questionId === activeQuestion)?.questionId ??
+    current?.numbers[0]?.questionId ??
     null;
 
-  const select = (id: number, from: number) => {
+  const select = (id: number, questionId: number) => {
     drawer.close();
-    onSelect(id, from);
+    onSelect(id, questionId);
   };
 
   return (

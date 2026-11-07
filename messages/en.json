@@ -142,7 +142,12 @@
       "EXPRESS_OPINION": "Express an opinion",
       "WRITE_SENTENCE_PICTURE": "Write a sentence",
       "RESPOND_WRITTEN_REQUEST": "Respond to a written request",
-      "OPINION_ESSAY": "Opinion essay"
+      "OPINION_ESSAY": "Opinion essay",
+      "IELTS_WRITING_TASK_1": "Writing Task 1",
+      "IELTS_WRITING_TASK_2": "Writing Task 2",
+      "IELTS_SPEAKING_PART_1": "Speaking Part 1",
+      "IELTS_SPEAKING_PART_2": "Speaking Part 2",
+      "IELTS_SPEAKING_PART_3": "Speaking Part 3"
     },
     "navQuestion": "Question {n}, {status, select, answered {answered} other {not answered}}{flagged, select, yes {, flagged} other {}}",
     "passage": "Passage",
@@ -242,7 +247,18 @@
       "title": "We couldn't open this test",
       "body": "Check your connection and try again. Your saved answers are safe.",
       "retry": "Try again"
-    }
+    },
+    "record": "Start recording",
+    "stopRecording": "Stop",
+    "uploading": "Saving recording…",
+    "recordingSaved": "Recording saved",
+    "recordAgain": "Record again",
+    "retryUpload": "Retry",
+    "micDenied": "Allow microphone access to record.",
+    "micUnsupported": "This browser can't record audio.",
+    "sectionClosed": "This section is closed; the recording can't be saved.",
+    "uploadFailed": "Couldn't save the recording.",
+    "audioTooLarge": "Recording is over 20 MB."
   },
   "results": {
     "fullTest": "Full test",
@@ -265,13 +281,15 @@
       "correct": "Correct {count}",
       "incorrect": "Incorrect {count}",
       "blank": "Blank {count}",
-      "pending": "Pending {count}"
+      "pending": "Pending {count}",
+      "graded": "Graded {count}"
     },
     "status": {
       "correct": "Correct",
       "incorrect": "Incorrect",
       "blank": "Blank",
-      "pending": "Pending"
+      "pending": "Pending",
+      "graded": "Graded"
     },
     "questionAria": "Question {n}, {status}",
     "focusTitle": "Where to focus",
@@ -296,6 +314,22 @@
     "next": "Next",
     "transcripts": "Transcripts",
     "transcriptN": "Transcript {n}",
-    "emptySection": "This section has no questions."
+    "emptySection": "This section has no questions.",
+    "grading": "Being graded",
+    "totalIeltsFinal": "Overall band",
+    "assessmentTitle": "Teacher's grade · Band {band}",
+    "teacherFeedback": "Teacher feedback",
+    "sampleAnswer": "Sample answer",
+    "yourRecording": "Your recording",
+    "taskBand": "{task} · Band {band}",
+    "criteria": {
+      "TA": "Task Achievement",
+      "TR": "Task Response",
+      "CC": "Coherence and Cohesion",
+      "LR": "Lexical Resource",
+      "GRA": "Grammatical Range and Accuracy",
+      "FC": "Fluency and Coherence",
+      "P": "Pronunciation"
+    }
   }
 }

@@ -58,4 +58,9 @@ export const QUESTION_VIEWS: Record<QuestionType, ViewHints> = {
   WRITE_SENTENCE_PICTURE: { view: 'write', rows: 2 },
   RESPOND_WRITTEN_REQUEST: { view: 'write', email: true, rows: 8 },
   OPINION_ESSAY: { view: 'write', rows: 12, minWords: 300 },
+  IELTS_WRITING_TASK_1: { view: 'write', rows: 12, minWords: 150 },
+  IELTS_WRITING_TASK_2: { view: 'write', rows: 14, minWords: 250 },
+  IELTS_SPEAKING_PART_1: { view: 'speak' },
+  IELTS_SPEAKING_PART_2: { view: 'speak' },
+  IELTS_SPEAKING_PART_3: { view: 'speak' },
 };

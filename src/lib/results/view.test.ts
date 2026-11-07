@@ -28,6 +28,7 @@ describe('buildResultView', () => {
       incorrect: 1,
       blank: 1,
       pending: 0,
+      graded: 0,
     });
     expect(statuses(view, 1)).toEqual([
       [1, 'correct'],
@@ -123,11 +124,17 @@ describe('buildResultView', () => {
           }),
         ],
       },
-      { sections: [attemptSection(30, { skill: 'WRITING' })] },
+      {
+        sections: [
+          attemptSection(30, { skill: 'WRITING', gradingStatus: 'PENDING' }),
+        ],
+      },
     );
     const view = buildResultView(result, makeTest());
 
     expect(view.skills[0].pending).toBe(true);
+    expect(view.sections[0].gradingStatus).toBe('PENDING');
+    expect(view.sections[0].assessment).toBeNull();
     expect(view.sections[0].items[0]).toMatchObject({
       status: 'pending',
       correctAnswer: null,
@@ -138,7 +145,12 @@ describe('buildResultView', () => {
   it('estimates the IELTS band from listening and reading', () => {
     const view = buildResultView(makeAttemptResult(), makeTest());
 
-    expect(view.total).toEqual({ kind: 'ielts', band: 7, max: 9 });
+    expect(view.total).toEqual({
+      kind: 'ielts',
+      band: 7,
+      max: 9,
+      estimate: true,
+    });
   });
 
   it('shows no IELTS total for practice sections', () => {
@@ -165,6 +177,134 @@ describe('buildResultView', () => {
       kind: 'toeic',
       score: 755,
       max: 990,
+    });
+  });
+});
+
+describe('teacher grading', () => {
+  const essay = (overrides = {}) =>
+    resultQuestion(1, 30, 1, {
+      response: { text: 'My essay' },
+      score: 0,
+      maxScore: 1,
+      answer: { sample: 'A model essay' },
+      ...overrides,
+    });
+  const writing = (
+    gradingStatus: 'PENDING' | 'GRADED',
+    questions = [essay()],
+    assessments: ReturnType<typeof makeAttemptResult>['assessments'] = [],
+  ) =>
+    makeAttemptResult(
+      { questions, assessments },
+      {
+        sections: [
+          attemptSection(30, {
+            skill: 'WRITING',
+            gradingStatus,
+            scaledScore: gradingStatus === 'GRADED' ? 6.5 : null,
+          }),
+        ],
+      },
+    );
+
+  it("shows the teacher's grade", () => {
+    const result = writing(
+      'GRADED',
+      [essay()],
+      [
+        {
+          attemptSectionId: 'as-30',
+          band: 6.5,
+          entries: [
+            {
+              partId: 300,
+              criteria: { GRA: 6, TR: 7, LR: 7, CC: 6 },
+              band: 6.5,
+              feedback: 'Good',
+            },
+          ],
+        },
+      ],
+    );
+    const view = buildResultView(result, makeTest());
+
+    expect(view.skills[0]).toMatchObject({ pending: false, scaledScore: 6.5 });
+    expect(view.sections[0].items[0]).toMatchObject({
+      status: 'graded',
+      sample: 'A model essay',
+    });
+    expect(view.sections[0].counts.graded).toBe(1);
+    const { assessment } = view.sections[0];
+    expect(assessment?.band).toBe(6.5);
+    expect(assessment?.entries[0]).toMatchObject({
+      partId: 300,
+      partTitle: 'Part 1',
+      partOrder: 1,
+      band: 6.5,
+      feedback: 'Good',
+    });
+    expect(assessment?.entries[0].criteria.map((c) => c.code)).toEqual([
+      'TR',
+      'CC',
+      'LR',
+      'GRA',
+    ]);
+  });
+
+  it('a blank essay is blank', () => {
+    for (const status of ['PENDING', 'GRADED'] as const) {
+      const view = buildResultView(
+        writing(status, [essay({ response: null })]),
+        makeTest(),
+      );
+      expect(view.sections[0].items[0].status).toBe('blank');
+    }
+  });
+
+  it('ignores score and maxScore for Writing/Speaking', () => {
+    const view = buildResultView(
+      writing('GRADED', [essay({ score: 1, maxScore: 1 })]),
+      makeTest(),
+    );
+    expect(view.sections[0].byPart).toEqual([]);
+    expect(view.sections[0].byType).toEqual([]);
+  });
+
+  it('keeps the recording link', () => {
+    const result = makeAttemptResult(
+      {
+        questions: [
+          resultQuestion(1, 30, 1, {
+            response: { mediaId: 9 },
+            answer: { sample: 'A model answer' },
+            audioUrl: 'https://signed',
+          }),
+        ],
+      },
+      {
+        sections: [
+          attemptSection(30, { skill: 'SPEAKING', gradingStatus: 'PENDING' }),
+        ],
+      },
+    );
+    const [item] = buildResultView(result, makeTest()).sections[0].items;
+
+    expect(item).toMatchObject({
+      audioUrl: 'https://signed',
+      yourAnswer: [],
+      status: 'pending',
+    });
+  });
+
+  it('uses the server overall band', () => {
+    const result = makeAttemptResult({}, { overallScore: 6.5 });
+
+    expect(buildResultView(result, makeTest()).total).toEqual({
+      kind: 'ielts',
+      band: 6.5,
+      max: 9,
+      estimate: false,
     });
   });
 });

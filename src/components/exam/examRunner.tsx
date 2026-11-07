@@ -3,7 +3,14 @@
 import { Button, Skeleton } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 
 import type { ExamDraft } from '@/lib/exam/draft';
 import type { Answer } from '@/lib/exam/structure';
@@ -19,6 +26,7 @@ import {
 } from '@/lib/api/attempts-client';
 import { ApiError } from '@/lib/api/client';
 import {
+  indexTestQuestions,
   remainingFromAttempt,
   stateFromAttempt,
   type ServerExamState,
@@ -33,12 +41,14 @@ import {
 } from '@/lib/exam/reducer';
 import { partSequence } from '@/lib/exam/structure';
 
+import { AttemptAudioContext } from './attemptAudio';
 import { ExamHeader } from './examHeader';
 import { PartView, type FocusRequest } from './partView';
 import { partGroups, QuestionNavigator } from './questionNavigator';
 import { SubmitModal } from './submitModal';
 import { TimeUpModal } from './timeUpModal';
 import { useAttemptAutosave } from './useAttemptAutosave';
+import { useAttemptRecordings } from './useAttemptRecordings';
 import { useExamPersistence } from './useExamPersistence';
 import { useExamTextSize } from './useExamTextSize';
 import { useSectionTimer } from './useSectionTimer';
@@ -138,7 +148,7 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
   const [textSize, setTextSize] = useExamTextSize();
   const [active, setActive] = useState<{
     sectionId: number;
-    n: number;
+    questionId: number;
   } | null>(null);
   // Never reset: PartView only re-triggers on a new seq, even after the request was cleared.
   const focusSeq = useRef(0);
@@ -195,6 +205,38 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
     attempt?.baseline ?? null,
   );
 
+  const questionIndex = useMemo(
+    () => new Map(indexTestQuestions(test).map((q) => [q.question.id, q])),
+    [test],
+  );
+  const recordings = useAttemptRecordings(
+    attempt?.id ?? null,
+    useCallback(
+      (questionId: number, mediaId: number) => {
+        const q = questionIndex.get(questionId);
+        if (!q) return;
+        dispatch({
+          type: 'recorded',
+          sectionId: q.sectionId,
+          questionId,
+          value: String(mediaId),
+        });
+      },
+      [questionIndex],
+    ),
+  );
+  // Time running out stops the recording and uploads it within the server's grace period.
+  const recordingSection =
+    recordings.recordingId === null
+      ? null
+      : (questionIndex.get(recordings.recordingId)?.sectionId ?? null);
+  const recordingLocked =
+    recordingSection !== null && isSectionLocked(state, recordingSection);
+  const { stop: stopRecording } = recordings;
+  useEffect(() => {
+    if (recordingLocked) void stopRecording();
+  }, [recordingLocked, stopRecording]);
+
   const sections = [...test.testSections].sort((a, b) => a.order - b.order);
   const section = sections.find((s) => s.id === state.sectionId) ?? sections[0];
   const parts = [...section.testParts].sort((a, b) => a.order - b.order);
@@ -232,10 +274,10 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
   const groups = partGroups(section, sectionAnswers);
   const allNumbers = groups.flatMap((g) => g.numbers);
 
-  const goToQuestion = (partId: number, from: number) => {
+  const goToQuestion = (partId: number, questionId: number) => {
     dispatch({ type: 'goTo', sectionId: section.id, partId });
     setFocus({
-      n: from,
+      questionId,
       seq: ++focusSeq.current,
       sectionId: section.id,
       partId,
@@ -245,6 +287,7 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
   // Resolves 'graded' once the whole attempt is closed and the result page is on its way.
   const closeSection = async (sectionId: number) => {
     if (!attempt) throw new Error('No attempt');
+    await recordings.settle();
     await flush();
     const isLast = sections.every(
       (s) => s.id === sectionId || isSectionLocked(state, s.id),
@@ -348,30 +391,38 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
         exitHref={exitHref}
       />
       <div className="flex min-h-0 flex-1 flex-col">
-        <PartView
-          key={`${section.id}-${part?.id ?? 'none'}`}
-          part={part}
-          index={Math.max(partIndex, 0)}
-          answers={sectionAnswers}
-          onAnswer={(n: number, value: Answer) =>
-            dispatch({ type: 'answer', n, value })
-          }
-          readOnly={locked}
-          flagged={sectionFlagged}
-          onToggleFlag={(n) => dispatch({ type: 'toggleFlag', n })}
-          focusRequest={
-            focus?.sectionId === section.id && focus.partId === state.partId
-              ? focus
-              : null
-          }
-          onActiveQuestion={(n) => setActive({ sectionId: section.id, n })}
-          textSize={textSize}
-        />
+        <AttemptAudioContext.Provider value={recordings}>
+          <PartView
+            key={`${section.id}-${part?.id ?? 'none'}`}
+            part={part}
+            index={Math.max(partIndex, 0)}
+            answers={sectionAnswers}
+            onAnswer={(questionId: number, value: Answer) =>
+              dispatch({ type: 'answer', questionId, value })
+            }
+            readOnly={locked}
+            flagged={sectionFlagged}
+            onToggleFlag={(questionId) =>
+              dispatch({ type: 'toggleFlag', questionId })
+            }
+            focusRequest={
+              focus?.sectionId === section.id && focus.partId === state.partId
+                ? focus
+                : null
+            }
+            onActiveQuestion={(questionId) =>
+              setActive({ sectionId: section.id, questionId })
+            }
+            textSize={textSize}
+          />
+        </AttemptAudioContext.Provider>
       </div>
       <QuestionNavigator
         section={section}
         partId={state.partId}
-        activeQuestion={active?.sectionId === section.id ? active.n : null}
+        activeQuestion={
+          active?.sectionId === section.id ? active.questionId : null
+        }
         answers={sectionAnswers}
         flagged={sectionFlagged}
         onSelect={goToQuestion}

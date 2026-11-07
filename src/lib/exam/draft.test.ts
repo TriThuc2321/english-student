@@ -47,7 +47,7 @@ describe('exam draft', () => {
   it('returns null for malformed section ids', () => {
     localStorage.setItem(
       'exam-draft:x',
-      JSON.stringify({ ...state, version: 1, sectionIds: ['a'] }),
+      JSON.stringify({ ...state, version: 2, sectionIds: ['a'] }),
     );
     expect(loadExamDraft('x')).toBeNull();
   });
@@ -57,7 +57,7 @@ describe('exam draft', () => {
     delete legacy.submitted;
     localStorage.setItem(
       'exam-draft:x',
-      JSON.stringify({ ...legacy, version: 1 }),
+      JSON.stringify({ ...legacy, version: 2 }),
     );
     expect(loadExamDraft('x')).toEqual(state);
   });
@@ -70,7 +70,7 @@ describe('exam draft', () => {
   it('returns null for an unknown version', () => {
     localStorage.setItem(
       'exam-draft:x',
-      JSON.stringify({ ...state, version: 2 }),
+      JSON.stringify({ ...state, version: 1 }),
     );
     expect(loadExamDraft('x')).toBeNull();
   });
@@ -78,7 +78,7 @@ describe('exam draft', () => {
   it('returns null for a malformed envelope', () => {
     localStorage.setItem(
       'exam-draft:x',
-      JSON.stringify({ version: 1, answers: 3 }),
+      JSON.stringify({ version: 2, answers: 3 }),
     );
     expect(loadExamDraft('x')).toBeNull();
   });

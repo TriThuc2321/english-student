@@ -17,6 +17,7 @@ export type PassageView = {
 };
 
 export type QuestionView = {
+  id: number;
   n: number;
   nTo: number;
   prompt: string | null;
@@ -84,6 +85,7 @@ export function toGroupView(group: StudentQuestionGroup): GroupViewModel {
     questions: [...group.questions]
       .sort((a, b) => a.order - b.order)
       .map((q) => ({
+        id: q.id,
         n: q.numberFrom,
         nTo: q.numberTo,
         prompt: q.prompt,

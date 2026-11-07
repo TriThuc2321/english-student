@@ -28,7 +28,7 @@ export default async function AttemptResultPage({
   const lookup = await getAttemptResult(id);
   if (lookup.status === 'notFound') notFound();
   // An attempt still being taken has no result yet; the exam page resumes it.
-  if (lookup.status === 'notGraded') {
+  if (lookup.status === 'inProgress') {
     redirect(ROUTES.takeTest(lookup.testSlug));
   }
 

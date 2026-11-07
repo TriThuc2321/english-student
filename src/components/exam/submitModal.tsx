@@ -12,13 +12,14 @@ type SubmitModalProps = {
   isOpen: boolean;
   sectionName: string;
   groups: PartGroup[];
+  // Question ids.
   flagged: number[];
   remaining: number | null;
   isSubmitting?: boolean;
   hasError?: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  onGoTo: (partId: number, from: number) => void;
+  onGoTo: (partId: number, questionId: number) => void;
 };
 
 export function SubmitModal({
@@ -40,7 +41,7 @@ export function SubmitModal({
   const unanswered = numbers.filter((x) => !x.answered);
   // A multi-answer question is flagged by its first number, so list it once.
   const flaggedNumbers = numbers.filter(
-    (x) => x.n === x.from && flagged.includes(x.from),
+    (x) => x.n === x.from && flagged.includes(x.questionId),
   );
 
   const stats = [
@@ -49,9 +50,9 @@ export function SubmitModal({
     { label: t('flagged'), value: flaggedNumbers.length },
   ];
 
-  const goTo = (partId: number, from: number) => {
+  const goTo = (partId: number, questionId: number) => {
     onClose();
-    onGoTo(partId, from);
+    onGoTo(partId, questionId);
   };
 
   return (
@@ -84,13 +85,13 @@ export function SubmitModal({
                 <p className="mb-2 text-sm font-semibold">{t('unanswered')}</p>
                 <ul className="flex flex-wrap gap-1.5">
                   {unanswered.map((x) => (
-                    <li key={x.n}>
+                    <li key={`${x.questionId}-${x.n}`}>
                       <NavNumber
                         n={x.n}
                         answered={false}
                         flagged={false}
                         label={t('goTo', { n: x.n })}
-                        onPress={() => goTo(x.partId, x.from)}
+                        onPress={() => goTo(x.partId, x.questionId)}
                         className="w-10"
                       />
                     </li>
@@ -105,13 +106,13 @@ export function SubmitModal({
                 </p>
                 <ul className="flex flex-wrap gap-1.5">
                   {flaggedNumbers.map((x) => (
-                    <li key={x.n}>
+                    <li key={`${x.questionId}-${x.n}`}>
                       <NavNumber
                         n={x.n}
                         answered={x.answered}
                         flagged
                         label={t('goTo', { n: x.n })}
-                        onPress={() => goTo(x.partId, x.from)}
+                        onPress={() => goTo(x.partId, x.questionId)}
                         className="w-10"
                       />
                     </li>

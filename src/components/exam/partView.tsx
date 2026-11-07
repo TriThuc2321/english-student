@@ -10,6 +10,7 @@ import type { StudentTestPart } from '@/types/student-test';
 import { toPassageView } from '@/lib/exam/group-view';
 
 import { PartAudioCard, PartHeading } from './partHeading';
+import { questionAnchorId } from './questions/context';
 import { GroupView } from './questions/groupView';
 import { PassagePane } from './questions/parts';
 import { TEXT_ZOOM, type TextSize } from './useExamTextSize';
@@ -17,17 +18,18 @@ import { TEXT_ZOOM, type TextSize } from './useExamTextSize';
 type PartViewProps = {
   part: StudentTestPart | null;
   index: number;
+  // Keyed by question id.
   answers: Record<number, Answer>;
-  onAnswer: (n: number, value: Answer) => void;
+  onAnswer: (questionId: number, value: Answer) => void;
   readOnly: boolean;
   flagged: number[];
-  onToggleFlag: (n: number) => void;
+  onToggleFlag: (questionId: number) => void;
   focusRequest?: FocusRequest | null;
-  onActiveQuestion?: (n: number) => void;
+  onActiveQuestion?: (questionId: number) => void;
   textSize?: TextSize;
 };
 
-export type FocusRequest = { n: number; seq: number };
+export type FocusRequest = { questionId: number; seq: number };
 
 const FOCUSABLE = 'input, select, textarea, button, [tabindex]';
 
@@ -53,12 +55,12 @@ export function PartView({
   }
 
   const seq = focusRequest?.seq;
-  const target = focusRequest?.n;
+  const target = focusRequest?.questionId;
   useEffect(() => {
     if (seq === undefined || target === undefined) return;
     // The questions column is hidden while the passage tab is active; wait for it to show
     const frame = requestAnimationFrame(() => {
-      const el = document.getElementById(`q-${target}`);
+      const el = document.getElementById(questionAnchorId(target));
       if (!el) return;
       el.scrollIntoView({ block: 'center' });
       const focusable = el.matches(FOCUSABLE)
@@ -79,8 +81,8 @@ export function PartView({
     if (!el) return;
     const onFocusIn = (e: FocusEvent) => {
       const anchor = (e.target as Element).closest('[id^="q-"]');
-      const n = anchor ? Number(anchor.id.slice(2)) : NaN;
-      if (Number.isInteger(n)) onActiveRef.current?.(n);
+      const id = anchor ? Number(anchor.id.slice(2)) : NaN;
+      if (Number.isInteger(id)) onActiveRef.current?.(id);
     };
     el.addEventListener('focusin', onFocusIn);
     return () => el.removeEventListener('focusin', onFocusIn);

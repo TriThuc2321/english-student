@@ -9,7 +9,11 @@ import type { StudentQuestionGroup } from '@/types/student-test';
 import { toGroupView } from '@/lib/exam/group-view';
 import { isAnswered } from '@/lib/exam/structure';
 
-import { ExamGroupContext } from './context';
+import {
+  ExamGroupContext,
+  questionAnchorId,
+  type ExamGroupContextValue,
+} from './context';
 import { PassagePane } from './parts';
 import { VIEWS } from './views';
 
@@ -30,13 +34,14 @@ const Instruction = ({ text }: { text: string }) => (
   </p>
 );
 
+// answers, flagged and the callbacks are keyed by question id, like the exam state.
 type GroupViewProps = {
   group: StudentQuestionGroup;
   answers: Record<number, Answer>;
-  setAnswer: (n: number, value: Answer) => void;
+  setAnswer: (questionId: number, value: Answer) => void;
   readOnly: boolean;
   flagged: number[];
-  toggleFlag: (n: number) => void;
+  toggleFlag: (questionId: number) => void;
 };
 
 export function GroupView({
@@ -61,19 +66,48 @@ export function GroupView({
         ? `${from}`
         : `${from}–${to}`;
 
+  const context = useMemo((): ExamGroupContextValue => {
+    const idOf = new Map(view.questions.map((q) => [q.n, q.id]));
+    const byNumber: Record<number, Answer> = {};
+    for (const q of view.questions) {
+      if (answers[q.id] !== undefined) byNumber[q.n] = answers[q.id];
+    }
+    return {
+      group: view,
+      answers: byNumber,
+      // A template blank with no matching question has nowhere to save to.
+      setAnswer: (n, value) => {
+        const id = idOf.get(n);
+        if (id !== undefined) setAnswer(id, value);
+      },
+      readOnly,
+      flagged: view.questions
+        .filter((q) => flagged.includes(q.id))
+        .map((q) => q.n),
+      toggleFlag: (n) => {
+        const id = idOf.get(n);
+        if (id !== undefined) toggleFlag(id);
+      },
+      anchorId: (n) => {
+        const id = idOf.get(n);
+        return id === undefined
+          ? `blank-${view.id}-${n}`
+          : questionAnchorId(id);
+      },
+    };
+  }, [view, answers, setAnswer, readOnly, flagged, toggleFlag]);
+
   let total = 0;
   let done = 0;
   for (const q of view.questions) {
     const size = Math.max(q.nTo, q.n) - q.n + 1;
     total += size;
-    if (isAnswered(answers[q.n], size)) done += size;
+    if (isAnswered(answers[q.id], size)) done += size;
   }
   const headingId = `group-${group.id}-heading`;
 
   return (
-    <ExamGroupContext.Provider
-      value={{ group: view, answers, setAnswer, readOnly, flagged, toggleFlag }}
-    >
+    <ExamGroupContext.Provider value={context}>
       <section
         aria-labelledby={range ? headingId : undefined}
         className="bg-surface border-separator shadow-surface flex min-w-0 flex-col gap-3 overflow-hidden rounded-xl border pb-4"

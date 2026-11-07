@@ -1,8 +1,11 @@
 import type {
+  AttemptAssessment,
   AttemptListItem,
   AttemptResponse,
   AttemptResult,
   AttemptResultQuestion,
+  AttemptSection,
+  AttemptSectionGradingStatus,
 } from '@/types/attempt';
 import type {
   ExamType,
@@ -17,11 +20,19 @@ import type {
   StudentTestPart,
 } from '@/types/student-test';
 
-export type NumberStatus = 'correct' | 'incorrect' | 'blank' | 'pending';
+export type NumberStatus =
+  | 'correct'
+  | 'incorrect'
+  | 'blank'
+  | 'pending'
+  | 'graded';
 
 export type AnswerPart = { key: string | null; text: string | null };
 
 export type ReviewItem = {
+  // Unique within a section; question numbers can repeat (e.g. each Writing task starts at 1).
+  key: string;
+  questionId: number;
   n: number;
   from: number;
   to: number;
@@ -34,6 +45,22 @@ export type ReviewItem = {
   alsoAccepted: string[];
   explanation: string | null;
   evidence: { quote: string | null; paragraph: string | null } | null;
+  audioUrl: string | null;
+  sample: string | null;
+};
+
+export type AssessmentEntryView = {
+  partId: number | null;
+  partTitle: string | null;
+  partOrder: number | null;
+  band: number;
+  criteria: { code: string; band: number }[];
+  feedback: string | null;
+};
+
+export type SectionAssessment = {
+  band: number;
+  entries: AssessmentEntryView[];
 };
 
 export type Breakdown = {
@@ -62,6 +89,8 @@ export type SectionResult = {
   byPart: Breakdown[];
   byType: Breakdown[];
   transcripts: SectionTranscript[];
+  gradingStatus: AttemptSectionGradingStatus | null;
+  assessment: SectionAssessment | null;
 };
 
 export type SkillScore = {
@@ -75,7 +104,7 @@ export type SkillScore = {
 
 export type TotalScore =
   | { kind: 'toeic'; score: number; max: number; parts: SkillScore[] }
-  | { kind: 'ielts'; band: number; max: number };
+  | { kind: 'ielts'; band: number; max: number; estimate: boolean };
 
 export type ResultView = {
   examType: ExamType;
@@ -83,6 +112,16 @@ export type ResultView = {
   total: TotalScore | null;
   sections: SectionResult[];
 };
+
+export const CRITERIA_ORDER = [
+  'TA',
+  'TR',
+  'FC',
+  'CC',
+  'LR',
+  'GRA',
+  'P',
+] as const;
 
 // A category under this share of correct answers is flagged as needing work.
 export const WEAK_THRESHOLD = 60;
@@ -130,6 +169,7 @@ function responseParts(
     return response.key.trim() ? [choice(response.key, options)] : [];
   }
   if ('keys' in response) return response.keys.map((k) => choice(k, options));
+  if ('mediaId' in response) return [];
   return response.text.trim() ? [{ key: null, text: response.text }] : [];
 }
 
@@ -157,9 +197,16 @@ function correctParts(
   return { parts: null, alsoAccepted: [] };
 }
 
-function numberStatus(q: AttemptResultQuestion, n: number): NumberStatus {
-  if (isSample(q)) return 'pending';
+function numberStatus(
+  q: AttemptResultQuestion,
+  n: number,
+  gradingStatus: AttemptSectionGradingStatus | null,
+): NumberStatus {
   const given = q.response;
+  if (isSample(q)) {
+    if (!given) return 'blank';
+    return gradingStatus === 'GRADED' ? 'graded' : 'pending';
+  }
   if (!given) return 'blank';
   if ('keys' in given) {
     // A multi-answer question scores one point per right key; the points fill its numbers in order.
@@ -244,19 +291,54 @@ function sectionTranscripts(
   return found;
 }
 
+const criteriaRank = (code: string) => {
+  const i = (CRITERIA_ORDER as readonly string[]).indexOf(code);
+  return i === -1 ? CRITERIA_ORDER.length : i;
+};
+
+function sectionAssessment(
+  assessment: AttemptAssessment | undefined,
+  section: StudentTestSectionDetail | undefined,
+): SectionAssessment | null {
+  if (!assessment) return null;
+  return {
+    band: assessment.band,
+    entries: assessment.entries.map((e) => {
+      const part = section?.testParts.find((p) => p.id === e.partId);
+      return {
+        partId: e.partId,
+        partTitle: part?.title ?? null,
+        partOrder: part?.order ?? null,
+        band: e.band,
+        criteria: Object.entries(e.criteria)
+          .map(([code, band]) => ({ code, band }))
+          .sort((a, b) => criteriaRank(a.code) - criteriaRank(b.code)),
+        feedback: e.feedback,
+      };
+    }),
+  };
+}
+
+const sampleOf = (q: AttemptResultQuestion) =>
+  'sample' in q.answer && typeof q.answer.sample === 'string'
+    ? q.answer.sample
+    : null;
+
 function sectionResult(
-  sectionId: number,
-  skill: SkillType,
+  section: AttemptSection,
   questions: AttemptResultQuestion[],
   index: Map<number, QuestionContext>,
   transcripts: SectionTranscript[],
+  assessment: SectionAssessment | null,
 ): SectionResult {
+  const { sectionId, skill, gradingStatus } = section;
   const items: ReviewItem[] = [];
   const counts: StatusCounts = {
     correct: 0,
     incorrect: 0,
     blank: 0,
     pending: 0,
+    graded: 0,
   };
   const parts = new Map<
     number,
@@ -272,9 +354,11 @@ function sectionResult(
     const evidence = evidenceOf(q, ctx);
 
     for (let n = q.numberFrom; n <= q.numberTo; n++) {
-      const status = numberStatus(q, n);
+      const status = numberStatus(q, n, gradingStatus);
       counts[status]++;
       items.push({
+        key: `${q.questionId}-${n}`,
+        questionId: q.questionId,
         n,
         from: q.numberFrom,
         to: q.numberTo,
@@ -286,6 +370,8 @@ function sectionResult(
         alsoAccepted,
         explanation: q.explanation,
         evidence,
+        audioUrl: q.audioUrl,
+        sample: sampleOf(q),
       });
     }
 
@@ -326,6 +412,8 @@ function sectionResult(
       breakdown(`type-${type}`, type, s.correct, s.total),
     ),
     transcripts,
+    gradingStatus,
+    assessment,
   };
 }
 
@@ -352,12 +440,20 @@ function totalScore(
   }
   // Practice sessions are not a whole exam, so they get no overall band.
   if (attempt.mode !== 'FULL') return null;
+  if (overallScore !== null) {
+    return { kind: 'ielts', band: overallScore, max: 9, estimate: false };
+  }
   const bands = skills
     .filter((s) => s.skill === 'LISTENING' || s.skill === 'READING')
     .map((s) => s.scaledScore);
   // An estimate needs both objective skills; a single section already shows its own band.
   if (bands.length < 2 || bands.some((b) => b === null)) return null;
-  return { kind: 'ielts', band: ieltsBand(bands as number[]), max: 9 };
+  return {
+    kind: 'ielts',
+    band: ieltsBand(bands as number[]),
+    max: 9,
+    estimate: true,
+  };
 }
 
 export function buildResultView(
@@ -376,33 +472,32 @@ export function buildResultView(
     bySection.set(q.sectionId, [...(bySection.get(q.sectionId) ?? []), q]);
   }
 
-  const skills: SkillScore[] = sections.map((s) => {
-    const own = bySection.get(s.sectionId) ?? [];
-    return {
-      sectionId: s.sectionId,
-      skill: s.skill,
-      scaledScore: s.scaledScore,
-      rawScore: s.rawScore,
-      maxScore: s.maxScore,
-      pending: own.length > 0 && own.every(isSample),
-    };
-  });
+  const assessments = new Map(
+    result.assessments.map((a) => [a.attemptSectionId, a]),
+  );
+
+  const skills: SkillScore[] = sections.map((s) => ({
+    sectionId: s.sectionId,
+    skill: s.skill,
+    scaledScore: s.scaledScore,
+    rawScore: s.rawScore,
+    maxScore: s.maxScore,
+    pending: s.gradingStatus === 'PENDING',
+  }));
 
   return {
     examType: attempt.test.examType,
     skills,
     total: totalScore(attempt.test.examType, attempt, skills),
-    sections: sections.map((s) =>
-      sectionResult(
-        s.sectionId,
-        s.skill,
+    sections: sections.map((s) => {
+      const testSection = test.testSections.find((ts) => ts.id === s.sectionId);
+      return sectionResult(
+        s,
         bySection.get(s.sectionId) ?? [],
         index,
-        sectionTranscripts(
-          test.testSections.find((ts) => ts.id === s.sectionId),
-          transcripts,
-        ),
-      ),
-    ),
+        sectionTranscripts(testSection, transcripts),
+        sectionAssessment(assessments.get(s.id), testSection),
+      );
+    }),
   };
 }

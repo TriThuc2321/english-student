@@ -15,10 +15,10 @@ import TestOverview, {
 const SLUG = 'practice-test-1';
 const TAKE_HREF = '/tests/practice-test-1/take';
 const QUESTIONS: IntroQuestion[] = [
-  { sectionId: 1, from: 1, size: 1 },
-  { sectionId: 1, from: 2, size: 2 },
-  { sectionId: 1, from: 4, size: 1 },
-  { sectionId: 2, from: 1, size: 1 },
+  { sectionId: 1, questionId: 1, size: 1 },
+  { sectionId: 1, questionId: 2, size: 2 },
+  { sectionId: 1, questionId: 4, size: 1 },
+  { sectionId: 2, questionId: 1, size: 1 },
 ];
 const SECTIONS: OverviewSection[] = [
   { id: 1, skill: 'READING', questionCount: 4, minutes: 60 },

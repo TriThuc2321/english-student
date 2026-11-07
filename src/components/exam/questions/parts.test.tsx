@@ -30,6 +30,7 @@ function setup(
         readOnly: overrides.readOnly ?? false,
         flagged: [],
         toggleFlag,
+        anchorId: (n) => `q-${n}`,
       }}
     >
       {ui}

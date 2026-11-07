@@ -1,6 +1,7 @@
 import type { ExamState } from './reducer';
 
-const VERSION = 1;
+// 2: answers and flags are keyed by question id instead of question number.
+const VERSION = 2;
 
 // sectionIds is absent for a full-test attempt, which keeps drafts saved before practice mode valid.
 export type ExamDraft = ExamState & { sectionIds?: number[] };

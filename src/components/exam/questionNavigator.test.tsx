@@ -82,9 +82,9 @@ describe('QuestionNavigator', () => {
   });
 
   it('collapses other parts into a jump to their first question', async () => {
-    const { onSelect } = setup({ answers: { 5: 'x' } });
+    const { onSelect } = setup({ answers: { 4: 'x' } });
     await userEvent.click(screen.getByRole('button', { name: /Part 2/ }));
-    expect(onSelect).toHaveBeenCalledWith(301, 5);
+    expect(onSelect).toHaveBeenCalledWith(301, 4);
   });
 
   it('marks a multi-answer question as current on all its numbers', () => {

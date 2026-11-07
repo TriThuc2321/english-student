@@ -142,7 +142,12 @@
       "EXPRESS_OPINION": "Nêu ý kiến",
       "WRITE_SENTENCE_PICTURE": "Viết câu theo tranh",
       "RESPOND_WRITTEN_REQUEST": "Trả lời yêu cầu bằng văn bản",
-      "OPINION_ESSAY": "Bài luận nêu ý kiến"
+      "OPINION_ESSAY": "Bài luận nêu ý kiến",
+      "IELTS_WRITING_TASK_1": "Writing Task 1",
+      "IELTS_WRITING_TASK_2": "Writing Task 2",
+      "IELTS_SPEAKING_PART_1": "Speaking Part 1",
+      "IELTS_SPEAKING_PART_2": "Speaking Part 2",
+      "IELTS_SPEAKING_PART_3": "Speaking Part 3"
     },
     "navQuestion": "Câu {n}, {status, select, answered {đã trả lời} other {chưa trả lời}}{flagged, select, yes {, đã đánh dấu} other {}}",
     "passage": "Bài đọc",
@@ -242,7 +247,18 @@
       "title": "Không mở được bài thi",
       "body": "Hãy kiểm tra kết nối rồi thử lại. Câu trả lời đã lưu vẫn an toàn.",
       "retry": "Thử lại"
-    }
+    },
+    "record": "Bắt đầu ghi âm",
+    "stopRecording": "Dừng",
+    "uploading": "Đang lưu bản ghi…",
+    "recordingSaved": "Đã lưu bản ghi",
+    "recordAgain": "Ghi lại",
+    "retryUpload": "Thử lưu lại",
+    "micDenied": "Hãy cho phép truy cập micro để ghi âm.",
+    "micUnsupported": "Trình duyệt này không hỗ trợ ghi âm.",
+    "sectionClosed": "Phần thi đã đóng, không thể lưu bản ghi.",
+    "uploadFailed": "Lưu bản ghi thất bại.",
+    "audioTooLarge": "Bản ghi vượt quá 20 MB."
   },
   "results": {
     "fullTest": "Toàn bộ đề",
@@ -265,13 +281,15 @@
       "correct": "Đúng {count}",
       "incorrect": "Sai {count}",
       "blank": "Bỏ trống {count}",
-      "pending": "Chờ chấm {count}"
+      "pending": "Chờ chấm {count}",
+      "graded": "Đã chấm {count}"
     },
     "status": {
       "correct": "Đúng",
       "incorrect": "Sai",
       "blank": "Bỏ trống",
-      "pending": "Chờ chấm"
+      "pending": "Chờ chấm",
+      "graded": "Đã chấm"
     },
     "questionAria": "Câu {n}, {status}",
     "focusTitle": "Cần tập trung vào đâu",
@@ -296,6 +314,22 @@
     "next": "Câu sau",
     "transcripts": "Transcript",
     "transcriptN": "Transcript {n}",
-    "emptySection": "Phần thi này không có câu hỏi."
+    "emptySection": "Phần thi này không có câu hỏi.",
+    "grading": "Đang chấm",
+    "totalIeltsFinal": "Band tổng",
+    "assessmentTitle": "Điểm giáo viên chấm · Band {band}",
+    "teacherFeedback": "Nhận xét của giáo viên",
+    "sampleAnswer": "Bài mẫu",
+    "yourRecording": "Bản ghi âm của bạn",
+    "taskBand": "{task} · Band {band}",
+    "criteria": {
+      "TA": "Task Achievement",
+      "TR": "Task Response",
+      "CC": "Coherence and Cohesion",
+      "LR": "Lexical Resource",
+      "GRA": "Grammatical Range and Accuracy",
+      "FC": "Fluency and Coherence",
+      "P": "Pronunciation"
+    }
   }
 }

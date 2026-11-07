@@ -13,11 +13,14 @@ import type {
   SectionResult,
 } from '@/lib/results/view';
 
+import { AssessmentPanel } from './assessmentPanel';
+
 const CELL_CLASSES: Record<NumberStatus, string> = {
   correct: 'bg-success text-success-foreground border border-success',
   incorrect: 'bg-danger-soft text-foreground border-2 border-danger',
   blank: 'text-muted border border-dashed border-field-border',
   pending: 'bg-surface-secondary text-muted border border-separator',
+  graded: 'bg-accent-soft text-accent-soft-foreground border border-accent',
 };
 
 const BADGE_CLASSES: Record<NumberStatus, string> = {
@@ -25,6 +28,7 @@ const BADGE_CLASSES: Record<NumberStatus, string> = {
   incorrect: 'bg-danger text-danger-foreground',
   blank: 'bg-surface-secondary text-muted',
   pending: 'bg-surface-secondary text-muted',
+  graded: 'bg-accent-soft text-accent-soft-foreground',
 };
 
 const GLYPHS: Record<NumberStatus, string> = {
@@ -32,6 +36,7 @@ const GLYPHS: Record<NumberStatus, string> = {
   incorrect: '✗',
   blank: '–',
   pending: '…',
+  graded: '✓',
 };
 
 const LEGEND_SWATCHES: Record<NumberStatus, string> = {
@@ -39,6 +44,7 @@ const LEGEND_SWATCHES: Record<NumberStatus, string> = {
   incorrect: 'border-2 border-danger bg-danger-soft',
   blank: 'border border-dashed border-field-border',
   pending: 'border border-separator bg-surface-secondary',
+  graded: 'border border-accent bg-accent-soft',
 };
 
 const card =
@@ -54,7 +60,7 @@ type ResultReviewProps = {
 export function ResultReview({ sections }: ResultReviewProps) {
   const t = useTranslations();
   const [sectionId, setSectionId] = useState(sections[0]?.sectionId);
-  const [selected, setSelected] = useState<Record<number, number>>({});
+  const [selected, setSelected] = useState<Record<number, string>>({});
   const transcriptsHeading = useId();
 
   const section =
@@ -63,19 +69,22 @@ export function ResultReview({ sections }: ResultReviewProps) {
 
   const items = section.items;
   const current =
-    items.find((item) => item.n === selected[section.sectionId]) ?? items[0];
+    items.find((item) => item.key === selected[section.sectionId]) ?? items[0];
   const index = current ? items.indexOf(current) : -1;
-  const select = (n: number) =>
-    setSelected((prev) => ({ ...prev, [section.sectionId]: n }));
+  const select = (key: string) =>
+    setSelected((prev) => ({ ...prev, [section.sectionId]: key }));
 
   const sectionName = (s: SectionResult) => t(`exam.skill.${s.skill}`);
 
   const content = (
     <>
+      {section.assessment && (
+        <AssessmentPanel assessment={section.assessment} />
+      )}
       <AnswerGrid
         title={t('results.answersTitle', { section: sectionName(section) })}
         section={section}
-        selectedN={current?.n ?? null}
+        selectedKey={current?.key ?? null}
         onSelect={select}
       />
       <FocusBreakdown section={section} />
@@ -147,9 +156,9 @@ export function ResultReview({ sections }: ResultReviewProps) {
       {current && (
         <ReviewPanel
           item={current}
-          onPrev={index > 0 ? () => select(items[index - 1].n) : null}
+          onPrev={index > 0 ? () => select(items[index - 1].key) : null}
           onNext={
-            index < items.length - 1 ? () => select(items[index + 1].n) : null
+            index < items.length - 1 ? () => select(items[index + 1].key) : null
           }
         />
       )}
@@ -160,18 +169,20 @@ export function ResultReview({ sections }: ResultReviewProps) {
 function AnswerGrid({
   title,
   section,
-  selectedN,
+  selectedKey,
   onSelect,
 }: {
   title: string;
   section: SectionResult;
-  selectedN: number | null;
-  onSelect: (n: number) => void;
+  selectedKey: string | null;
+  onSelect: (key: string) => void;
 }) {
   const t = useTranslations('results');
   const headingId = useId();
   const legend = (Object.keys(section.counts) as NumberStatus[]).filter(
-    (status) => status !== 'pending' || section.counts.pending > 0,
+    (status) =>
+      (status !== 'pending' && status !== 'graded') ||
+      section.counts[status] > 0,
   );
 
   return (
@@ -197,9 +208,9 @@ function AnswerGrid({
       ) : (
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(48px,1fr))] gap-1.5">
           {section.items.map((item) => {
-            const on = item.n === selectedN;
+            const on = item.key === selectedKey;
             return (
-              <li key={item.n}>
+              <li key={item.key}>
                 <button
                   type="button"
                   aria-pressed={on}
@@ -207,7 +218,7 @@ function AnswerGrid({
                     n: item.n,
                     status: t(`status.${item.status}`),
                   })}
-                  onClick={() => onSelect(item.n)}
+                  onClick={() => onSelect(item.key)}
                   className={`flex h-11 w-full cursor-pointer flex-col items-center justify-center gap-px rounded-lg text-sm font-semibold tabular-nums ${CELL_CLASSES[item.status]} ${on ? 'ring-foreground ring-offset-surface ring-2 ring-offset-2' : ''}`}
                 >
                   {item.n}
@@ -326,16 +337,36 @@ function ReviewPanel({
         {item.prompt ?? t('results.promptFallback')}
       </p>
       <div className="bg-surface-secondary rounded-lg px-3.5 py-3">
-        <p className="text-muted text-xs">{t('results.yourAnswer')}</p>
-        <p className="mt-0.5 font-semibold">
-          {item.yourAnswer.length > 0
-            ? item.yourAnswer.map(formatPart).join(', ')
-            : t('results.noAnswer')}
-        </p>
+        {item.audioUrl ? (
+          <>
+            <p className="text-muted text-xs">{t('results.yourRecording')}</p>
+            {/* oxlint-disable-next-line jsx-a11y/media-has-caption -- the student's own recording has no captions to offer */}
+            <audio controls src={item.audioUrl} className="mt-1.5 w-full" />
+          </>
+        ) : (
+          <>
+            <p className="text-muted text-xs">{t('results.yourAnswer')}</p>
+            <p
+              className={`mt-0.5 ${item.sample === null ? 'font-semibold' : 'max-h-96 overflow-y-auto text-sm leading-6 whitespace-pre-line'}`}
+            >
+              {item.yourAnswer.length > 0
+                ? item.yourAnswer.map(formatPart).join(', ')
+                : t('results.noAnswer')}
+            </p>
+          </>
+        )}
       </div>
       <div className="border-border rounded-lg border border-dashed px-3.5 py-3">
-        <p className="text-muted text-xs">{t('results.correctAnswer')}</p>
-        {item.correctAnswer ? (
+        <p className="text-muted text-xs">
+          {item.sample === null
+            ? t('results.correctAnswer')
+            : t('results.sampleAnswer')}
+        </p>
+        {item.sample !== null ? (
+          <p className="mt-0.5 max-h-96 overflow-y-auto text-sm leading-6 whitespace-pre-line">
+            {item.sample}
+          </p>
+        ) : item.correctAnswer ? (
           <>
             <p className="mt-0.5 font-semibold">
               {item.correctAnswer.map(formatPart).join(', ')}

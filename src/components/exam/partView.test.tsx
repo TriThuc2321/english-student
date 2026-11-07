@@ -45,7 +45,11 @@ describe('PartView focus requests', () => {
     const scrollIntoView = vi.fn();
     Element.prototype.scrollIntoView = scrollIntoView;
     renderWithIntl(
-      <PartView part={parts[0]} {...props} focusRequest={{ n: 1, seq: 1 }} />,
+      <PartView
+        part={parts[0]}
+        {...props}
+        focusRequest={{ questionId: 10, seq: 1 }}
+      />,
     );
     await waitFor(() =>
       expect(screen.getByLabelText('Answer 1')).toHaveFocus(),

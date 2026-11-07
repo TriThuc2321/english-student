@@ -49,12 +49,22 @@ describe('getAttemptResult', () => {
     });
   });
 
-  it('looks up the test of an attempt that is not graded yet', async () => {
+  it('reads a submitted attempt', async () => {
+    const result = makeAttemptResult({}, { status: 'SUBMITTED' });
+    respond(200, result);
+
+    await expect(getAttemptResult('waiting')).resolves.toEqual({
+      status: 'ok',
+      result,
+    });
+  });
+
+  it('looks up the test of an attempt still in progress', async () => {
     respond(409, { message: 'Not graded', code: 'ATTEMPT_NOT_GRADED' });
     respond(200, makeAttempt({ testSlug: 'cam-18' }));
 
     await expect(getAttemptResult('open')).resolves.toEqual({
-      status: 'notGraded',
+      status: 'inProgress',
       testSlug: 'cam-18',
     });
   });

@@ -4,6 +4,7 @@ import { partSequence, sectionDurationSeconds, type Answer } from './structure';
 
 export type { Answer } from './structure';
 
+// answers and flagged are keyed by section id, then by question id: question numbers can repeat within a section.
 export type ExamState = {
   answers: Record<number, Record<number, Answer>>;
   sectionId: number;
@@ -14,8 +15,9 @@ export type ExamState = {
 };
 
 export type ExamAction =
-  | { type: 'answer'; n: number; value: Answer }
-  | { type: 'toggleFlag'; n: number }
+  | { type: 'answer'; questionId: number; value: Answer }
+  | { type: 'recorded'; sectionId: number; questionId: number; value: Answer }
+  | { type: 'toggleFlag'; questionId: number }
   | { type: 'goTo'; sectionId: number; partId?: number | null }
   | { type: 'step'; dir: 1 | -1 }
   | { type: 'tick'; seconds: number }
@@ -110,16 +112,28 @@ export function examReducer(
           ...state.answers,
           [state.sectionId]: {
             ...state.answers[state.sectionId],
-            [action.n]: action.value,
+            [action.questionId]: action.value,
           },
         },
       };
     }
+    // The server already accepted the recording, possibly during the grace period after the section locked.
+    case 'recorded':
+      return {
+        ...state,
+        answers: {
+          ...state.answers,
+          [action.sectionId]: {
+            ...state.answers[action.sectionId],
+            [action.questionId]: action.value,
+          },
+        },
+      };
     case 'toggleFlag': {
       const current = state.flagged[state.sectionId] ?? [];
-      const next = current.includes(action.n)
-        ? current.filter((n) => n !== action.n)
-        : [...current, action.n];
+      const next = current.includes(action.questionId)
+        ? current.filter((id) => id !== action.questionId)
+        : [...current, action.questionId];
       const flagged = { ...state.flagged };
       if (next.length === 0) delete flagged[state.sectionId];
       else flagged[state.sectionId] = next;
