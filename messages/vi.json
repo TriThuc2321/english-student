@@ -270,13 +270,15 @@
       "correct": "Đúng {count}",
       "incorrect": "Sai {count}",
       "blank": "Bỏ trống {count}",
-      "pending": "Chờ chấm {count}"
+      "pending": "Chờ chấm {count}",
+      "graded": "Đã chấm {count}"
     },
     "status": {
       "correct": "Đúng",
       "incorrect": "Sai",
       "blank": "Bỏ trống",
-      "pending": "Chờ chấm"
+      "pending": "Chờ chấm",
+      "graded": "Đã chấm"
     },
     "questionAria": "Câu {n}, {status}",
     "focusTitle": "Cần tập trung vào đâu",

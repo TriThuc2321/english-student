@@ -18,6 +18,7 @@ const CELL_CLASSES: Record<NumberStatus, string> = {
   incorrect: 'bg-danger-soft text-foreground border-2 border-danger',
   blank: 'text-muted border border-dashed border-field-border',
   pending: 'bg-surface-secondary text-muted border border-separator',
+  graded: 'bg-accent-soft text-accent-soft-foreground border border-accent',
 };
 
 const BADGE_CLASSES: Record<NumberStatus, string> = {
@@ -25,6 +26,7 @@ const BADGE_CLASSES: Record<NumberStatus, string> = {
   incorrect: 'bg-danger text-danger-foreground',
   blank: 'bg-surface-secondary text-muted',
   pending: 'bg-surface-secondary text-muted',
+  graded: 'bg-accent-soft text-accent-soft-foreground',
 };
 
 const GLYPHS: Record<NumberStatus, string> = {
@@ -32,6 +34,7 @@ const GLYPHS: Record<NumberStatus, string> = {
   incorrect: '✗',
   blank: '–',
   pending: '…',
+  graded: '✓',
 };
 
 const LEGEND_SWATCHES: Record<NumberStatus, string> = {
@@ -39,6 +42,7 @@ const LEGEND_SWATCHES: Record<NumberStatus, string> = {
   incorrect: 'border-2 border-danger bg-danger-soft',
   blank: 'border border-dashed border-field-border',
   pending: 'border border-separator bg-surface-secondary',
+  graded: 'border border-accent bg-accent-soft',
 };
 
 const card =
@@ -171,7 +175,9 @@ function AnswerGrid({
   const t = useTranslations('results');
   const headingId = useId();
   const legend = (Object.keys(section.counts) as NumberStatus[]).filter(
-    (status) => status !== 'pending' || section.counts.pending > 0,
+    (status) =>
+      (status !== 'pending' && status !== 'graded') ||
+      section.counts[status] > 0,
   );
 
   return (

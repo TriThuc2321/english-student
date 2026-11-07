@@ -270,13 +270,15 @@
       "correct": "Correct {count}",
       "incorrect": "Incorrect {count}",
       "blank": "Blank {count}",
-      "pending": "Pending {count}"
+      "pending": "Pending {count}",
+      "graded": "Graded {count}"
     },
     "status": {
       "correct": "Correct",
       "incorrect": "Incorrect",
       "blank": "Blank",
-      "pending": "Pending"
+      "pending": "Pending",
+      "graded": "Graded"
     },
     "questionAria": "Question {n}, {status}",
     "focusTitle": "Where to focus",
