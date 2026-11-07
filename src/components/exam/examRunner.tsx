@@ -3,7 +3,14 @@
 import { Button, Skeleton } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 
 import type { ExamDraft } from '@/lib/exam/draft';
 import type { Answer } from '@/lib/exam/structure';
@@ -19,6 +26,7 @@ import {
 } from '@/lib/api/attempts-client';
 import { ApiError } from '@/lib/api/client';
 import {
+  indexTestQuestions,
   remainingFromAttempt,
   stateFromAttempt,
   type ServerExamState,
@@ -197,7 +205,37 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
     attempt?.baseline ?? null,
   );
 
-  const recordings = useAttemptRecordings(attempt?.id ?? null);
+  const questionIndex = useMemo(
+    () => new Map(indexTestQuestions(test).map((q) => [q.question.id, q])),
+    [test],
+  );
+  const recordings = useAttemptRecordings(
+    attempt?.id ?? null,
+    useCallback(
+      (questionId: number, mediaId: number) => {
+        const q = questionIndex.get(questionId);
+        if (!q) return;
+        dispatch({
+          type: 'recorded',
+          sectionId: q.sectionId,
+          n: q.question.numberFrom,
+          value: String(mediaId),
+        });
+      },
+      [questionIndex],
+    ),
+  );
+  // Time running out stops the recording and uploads it within the server's grace period.
+  const recordingSection =
+    recordings.recordingId === null
+      ? null
+      : (questionIndex.get(recordings.recordingId)?.sectionId ?? null);
+  const recordingLocked =
+    recordingSection !== null && isSectionLocked(state, recordingSection);
+  const { stop: stopRecording } = recordings;
+  useEffect(() => {
+    if (recordingLocked) void stopRecording();
+  }, [recordingLocked, stopRecording]);
 
   const sections = [...test.testSections].sort((a, b) => a.order - b.order);
   const section = sections.find((s) => s.id === state.sectionId) ?? sections[0];

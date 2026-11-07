@@ -51,7 +51,10 @@ vi.mock('./useRecorder', async () => {
         state,
         error: null,
         elapsedMs: 0,
-        start: async () => setState('recording'),
+        start: async () => {
+          setState('recording');
+          return true;
+        },
         stop: async () => {
           setState('idle');
           return new Blob(['voice'], { type: 'audio/webm' });
@@ -540,6 +543,53 @@ describe('ExamRunner with Writing and Speaking', () => {
     await act(async () => finish(42));
     await waitFor(() => expect(submitAttempt).toHaveBeenCalledWith(ATTEMPT_ID));
     expect(saveAttemptAnswers).not.toHaveBeenCalled();
+  });
+
+  it('uploads a recording still running when time runs out', async () => {
+    serve({
+      sections: [
+        attemptSection(40, {
+          skill: 'SPEAKING',
+          status: 'IN_PROGRESS',
+          submittedAt: null,
+          deadlineAt: secondsFromNow(5),
+        }),
+      ],
+    });
+    vi.mocked(uploadAttemptAudio).mockResolvedValue(42);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await renderRunner(<ExamRunner test={productiveTest('SPEAKING')} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start recording' }));
+    await screen.findByRole('button', { name: 'Stop' });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(6000);
+    });
+
+    expect(screen.getByText('Time is up')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(uploadAttemptAudio).toHaveBeenCalledWith(
+        ATTEMPT_ID,
+        77,
+        expect.any(Blob),
+      ),
+    );
+  });
+
+  it('uploads a recording still running before submitting', async () => {
+    serve({ sections: [productiveSection('SPEAKING')] });
+    vi.mocked(uploadAttemptAudio).mockResolvedValue(42);
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    await renderRunner(<ExamRunner test={productiveTest('SPEAKING')} />);
+
+    await user.click(screen.getByRole('button', { name: 'Start recording' }));
+    await screen.findByRole('button', { name: 'Stop' });
+    await confirmSubmit(user);
+
+    await waitFor(() => expect(submitAttempt).toHaveBeenCalledWith(ATTEMPT_ID));
+    expect(
+      vi.mocked(uploadAttemptAudio).mock.invocationCallOrder[0],
+    ).toBeLessThan(vi.mocked(submitAttempt).mock.invocationCallOrder[0]);
   });
 
   it('submits even if the recording failed', async () => {

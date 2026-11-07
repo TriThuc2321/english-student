@@ -31,6 +31,15 @@ describe('examReducer', () => {
     expect(s.answers[31][1]).toBe('y');
   });
 
+  it('stores a confirmed recording even after the section locks', () => {
+    let s = run(initial(), { type: 'tick', seconds: 1800 });
+    expect(isSectionLocked(s, 30)).toBe(true);
+    s = run(s, { type: 'answer', n: 1, value: 'ignored' });
+    expect(s.answers[30]?.[1]).toBeUndefined();
+    s = run(s, { type: 'recorded', sectionId: 30, n: 1, value: '42' });
+    expect(s.answers[30][1]).toBe('42');
+  });
+
   it('toggles flags', () => {
     let s = run(initial(), { type: 'toggleFlag', n: 2 });
     expect(s.flagged[30]).toEqual([2]);

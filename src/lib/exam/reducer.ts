@@ -15,6 +15,7 @@ export type ExamState = {
 
 export type ExamAction =
   | { type: 'answer'; n: number; value: Answer }
+  | { type: 'recorded'; sectionId: number; n: number; value: Answer }
   | { type: 'toggleFlag'; n: number }
   | { type: 'goTo'; sectionId: number; partId?: number | null }
   | { type: 'step'; dir: 1 | -1 }
@@ -115,6 +116,18 @@ export function examReducer(
         },
       };
     }
+    // The server already accepted the recording, possibly during the grace period after the section locked.
+    case 'recorded':
+      return {
+        ...state,
+        answers: {
+          ...state.answers,
+          [action.sectionId]: {
+            ...state.answers[action.sectionId],
+            [action.n]: action.value,
+          },
+        },
+      };
     case 'toggleFlag': {
       const current = state.flagged[state.sectionId] ?? [];
       const next = current.includes(action.n)

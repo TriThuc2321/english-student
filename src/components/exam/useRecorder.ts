@@ -34,7 +34,7 @@ export function useRecorder() {
     [],
   );
 
-  const start = useCallback(async () => {
+  const start = useCallback(async (): Promise<boolean> => {
     const mimeType =
       typeof MediaRecorder === 'undefined' || !navigator.mediaDevices
         ? undefined
@@ -42,7 +42,7 @@ export function useRecorder() {
     if (!mimeType) {
       setError('unsupported');
       setState('error');
-      return;
+      return false;
     }
     let stream: MediaStream;
     try {
@@ -50,7 +50,7 @@ export function useRecorder() {
     } catch {
       setError('permission');
       setState('error');
-      return;
+      return false;
     }
     const recorder = new MediaRecorder(stream, { mimeType });
     const chunks: Blob[] = [];
@@ -60,6 +60,7 @@ export function useRecorder() {
     setError(null);
     setElapsedMs(0);
     setState('recording');
+    return true;
   }, []);
 
   const stop = useCallback(
