@@ -6,10 +6,38 @@ import { describe, expect, it, vi } from 'vitest';
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentQuestionGroup } from '@/types/student-test';
 
+import { ApiError } from '@/lib/api/client';
 import { makeTest } from '@/test/fixtures/student-test';
 import { renderWithIntl } from '@/test/render';
 
+import { AttemptAudioContext } from '../attemptAudio';
 import { GroupView } from './groupView';
+
+const recorderMock = vi.hoisted(() => ({
+  error: null as null | 'permission' | 'unsupported',
+  blob: new Blob(['voice'], { type: 'audio/webm' }),
+}));
+
+vi.mock('../useRecorder', async () => {
+  const { useState } = await import('react');
+  return {
+    useRecorder: () => {
+      const [state, setState] = useState<'idle' | 'recording' | 'error'>(
+        'idle',
+      );
+      return {
+        state,
+        error: state === 'error' ? recorderMock.error : null,
+        elapsedMs: 0,
+        start: async () => setState(recorderMock.error ? 'error' : 'recording'),
+        stop: async () => {
+          setState('idle');
+          return recorderMock.blob;
+        },
+      };
+    },
+  };
+});
 
 const fixtureGroup = (id: number) => {
   const group = makeTest()
@@ -170,5 +198,127 @@ describe('question views', () => {
     expect(
       await screen.findByText('Voice recording is coming soon.'),
     ).toBeVisible();
+  });
+});
+
+const speakingGroup = () =>
+  inlineGroup({
+    questionType: 'IELTS_SPEAKING_PART_1',
+    content: null,
+    questions: [
+      {
+        ...fixtureGroup(3000).questions[0],
+        id: 77,
+        prompt: 'Do you work or study?',
+      },
+    ],
+  });
+
+function setupSpeaking({
+  upload = vi.fn(async () => 42),
+  answers = {},
+  readOnly = false,
+}: {
+  upload?: (questionId: number, blob: Blob) => Promise<number>;
+  answers?: Record<number, Answer>;
+  readOnly?: boolean;
+} = {}) {
+  const setAnswer = vi.fn();
+  renderWithIntl(
+    <AttemptAudioContext.Provider value={{ upload }}>
+      <GroupView
+        group={speakingGroup()}
+        answers={answers}
+        setAnswer={setAnswer}
+        readOnly={readOnly}
+        flagged={[]}
+        toggleFlag={vi.fn()}
+      />
+    </AttemptAudioContext.Provider>,
+  );
+  return { setAnswer, upload };
+}
+
+const record = async () => {
+  await userEvent.click(
+    screen.getByRole('button', { name: 'Start recording' }),
+  );
+  await userEvent.click(await screen.findByRole('button', { name: 'Stop' }));
+};
+
+describe('IELTS speaking recorder', () => {
+  it('records, uploads and marks the question answered', async () => {
+    recorderMock.error = null;
+    const { setAnswer, upload } = setupSpeaking();
+
+    await record();
+
+    expect(upload).toHaveBeenCalledWith(77, recorderMock.blob);
+    expect(await screen.findByText('Recording saved')).toBeVisible();
+    expect(setAnswer).toHaveBeenCalledWith(1, '42');
+    expect(screen.getByRole('button', { name: 'Record again' })).toBeVisible();
+  });
+
+  it('starts as saved when the question already has a recording', () => {
+    setupSpeaking({ answers: { 1: '42' } });
+    expect(screen.getByText('Recording saved')).toBeVisible();
+  });
+
+  it('shows the closed-section error', async () => {
+    recorderMock.error = null;
+    setupSpeaking({
+      upload: vi.fn(async () => {
+        throw new ApiError(409, { code: 'SECTION_NOT_OPEN' });
+      }),
+    });
+
+    await record();
+
+    expect(
+      await screen.findByText(
+        "This section is closed; the recording can't be saved.",
+      ),
+    ).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
+  });
+
+  it('retries a failed upload', async () => {
+    recorderMock.error = null;
+    const upload = vi
+      .fn<(questionId: number, blob: Blob) => Promise<number>>()
+      .mockRejectedValueOnce(new ApiError(500, null))
+      .mockResolvedValueOnce(42);
+    setupSpeaking({ upload });
+
+    await record();
+    expect(
+      await screen.findByText("Couldn't save the recording."),
+    ).toBeVisible();
+    await userEvent.click(screen.getByRole('button', { name: 'Retry' }));
+
+    expect(upload).toHaveBeenCalledTimes(2);
+    expect(upload.mock.calls[1]).toEqual([77, recorderMock.blob]);
+    expect(await screen.findByText('Recording saved')).toBeVisible();
+  });
+
+  it('shows the permission error', async () => {
+    recorderMock.error = 'permission';
+    setupSpeaking();
+
+    await userEvent.click(
+      screen.getByRole('button', { name: 'Start recording' }),
+    );
+
+    expect(
+      await screen.findByText('Allow microphone access to record.'),
+    ).toBeVisible();
+    recorderMock.error = null;
+  });
+
+  it('cannot record when read-only', () => {
+    setupSpeaking({ readOnly: true });
+    expect(
+      screen.getByRole('button', { name: 'Start recording' }),
+    ).toBeDisabled();
   });
 });

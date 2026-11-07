@@ -4,10 +4,14 @@ import { LuMic } from 'react-icons/lu';
 
 import type { QuestionView } from '@/lib/exam/group-view';
 
+import { isRecordedQuestion } from '@/lib/exam/attempt-sync';
+
+import { useAttemptAudio } from '../../attemptAudio';
 import { useExamGroup } from '../context';
 import { ExamImage } from '../media';
 import { Hint, mmss, Prompt, QRow } from '../parts';
 import { GroupAudio } from './groupMedia';
+import { IeltsRecorder } from './recorder';
 
 const Task = ({ children }: { children: React.ReactNode }) => (
   <div className="border-border rounded-field mb-3 border p-4">{children}</div>
@@ -40,6 +44,8 @@ const Recorder = ({ q }: { q: QuestionView }) => {
 export const SpeakView = () => {
   const t = useTranslations('taking');
   const { group } = useExamGroup();
+  const audio = useAttemptAudio();
+  const recordable = audio !== null && isRecordedQuestion(group.type);
   const info = group.content?.info;
 
   return (
@@ -81,7 +87,11 @@ export const SpeakView = () => {
                   </Prompt>
                 )
               )}
-              <Recorder q={q} />
+              {recordable ? (
+                <IeltsRecorder q={q} audio={audio} />
+              ) : (
+                <Recorder q={q} />
+              )}
             </QRow>
           </Task>
         );

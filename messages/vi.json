@@ -247,7 +247,18 @@
       "title": "Không mở được bài thi",
       "body": "Hãy kiểm tra kết nối rồi thử lại. Câu trả lời đã lưu vẫn an toàn.",
       "retry": "Thử lại"
-    }
+    },
+    "record": "Bắt đầu ghi âm",
+    "stopRecording": "Dừng",
+    "uploading": "Đang lưu bản ghi…",
+    "recordingSaved": "Đã lưu bản ghi",
+    "recordAgain": "Ghi lại",
+    "retryUpload": "Thử lưu lại",
+    "micDenied": "Hãy cho phép truy cập micro để ghi âm.",
+    "micUnsupported": "Trình duyệt này không hỗ trợ ghi âm.",
+    "sectionClosed": "Phần thi đã đóng, không thể lưu bản ghi.",
+    "uploadFailed": "Lưu bản ghi thất bại.",
+    "audioTooLarge": "Bản ghi vượt quá 20 MB."
   },
   "results": {
     "fullTest": "Toàn bộ đề",

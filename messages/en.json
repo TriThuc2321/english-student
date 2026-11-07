@@ -247,7 +247,18 @@
       "title": "We couldn't open this test",
       "body": "Check your connection and try again. Your saved answers are safe.",
       "retry": "Try again"
-    }
+    },
+    "record": "Start recording",
+    "stopRecording": "Stop",
+    "uploading": "Saving recording…",
+    "recordingSaved": "Recording saved",
+    "recordAgain": "Record again",
+    "retryUpload": "Retry",
+    "micDenied": "Allow microphone access to record.",
+    "micUnsupported": "This browser can't record audio.",
+    "sectionClosed": "This section is closed; the recording can't be saved.",
+    "uploadFailed": "Couldn't save the recording.",
+    "audioTooLarge": "Recording is over 20 MB."
   },
   "results": {
     "fullTest": "Full test",
