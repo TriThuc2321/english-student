@@ -20,15 +20,15 @@ export default function ThemeSwitch() {
 
   return (
     <Button
-      variant="tertiary"
+      variant="ghost"
       isIconOnly
       isDisabled={!isHydrated}
       aria-label={t('toggleTheme')}
       className="rounded-full"
       onPress={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
     >
-      <IoSunnyOutline size={12} data-hide-on-theme="dark" />
-      <IoMoonOutline size={12} data-hide-on-theme="light" />
+      <IoSunnyOutline size={16} data-hide-on-theme="dark" />
+      <IoMoonOutline size={16} data-hide-on-theme="light" />
     </Button>
   );
 }

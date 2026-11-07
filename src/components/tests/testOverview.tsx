@@ -22,6 +22,7 @@ import {
   type ReactNode,
 } from 'react';
 import {
+  LuArrowRight,
   LuHeadphones,
   LuPause,
   LuPlay,
@@ -32,6 +33,7 @@ import {
 import type { ExamDraft } from '@/lib/exam/draft';
 import type { SkillType } from '@/types/student-test';
 
+import { SKILL_CLASSES } from '@/constants/exam';
 import { ROUTES } from '@/constants/routes';
 import { clearExamDraft, loadExamDraft } from '@/lib/exam/draft';
 import { isAnswered } from '@/lib/exam/structure';
@@ -72,8 +74,7 @@ type TestOverviewProps = {
 
 const SAMPLE_AUDIO_SRC = '/audio/sample.mp3';
 
-const CARD =
-  'bg-surface border-separator shadow-surface flex flex-col rounded-xl border p-6';
+const CARD = 'bg-surface shadow-surface flex flex-col rounded-2xl p-6';
 
 const subscribe = () => () => {};
 
@@ -195,144 +196,223 @@ export default function TestOverview({
     }
   }
 
+  const sectionMeta = (section: OverviewSection) =>
+    [
+      t('taking.intro.questionCount', { count: section.questionCount }),
+      section.minutes !== null &&
+        t('tests.minutes', { count: section.minutes }),
+    ]
+      .filter(Boolean)
+      .join(' · ');
+
+  const percent =
+    progress && progress.total > 0
+      ? Math.round((progress.answered / progress.total) * 100)
+      : 0;
+
   return (
     <div className="flex flex-col gap-6">
       {progress && (
-        <div className="bg-surface border-warning flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl border px-5 py-4">
-          <span
+        <div className="bg-surface shadow-surface flex flex-col gap-3 rounded-2xl p-5">
+          <div className="flex items-center gap-3">
+            <span className="bg-warning/15 flex size-9 flex-none items-center justify-center rounded-full">
+              <span aria-hidden className="bg-warning size-2 rounded-full" />
+            </span>
+            <div className="min-w-0 flex-auto">
+              <p className="font-semibold">
+                {t('taking.intro.inProgressTitle')}
+              </p>
+              <p
+                className="text-muted mt-0.5 text-sm tabular-nums"
+                data-testid="draft-progress"
+              >
+                {details.join(' · ')}
+              </p>
+            </div>
+            <span className="text-muted hidden text-sm font-medium tabular-nums sm:block">
+              {percent}%
+            </span>
+          </div>
+          <div
             aria-hidden
-            className="bg-warning text-warning-foreground flex size-9 flex-none items-center justify-center rounded-lg"
+            className="bg-default h-1.5 overflow-hidden rounded-full"
           >
-            <LuPlay className="size-4.5 fill-current" />
-          </span>
-          <div className="flex-[1_1_280px]">
-            <p className="font-semibold">{t('taking.intro.inProgressTitle')}</p>
-            <p
-              className="text-muted mt-0.5 text-sm"
-              data-testid="draft-progress"
-            >
-              {details.join(' · ')}
-            </p>
+            <div
+              className="bg-brand-navy h-full rounded-full transition-[width]"
+              style={{ width: `${percent}%` }}
+            />
           </div>
         </div>
       )}
       <div className="flex flex-wrap items-start gap-6">
         <div className="flex min-w-0 flex-[999_1_560px] flex-col gap-6">
-          <section aria-labelledby="mode-heading" className={cn(CARD, 'gap-4')}>
-            <h2 id="mode-heading" className="text-xl font-semibold">
-              {t('taking.intro.modeTitle')}
-            </h2>
-            <RadioGroup
-              aria-labelledby="mode-heading"
-              value={mode}
-              onChange={(value) => setMode(value as Mode)}
-              isDisabled={!!progress}
-              className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-3"
-            >
-              {(['full', 'practice'] as const).map((value) => (
-                <Radio
-                  key={value}
-                  value={value}
-                  className={cn(
-                    'rounded-[10px] border',
-                    mode === value
-                      ? 'border-accent bg-accent-soft'
-                      : 'border-border bg-surface',
-                  )}
-                >
-                  <Radio.Content className="flex w-full items-start gap-3 p-4">
-                    <Radio.Control className="mt-0.5">
-                      <Radio.Indicator />
-                    </Radio.Control>
-                    <span>
-                      <span className="block font-semibold">
-                        {t(
-                          value === 'full'
-                            ? 'taking.intro.modeFull'
-                            : 'taking.intro.modePractice',
-                        )}
-                      </span>
-                      <span className="text-muted mt-0.5 block text-sm">
-                        {t(
-                          value === 'full'
-                            ? 'taking.intro.modeFullHint'
-                            : 'taking.intro.modePracticeHint',
-                        )}
-                      </span>
-                    </span>
-                  </Radio.Content>
-                </Radio>
-              ))}
-            </RadioGroup>
-            <CheckboxGroup
-              value={isFull ? sections.map((s) => String(s.id)) : picked}
-              onChange={setPicked}
-              isDisabled={isFull || !!progress}
-              className="flex flex-col gap-2"
-            >
-              <Label className="mb-2 text-sm font-semibold">
+          <section aria-labelledby="mode-heading" className={cn(CARD, 'gap-5')}>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 id="mode-heading" className="text-lg font-semibold">
                 {t(
-                  isFull
-                    ? 'taking.intro.sectionsInOrder'
-                    : 'taking.intro.chooseSections',
+                  progress
+                    ? 'taking.intro.modeLocked'
+                    : 'taking.intro.modeTitle',
                 )}
-              </Label>
-              {sections.map((section) => {
-                const Icon = SKILL_ICONS[section.skill];
-                const selected = !isFull && picked.includes(String(section.id));
-                return (
-                  <Checkbox
-                    key={section.id}
-                    value={String(section.id)}
+              </h2>
+              {progress && (
+                <span className="bg-default rounded-full px-2.5 py-0.5 text-xs font-medium">
+                  {t(
+                    isFull
+                      ? 'taking.intro.modeFull'
+                      : 'taking.intro.modePractice',
+                  )}
+                </span>
+              )}
+            </div>
+            {!progress && (
+              <RadioGroup
+                aria-labelledby="mode-heading"
+                value={mode}
+                onChange={(value) => setMode(value as Mode)}
+                className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-3"
+              >
+                {(['full', 'practice'] as const).map((value) => (
+                  <Radio
+                    key={value}
+                    value={value}
                     className={cn(
-                      'rounded-lg border',
-                      selected
-                        ? 'border-accent bg-accent-soft'
-                        : 'border-border bg-surface',
+                      'rounded-xl border transition-colors',
+                      mode === value
+                        ? 'border-brand-navy bg-brand-navy-soft/60'
+                        : 'border-border bg-surface hover:border-field-border',
                     )}
                   >
-                    <Checkbox.Content className="flex min-h-13 w-full items-center gap-3 px-3.5 py-2.5">
-                      <Checkbox.Control>
-                        <Checkbox.Indicator />
-                      </Checkbox.Control>
-                      <Icon aria-hidden className="text-brand-navy size-4.5" />
-                      <span className="flex-auto font-medium">
-                        {t(`exam.skill.${section.skill}`)}
+                    <Radio.Content className="flex w-full items-start gap-3 p-4">
+                      <Radio.Control className="mt-0.5">
+                        <Radio.Indicator />
+                      </Radio.Control>
+                      <span>
+                        <span className="block font-semibold">
+                          {t(
+                            value === 'full'
+                              ? 'taking.intro.modeFull'
+                              : 'taking.intro.modePractice',
+                          )}
+                        </span>
+                        <span className="text-muted mt-0.5 block text-sm">
+                          {t(
+                            value === 'full'
+                              ? 'taking.intro.modeFullHint'
+                              : 'taking.intro.modePracticeHint',
+                          )}
+                        </span>
                       </span>
-                      <span className="text-muted text-sm">
-                        {t('taking.intro.questionCount', {
-                          count: section.questionCount,
-                        })}
-                        {section.minutes !== null &&
-                          ` · ${t('tests.minutes', { count: section.minutes })}`}
-                      </span>
-                    </Checkbox.Content>
-                  </Checkbox>
-                );
-              })}
-            </CheckboxGroup>
+                    </Radio.Content>
+                  </Radio>
+                ))}
+              </RadioGroup>
+            )}
+            {isFull || progress ? (
+              <div className="flex flex-col gap-2">
+                <p className="eyebrow">
+                  {t(
+                    isFull
+                      ? 'taking.intro.sectionsInOrder'
+                      : 'taking.intro.sections',
+                  )}
+                </p>
+                <ol className="flex flex-col gap-2">
+                  {(isFull ? sections : chosen).map((section, index) => {
+                    const current = progress?.sectionId === section.id;
+                    return (
+                      <li
+                        key={section.id}
+                        aria-current={current ? 'step' : undefined}
+                        className={cn(
+                          'flex min-h-13 items-center gap-3 rounded-xl border px-3.5 py-2.5',
+                          current
+                            ? 'border-brand-navy/40 bg-brand-navy-soft/40'
+                            : 'border-border',
+                        )}
+                      >
+                        <span className="text-muted w-4 text-sm tabular-nums">
+                          {index + 1}
+                        </span>
+                        <SkillTile skill={section.skill} />
+                        <span className="flex-auto font-medium">
+                          {t(`exam.skill.${section.skill}`)}
+                        </span>
+                        <span className="text-muted text-sm">
+                          {sectionMeta(section)}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            ) : (
+              <CheckboxGroup
+                value={picked}
+                onChange={setPicked}
+                className="flex flex-col gap-2"
+              >
+                <Label className="eyebrow mb-1">
+                  {t('taking.intro.chooseSections')}
+                </Label>
+                {sections.map((section) => {
+                  const selected = picked.includes(String(section.id));
+                  return (
+                    <Checkbox
+                      key={section.id}
+                      value={String(section.id)}
+                      className={cn(
+                        'rounded-xl border transition-colors',
+                        selected
+                          ? 'border-brand-navy bg-brand-navy-soft/60'
+                          : 'border-border bg-surface hover:border-field-border',
+                      )}
+                    >
+                      <Checkbox.Content className="flex min-h-13 w-full items-center gap-3 px-3.5 py-2.5">
+                        <Checkbox.Control>
+                          <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <SkillTile skill={section.skill} />
+                        <span className="flex-auto font-medium">
+                          {t(`exam.skill.${section.skill}`)}
+                        </span>
+                        <span className="text-muted text-sm">
+                          {sectionMeta(section)}
+                        </span>
+                      </Checkbox.Content>
+                    </Checkbox>
+                  );
+                })}
+              </CheckboxGroup>
+            )}
           </section>
           {rules}
         </div>
-        <aside className="flex min-w-0 flex-[1_1_320px] flex-col gap-4">
+        <aside className="flex min-w-0 flex-[1_1_320px] flex-col gap-4 lg:sticky lg:top-20">
           {chosen.some((s) => s.skill === 'LISTENING') && <HeadphoneCheck />}
-          <section className={cn(CARD, 'gap-3')}>
-            <p className="flex justify-between gap-3 text-sm">
-              <span className="text-muted">{t('taking.intro.youTake')}</span>
-              <b className="text-right">
-                {isFull
-                  ? t('taking.intro.modeFull')
-                  : nothingChosen
-                    ? t('taking.intro.noSections')
-                    : chosen.map((s) => t(`exam.skill.${s.skill}`)).join(', ')}
-              </b>
-            </p>
-            {minutes > 0 && (
-              <p className="flex justify-between gap-3 text-sm">
-                <span className="text-muted">{t('taking.intro.time')}</span>
-                <b>{formatDuration(minutes)}</b>
-              </p>
-            )}
+          <section className={cn(CARD, 'gap-4')}>
+            <dl className="flex flex-col gap-2.5 text-sm">
+              <div className="flex justify-between gap-3">
+                <dt className="text-muted">{t('taking.intro.youTake')}</dt>
+                <dd className="text-right font-medium">
+                  {isFull
+                    ? t('taking.intro.modeFull')
+                    : nothingChosen
+                      ? t('taking.intro.noSections')
+                      : chosen
+                          .map((s) => t(`exam.skill.${s.skill}`))
+                          .join(', ')}
+                </dd>
+              </div>
+              {minutes > 0 && (
+                <div className="flex justify-between gap-3">
+                  <dt className="text-muted">{t('taking.intro.time')}</dt>
+                  <dd className="font-medium tabular-nums">
+                    {formatDuration(minutes)}
+                  </dd>
+                </div>
+              )}
+            </dl>
             {nothingChosen ? (
               <Button variant="primary" size="lg" fullWidth isDisabled>
                 {t('taking.intro.start')}
@@ -347,6 +427,7 @@ export default function TestOverview({
                 })}
               >
                 {t(progress ? 'taking.intro.resume' : 'taking.intro.start')}
+                <LuArrowRight aria-hidden />
               </Link>
             )}
             {progress && (
@@ -357,7 +438,7 @@ export default function TestOverview({
                     setRestarts((n) => n + 1);
                   }}
                 />
-                <p className="text-muted text-center text-[13px] leading-[18px]">
+                <p className="text-muted -mt-1 text-center text-xs leading-relaxed">
                   {t('taking.intro.lockedHint')}
                 </p>
               </>
@@ -369,11 +450,26 @@ export default function TestOverview({
   );
 }
 
+function SkillTile({ skill }: { skill: SkillType }) {
+  const Icon = SKILL_ICONS[skill];
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        'flex size-8 flex-none items-center justify-center rounded-lg',
+        SKILL_CLASSES[skill],
+      )}
+    >
+      <Icon className="size-4" />
+    </span>
+  );
+}
+
 function RestartButton({ onConfirm }: { onConfirm: () => void }) {
   const t = useTranslations('taking.intro');
   return (
     <AlertDialog>
-      <Button variant="ghost" size="sm" className="text-danger self-center">
+      <Button variant="ghost" size="sm" className="text-muted self-center">
         <LuRotateCcw aria-hidden />
         {t('restart')}
       </Button>

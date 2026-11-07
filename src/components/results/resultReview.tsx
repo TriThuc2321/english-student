@@ -16,11 +16,11 @@ import type {
 import { AssessmentPanel } from './assessmentPanel';
 
 const CELL_CLASSES: Record<NumberStatus, string> = {
-  correct: 'bg-success text-success-foreground border border-success',
+  correct: 'bg-success/15 text-success border border-success/40',
   incorrect: 'bg-danger-soft text-foreground border-2 border-danger',
   blank: 'text-muted border border-dashed border-field-border',
   pending: 'bg-surface-secondary text-muted border border-separator',
-  graded: 'bg-accent-soft text-accent-soft-foreground border border-accent',
+  graded: 'bg-brand-navy-soft text-brand-navy border border-brand-navy/40',
 };
 
 const BADGE_CLASSES: Record<NumberStatus, string> = {
@@ -28,7 +28,7 @@ const BADGE_CLASSES: Record<NumberStatus, string> = {
   incorrect: 'bg-danger text-danger-foreground',
   blank: 'bg-surface-secondary text-muted',
   pending: 'bg-surface-secondary text-muted',
-  graded: 'bg-accent-soft text-accent-soft-foreground',
+  graded: 'bg-brand-navy-soft text-brand-navy',
 };
 
 const GLYPHS: Record<NumberStatus, string> = {
@@ -44,11 +44,10 @@ const LEGEND_SWATCHES: Record<NumberStatus, string> = {
   incorrect: 'border-2 border-danger bg-danger-soft',
   blank: 'border border-dashed border-field-border',
   pending: 'border border-separator bg-surface-secondary',
-  graded: 'border border-accent bg-accent-soft',
+  graded: 'border border-brand-navy/40 bg-brand-navy-soft',
 };
 
-const card =
-  'bg-surface border-separator shadow-surface flex flex-col rounded-xl border p-6';
+const card = 'bg-surface shadow-surface flex flex-col rounded-2xl p-6';
 
 const formatPart = ({ key, text }: AnswerPart) =>
   key && text ? `${key} · ${text}` : (key ?? text ?? '');

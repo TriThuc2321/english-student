@@ -17,14 +17,12 @@ export function PartHeading({ part, index }: PartHeadingProps) {
   const fallback = t('partFallback', { n: index + 1 });
   return (
     <div>
-      <p className="text-brand-navy mb-1 text-xs font-semibold tracking-[.08em] uppercase">
-        {fallback}
-      </p>
+      <p className="eyebrow mb-1.5">{fallback}</p>
       {part.title && part.title !== fallback && (
-        <h2 className="text-2xl font-semibold">{part.title}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">{part.title}</h2>
       )}
       {part.instruction && (
-        <p className="text-muted mt-2 whitespace-pre-line">
+        <p className="text-muted mt-2 text-sm leading-relaxed whitespace-pre-line">
           {part.instruction}
         </p>
       )}
@@ -41,7 +39,7 @@ export function PartAudioCard({ part, index }: PartHeadingProps) {
     <div className="bg-background sticky top-0 z-10 px-4 pt-5 pb-3 sm:px-6">
       <section
         aria-label={t('partAudio', { part: name })}
-        className="border-separator bg-surface shadow-surface mx-auto flex max-w-[920px] flex-wrap items-center gap-x-5 gap-y-3 rounded-xl border px-5 py-3.5"
+        className="bg-surface shadow-surface mx-auto flex max-w-[920px] flex-wrap items-center gap-x-5 gap-y-3 rounded-2xl px-5 py-3.5"
       >
         <span
           aria-hidden

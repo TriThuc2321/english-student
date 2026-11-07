@@ -130,7 +130,7 @@ export const TextCompletionView = () => {
     const q = group.questions.find((x) => x.n === n);
     const picked = q?.content?.options?.find((o) => o.key === answers[n]);
     return (
-      <span className="border-accent text-accent mx-0.5 inline-block min-w-12 border-b-2 px-1 text-center font-semibold">
+      <span className="border-brand-navy text-brand-navy mx-0.5 inline-block min-w-12 border-b-2 px-1 text-center font-semibold">
         {picked?.text ?? n}
       </span>
     );
@@ -138,7 +138,7 @@ export const TextCompletionView = () => {
 
   return (
     <>
-      <div className="border-border rounded-field mb-4 border p-4 text-sm leading-7 whitespace-pre-line">
+      <div className="border-border mb-4 rounded-xl border p-4 text-sm leading-7 whitespace-pre-line">
         {parts.map((part, i) =>
           i % 2 ? <span key={i}>{gap(Number(part))}</span> : part,
         )}

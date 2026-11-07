@@ -42,7 +42,7 @@ export function IeltsRecorder({
     audio.recorderError?.questionId === q.id ? audio.recorderError.error : null;
 
   return (
-    <div className="bg-default rounded-field mt-3 flex flex-col gap-2 px-3 py-2 text-sm">
+    <div className="bg-surface-secondary mt-3 flex flex-col gap-2 rounded-xl px-4 py-3 text-sm">
       <div className="flex flex-wrap items-center gap-3">
         {recording ? (
           <Button size="sm" variant="danger" onPress={() => void audio.stop()}>

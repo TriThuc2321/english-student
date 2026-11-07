@@ -37,11 +37,11 @@ export function ResultHeader({ attempt }: ResultHeaderProps) {
           <Chip
             size="sm"
             variant="soft"
-            className={EXAM_CLASSES[test.examType].soft}
+            className={`rounded-full ${EXAM_CLASSES[test.examType].soft}`}
           >
             {t(`exam.${test.examType}`)}
           </Chip>
-          <Chip size="sm" variant="soft">
+          <Chip size="sm" variant="soft" className="rounded-full">
             {attempt.mode === 'FULL'
               ? t('results.fullTest')
               : t('results.practice')}
@@ -50,7 +50,7 @@ export function ResultHeader({ attempt }: ResultHeaderProps) {
             <Chip
               size="sm"
               variant="soft"
-              className="bg-warning text-warning-foreground"
+              className="bg-warning/20 text-foreground rounded-full"
             >
               <LuClock aria-hidden className="size-3" />
               {t('results.expired')}
@@ -63,7 +63,9 @@ export function ResultHeader({ attempt }: ResultHeaderProps) {
             </Chip>
           )}
         </div>
-        <h1 className="text-3xl font-bold tracking-tight">{test.title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
+          {test.title}
+        </h1>
         {attempt.submittedAt && minutes !== null && (
           <p className="text-muted text-sm">
             {t('results.submittedMeta', {

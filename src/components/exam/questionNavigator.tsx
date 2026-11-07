@@ -85,11 +85,11 @@ export function NavNumber({
       aria-label={label}
       onClick={onPress}
       className={cn(
-        'relative grid h-9 min-w-9 place-items-center overflow-hidden rounded-lg border px-1 text-sm font-semibold tabular-nums transition-colors',
+        'relative grid h-8 min-w-8 place-items-center rounded-lg px-1 text-[13px] font-medium tabular-nums transition-colors',
         answered
-          ? 'border-brand-navy bg-brand-navy text-brand-navy-foreground'
-          : 'border-field-border bg-surface text-foreground hover:bg-default',
-        current && 'ring-foreground ring-offset-surface ring-2 ring-offset-2',
+          ? 'bg-brand-navy text-brand-navy-foreground'
+          : 'bg-default text-foreground hover:bg-surface-tertiary',
+        current && 'ring-brand-navy ring-offset-surface ring-2 ring-offset-2',
         className,
       )}
     >
@@ -97,7 +97,7 @@ export function NavNumber({
       {flagged && (
         <span
           aria-hidden
-          className="border-t-warning absolute top-0 right-0 size-0 border-t-[12px] border-l-[12px] border-l-transparent"
+          className="bg-warning ring-surface absolute -top-1 -right-1 size-2.5 rounded-full ring-2"
         />
       )}
     </button>
@@ -141,9 +141,12 @@ function NumberGrid({
               type="button"
               disabled={!first}
               onClick={() => first && onSelect(group.id, first.questionId)}
-              className="hover:bg-default h-10 rounded-lg px-3 text-sm font-semibold whitespace-nowrap disabled:opacity-50"
+              className="hover:bg-default text-muted hover:text-foreground flex h-8 items-center gap-2 rounded-full px-3 text-sm font-medium whitespace-nowrap transition-colors disabled:opacity-50"
             >
-              {title} <span className="text-muted font-normal">{progress}</span>
+              {title}
+              <span className="text-xs font-normal tabular-nums">
+                {progress}
+              </span>
             </button>
           );
         }
@@ -156,13 +159,16 @@ function NumberGrid({
           >
             <span
               className={cn(
-                'text-sm whitespace-nowrap',
-                isCurrentPart ? 'font-bold' : 'text-muted font-medium',
+                'flex items-baseline gap-2 text-sm whitespace-nowrap',
+                isCurrentPart ? 'font-semibold' : 'text-muted font-medium',
               )}
             >
-              {title} <span className="text-muted font-normal">{progress}</span>
+              {title}
+              <span className="text-muted text-xs font-normal tabular-nums">
+                {progress}
+              </span>
             </span>
-            <ul className="flex flex-wrap gap-1.5 p-0.5">
+            <ul className="flex flex-wrap gap-1.5 p-1">
               {group.numbers.map(({ n, questionId, answered }) => {
                 const isFlagged = flagged.includes(questionId);
                 return (
@@ -191,7 +197,7 @@ function NumberGrid({
 }
 
 const STEP_CLASS =
-  'border-field-border bg-surface hover:bg-default grid size-11 flex-none place-items-center rounded-lg border disabled:pointer-events-none disabled:opacity-50';
+  'border-border bg-surface hover:bg-default grid size-9 flex-none place-items-center rounded-full border transition-colors disabled:pointer-events-none disabled:opacity-40';
 
 export function QuestionNavigator({
   section,
@@ -222,7 +228,7 @@ export function QuestionNavigator({
   return (
     <nav
       aria-label={t('questions')}
-      className="border-border bg-surface flex flex-none items-center gap-4 border-t px-5 py-2.5"
+      className="border-separator bg-surface flex flex-none items-center gap-3 border-t px-4 py-2 md:gap-4 md:px-5"
     >
       <button
         type="button"
@@ -231,7 +237,7 @@ export function QuestionNavigator({
         onClick={() => onStep(-1)}
         className={STEP_CLASS}
       >
-        <LuChevronLeft aria-hidden className="size-5" />
+        <LuChevronLeft aria-hidden className="size-4.5" />
       </button>
       <div className="hidden min-w-0 flex-1 md:block">
         <NumberGrid
@@ -245,7 +251,7 @@ export function QuestionNavigator({
       </div>
       <Button
         variant="secondary"
-        className="min-w-0 flex-1 justify-start md:hidden"
+        className="min-w-0 flex-1 justify-start rounded-full md:hidden"
         onPress={drawer.open}
       >
         {current &&
@@ -258,7 +264,7 @@ export function QuestionNavigator({
         onClick={() => onStep(1)}
         className={STEP_CLASS}
       >
-        <LuChevronRight aria-hidden className="size-5" />
+        <LuChevronRight aria-hidden className="size-4.5" />
       </button>
       <Drawer.Backdrop isOpen={drawer.isOpen} onOpenChange={drawer.setOpen}>
         <Drawer.Content placement="bottom">

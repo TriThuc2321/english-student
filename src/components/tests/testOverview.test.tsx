@@ -52,7 +52,15 @@ describe('TestOverview', () => {
       'href',
       TAKE_HREF,
     );
-    expect(screen.getByRole('checkbox', { name: /Reading/ })).toBeDisabled();
+    expect(screen.queryByRole('checkbox', { name: /Reading/ })).toBeNull();
+    expect(
+      screen.getAllByRole('listitem').map((item) => item.textContent),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('Listening'),
+        expect.stringContaining('Reading'),
+      ]),
+    );
     expect(screen.getByText('1 h 30 min')).toBeInTheDocument();
   });
 
@@ -88,7 +96,8 @@ describe('TestOverview', () => {
     expect(screen.getByTestId('draft-progress')).toHaveTextContent(
       '3 / 5 answered · 55:40 left in Reading · 1 flagged',
     );
-    expect(screen.getByRole('radio', { name: /Practice/ })).toBeDisabled();
+    expect(screen.queryByRole('radio')).toBeNull();
+    expect(screen.getByText('Your attempt')).toBeInTheDocument();
   });
 
   it('locks a practice draft to its sections', async () => {
@@ -100,8 +109,10 @@ describe('TestOverview', () => {
     expect(screen.getByTestId('draft-progress')).toHaveTextContent(
       '3 / 4 answered',
     );
-    expect(screen.getByRole('checkbox', { name: /Reading/ })).toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /Listening/ })).toBeDisabled();
+    expect(screen.queryByRole('checkbox')).toBeNull();
+    const steps = screen.getByRole('list');
+    expect(steps).toHaveTextContent('Reading');
+    expect(steps).not.toHaveTextContent('Listening');
   });
 
   it('keeps the draft when starting over is cancelled', async () => {

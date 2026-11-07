@@ -21,19 +21,19 @@ export default async function Page({ searchParams }: PageProps<'/login'>) {
 
   return (
     <>
-      <div className="absolute top-4 right-4 flex items-center gap-1">
+      <div className="absolute top-4 right-4 flex items-center gap-0.5">
         <SwitchLocale />
         <ThemeSwitch />
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col items-center gap-2">
         <LogoIcon className="h-8 w-auto" />
         <span className="text-muted text-sm">{t('tagline')}</span>
       </div>
 
-      <main className="bg-surface border-separator shadow-surface flex w-full max-w-[420px] flex-col gap-5 rounded-4xl border p-8">
-        <div>
-          <h1 className="text-foreground text-2xl font-semibold">
+      <main className="bg-surface shadow-overlay flex w-full max-w-[400px] flex-col gap-5 rounded-3xl p-8">
+        <div className="text-center">
+          <h1 className="text-foreground text-2xl font-semibold tracking-tight">
             {t('signInTitle')}
           </h1>
           <p className="text-muted mt-1 text-sm">{t('signInSubtitle')}</p>

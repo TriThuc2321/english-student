@@ -9,6 +9,7 @@ import {
   LuChevronLeft,
   LuClock,
   LuFlag,
+  LuListChecks,
   LuLogOut,
   LuSave,
   LuTimer,
@@ -54,18 +55,18 @@ function OverviewHeader({
   const minutes = sections.reduce((sum, s) => sum + (s.minutes ?? 0), 0);
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-3">
       <Chip
         size="sm"
         variant="soft"
-        className={`self-start ${EXAM_CLASSES[test.examType].soft}`}
+        className={`self-start rounded-full ${EXAM_CLASSES[test.examType].soft}`}
       >
         {t(`exam.${test.examType}`)}
       </Chip>
-      <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+      <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
         {test.title}
       </h1>
-      <p className="text-muted flex flex-wrap gap-x-4 gap-y-1.5">
+      <p className="text-muted flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm">
         {test.source && <span>{test.source}</span>}
         {minutes > 0 && (
           <span className="flex items-center gap-1.5">
@@ -73,7 +74,8 @@ function OverviewHeader({
             {formatDuration(minutes)}
           </span>
         )}
-        <span>
+        <span className="flex items-center gap-1.5">
+          <LuListChecks aria-hidden className="size-4" />
           {t('taking.intro.summaryMeta', {
             sections: sections.length,
             questions: sections.reduce((sum, s) => sum + s.questionCount, 0),
@@ -120,7 +122,7 @@ export default async function TestIntroPage({
     <div className="flex flex-col gap-6">
       <Link
         href={ROUTES.TESTS}
-        className="text-accent flex w-fit items-center gap-1.5 text-sm font-medium"
+        className="text-muted hover:text-foreground -ml-1 flex w-fit items-center gap-1 rounded-full px-1 text-sm font-medium transition-colors"
       >
         <LuChevronLeft aria-hidden className="size-4" />
         {t('taking.intro.back')}
@@ -133,18 +135,23 @@ export default async function TestIntroPage({
         rules={
           <section
             aria-labelledby="rules-heading"
-            className="bg-surface border-separator shadow-surface rounded-xl border p-6"
+            className="bg-surface shadow-surface rounded-2xl p-6"
           >
-            <h2 id="rules-heading" className="mb-3 text-xl font-semibold">
+            <h2 id="rules-heading" className="mb-4 text-lg font-semibold">
               {t('taking.intro.guideTitle')}
             </h2>
-            <ul className="flex flex-col gap-3">
+            <ul className="grid gap-3 sm:grid-cols-2">
               {GUIDE.map(({ key, icon: Icon }) => (
-                <li key={key} className="flex gap-3">
-                  <Icon
+                <li
+                  key={key}
+                  className="bg-surface-secondary flex gap-3 rounded-xl p-4 text-sm leading-relaxed"
+                >
+                  <span
                     aria-hidden
-                    className="text-brand-navy mt-0.5 size-5 flex-none"
-                  />
+                    className="bg-surface text-brand-navy shadow-surface flex size-8 flex-none items-center justify-center rounded-lg"
+                  >
+                    <Icon className="size-4" />
+                  </span>
                   <span>{t(`taking.intro.guide.${key}`)}</span>
                 </li>
               ))}

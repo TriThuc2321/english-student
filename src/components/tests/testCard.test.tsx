@@ -39,7 +39,7 @@ describe('TestCard', () => {
       'IELTS Academic',
       'Practice Test 1',
       'Cambridge IELTS 18',
-      '2 h 40 min',
+      '1 h 30 min',
       'Added October 20, 2026',
     ]) {
       expect(screen.getByText(text)).toBeInTheDocument();
@@ -52,15 +52,43 @@ describe('TestCard', () => {
     ).toEqual(['Listening30 min', 'Reading60 min']);
   });
 
-  it('formats whole hours and short durations', () => {
-    const { unmount } = renderWithIntl(
-      <TestCard test={{ ...test, durationMinutes: 120 }} />,
+  it('totals the sections, using the test duration for sections without one', () => {
+    renderWithIntl(
+      <TestCard
+        test={{
+          ...test,
+          durationMinutes: 1,
+          testSections: [
+            { id: 30, skill: 'WRITING', order: 1, durationMinutes: null },
+            { id: 31, skill: 'SPEAKING', order: 2, durationMinutes: null },
+          ],
+        }}
+      />,
+    );
+
+    expect(screen.getByText('2 min')).toBeInTheDocument();
+  });
+
+  it('formats whole hours', () => {
+    renderWithIntl(
+      <TestCard
+        test={{
+          ...test,
+          testSections: [
+            { id: 30, skill: 'LISTENING', order: 1, durationMinutes: 60 },
+            { id: 31, skill: 'READING', order: 2, durationMinutes: 60 },
+          ],
+        }}
+      />,
     );
     expect(screen.getByText('2 h')).toBeInTheDocument();
-    unmount();
+  });
 
-    renderWithIntl(<TestCard test={{ ...test, durationMinutes: 45 }} />);
-    expect(screen.getByText('45 min')).toBeInTheDocument();
+  it('hides the file extension of a pasted source', () => {
+    renderWithIntl(
+      <TestCard test={{ ...test, source: 'Đề thi IELTS Reading.pdf' }} />,
+    );
+    expect(screen.getByText('Đề thi IELTS Reading')).toBeInTheDocument();
   });
 
   it('omits null fields', () => {
@@ -88,6 +116,6 @@ describe('TestCard', () => {
     renderWithIntl(<TestCard test={test} />, { locale: LOCALE.VI });
 
     expect(screen.getByText('Nghe')).toBeInTheDocument();
-    expect(screen.getByText('2 giờ 40 phút')).toBeInTheDocument();
+    expect(screen.getByText('1 giờ 30 phút')).toBeInTheDocument();
   });
 });

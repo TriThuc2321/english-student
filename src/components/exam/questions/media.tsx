@@ -1,8 +1,9 @@
 'use client';
 
-import { Button, cn } from '@heroui/react';
+import { Button, cn, Modal } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
+import { LuMaximize2 } from 'react-icons/lu';
 
 import type { StudentMedia } from '@/types/student-test';
 
@@ -122,6 +123,53 @@ export function ExamImage({
 }) {
   // oxlint-disable-next-line next/no-img-element -- project rule: plain <img>
   return <img src={media.url} alt="" className={className} />;
+}
+
+// Task charts carry small labels, so they open full size on demand.
+export function ZoomableImage({
+  media,
+  className,
+}: {
+  media: StudentMedia;
+  className?: string;
+}) {
+  const t = useTranslations('taking');
+  return (
+    <Modal>
+      <Button
+        variant="ghost"
+        aria-label={t('zoomImage')}
+        className={cn(
+          'group border-border bg-surface relative h-auto w-full cursor-zoom-in overflow-hidden rounded-xl border p-2',
+          className,
+        )}
+      >
+        {/* oxlint-disable-next-line next/no-img-element -- project rule: plain <img> */}
+        <img src={media.url} alt="" className="mx-auto w-full object-contain" />
+        <span
+          aria-hidden
+          className="bg-surface/90 text-muted shadow-surface absolute top-3 right-3 grid size-8 place-items-center rounded-full opacity-0 transition-opacity group-hover:opacity-100"
+        >
+          <LuMaximize2 className="size-4" />
+        </span>
+      </Button>
+      <Modal.Backdrop>
+        <Modal.Container size="lg">
+          <Modal.Dialog className="sm:max-w-5xl">
+            <Modal.CloseTrigger />
+            <Modal.Body className="p-2">
+              {/* oxlint-disable-next-line next/no-img-element -- project rule: plain <img> */}
+              <img
+                src={media.url}
+                alt=""
+                className="mx-auto max-h-[80dvh] w-auto object-contain"
+              />
+            </Modal.Body>
+          </Modal.Dialog>
+        </Modal.Container>
+      </Modal.Backdrop>
+    </Modal>
+  );
 }
 
 export function QuestionAudioButton({

@@ -1,7 +1,9 @@
 'use client';
 
+import { cn } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
+import { LuCheck } from 'react-icons/lu';
 
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentQuestionGroup } from '@/types/student-test';
@@ -21,7 +23,7 @@ const KEYWORDS =
   /\b(ONE|TWO|THREE|NO MORE THAN|AND\/OR A NUMBER|ONLY|TRUE|FALSE|NOT GIVEN|YES|NO)\b/;
 
 const Instruction = ({ text }: { text: string }) => (
-  <p className="text-muted whitespace-pre-line">
+  <p className="text-muted text-sm leading-relaxed whitespace-pre-line">
     {text.split(KEYWORDS).map((part, i) =>
       i % 2 ? (
         <b key={i} className="text-foreground font-semibold">
@@ -105,27 +107,56 @@ export function GroupView({
     if (isAnswered(answers[q.id], size)) done += size;
   }
   const headingId = `group-${group.id}-heading`;
+  // A lone writing/speaking task is already named by its type; "Questions 1" adds nothing.
+  const taskLike =
+    (view.view === 'write' || view.view === 'speak') &&
+    view.questions.length === 1;
+  const typeLabel = t(`questionType.${view.type}`);
+  const title = taskLike
+    ? typeLabel
+    : range &&
+      (from === to
+        ? t('questionN', { n: range })
+        : t('questionsRange', { range }));
 
   return (
     <ExamGroupContext.Provider value={context}>
       <section
-        aria-labelledby={range ? headingId : undefined}
-        className="bg-surface border-separator shadow-surface flex min-w-0 flex-col gap-3 overflow-hidden rounded-xl border pb-4"
+        aria-labelledby={title ? headingId : undefined}
+        className="bg-surface shadow-surface flex min-w-0 flex-col gap-3 overflow-hidden rounded-2xl pb-4"
       >
-        <header className="bg-brand-navy-soft flex flex-col gap-1 px-5 py-4">
-          <div className="flex items-center justify-between gap-3 text-xs leading-4">
-            <span className="text-brand-navy font-semibold tracking-[.08em] uppercase">
-              {t(`questionType.${view.type}`)}
-            </span>
+        <header className="border-separator flex flex-col gap-1.5 border-b px-5 pt-4 pb-4">
+          <div className="flex items-center justify-between gap-3">
+            {taskLike ? (
+              <h3
+                id={headingId}
+                className="text-lg leading-snug font-semibold tracking-tight"
+              >
+                {title}
+              </h3>
+            ) : (
+              <span className="eyebrow">{typeLabel}</span>
+            )}
             {total > 0 && (
-              <span className="text-muted">
+              <span
+                className={cn(
+                  'ml-auto flex flex-none items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium tabular-nums',
+                  done === total
+                    ? 'bg-success/15 text-success'
+                    : 'bg-default text-muted',
+                )}
+              >
+                {done === total && <LuCheck aria-hidden className="size-3" />}
                 {t('groupAnswered', { answered: done, total })}
               </span>
             )}
           </div>
-          {range && (
-            <h3 id={headingId} className="text-lg leading-[26px] font-bold">
-              {t('questionsRange', { range })}
+          {title && !taskLike && (
+            <h3
+              id={headingId}
+              className="text-lg leading-snug font-semibold tracking-tight"
+            >
+              {title}
             </h3>
           )}
           {view.instruction && <Instruction text={view.instruction} />}
@@ -134,7 +165,7 @@ export function GroupView({
           <PassagePane
             key={i}
             passage={passage}
-            className="bg-surface-secondary mx-3 max-h-none rounded-[10px] border-0 px-[18px] py-3.5 sm:mx-4 md:border-r-0"
+            className="bg-surface-secondary mx-3 max-h-none rounded-xl border-0 px-5 py-4 sm:mx-4 md:border-r-0"
           />
         ))}
         <div className="min-w-0 px-2 sm:px-3">

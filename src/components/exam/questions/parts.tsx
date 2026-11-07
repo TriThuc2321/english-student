@@ -38,7 +38,10 @@ export const FlagToggle = ({ n }: { n: number }) => {
       aria-label={t('flagN', { n })}
       isSelected={isFlagged}
       onChange={() => toggleFlag(n)}
-      className={cn('shrink-0 align-middle', isFlagged && 'text-warning')}
+      className={cn(
+        'text-muted hover:text-foreground size-8 min-w-8 shrink-0 rounded-full align-middle',
+        isFlagged && 'text-warning hover:text-warning',
+      )}
     >
       <svg
         viewBox="0 0 24 24"
@@ -59,7 +62,7 @@ export const QRow = ({ n, label, children }: QRowProps) => {
   return (
     <div
       id={anchorId(n)}
-      className="rounded-field mb-1.5 grid grid-cols-[auto_1fr_auto] gap-2.5 border border-transparent p-2"
+      className="group/q focus-within:bg-surface-secondary mb-1 grid scroll-mt-24 grid-cols-[auto_1fr_auto] gap-3 rounded-xl p-2.5 transition-colors"
     >
       <QNum>{label ?? n}</QNum>
       <div className="min-w-0">{children}</div>
@@ -68,14 +71,45 @@ export const QRow = ({ n, label, children }: QRowProps) => {
   );
 };
 
+const QNUM_CLASS =
+  'bg-brand-navy-soft text-brand-navy inline-grid h-7 min-w-7 shrink-0 place-items-center rounded-lg px-1.5 align-middle text-[13px] leading-none font-semibold tabular-nums';
+
 export const QNum = ({ children }: { children: ReactNode }) => (
-  <span className="bg-accent-soft text-accent-soft-foreground rounded-field inline-grid h-7 min-w-7 shrink-0 place-items-center px-1.5 align-middle text-[13px] leading-none font-bold">
-    {children}
-  </span>
+  <span className={QNUM_CLASS}>{children}</span>
 );
 
+// Inline blanks flag from their number so a flag icon doesn't break the sentence after every gap.
+const FlagNum = ({ n }: { n: number }) => {
+  const t = useTranslations('taking');
+  const { flagged, toggleFlag } = useExamGroup();
+  const isFlagged = flagged.includes(n);
+  return (
+    <ToggleButton
+      aria-label={t('flagN', { n })}
+      isSelected={isFlagged}
+      onChange={() => toggleFlag(n)}
+      className={cn(
+        QNUM_CLASS,
+        'hover:ring-brand-navy/25 relative h-7 min-h-0 min-w-7 gap-0 border-0 transition-colors hover:ring-2',
+        isFlagged &&
+          'bg-warning/25 text-foreground data-[selected=true]:bg-warning/25',
+      )}
+    >
+      {n}
+      {isFlagged && (
+        <span
+          aria-hidden
+          className="bg-warning ring-surface absolute -top-0.5 -right-0.5 size-2 rounded-full ring-2"
+        />
+      )}
+    </ToggleButton>
+  );
+};
+
 export const Prompt = ({ children }: { children: ReactNode }) => (
-  <p className="text-foreground mt-0.5 mb-2 font-medium">{children}</p>
+  <p className="text-foreground mt-0.5 mb-2.5 leading-relaxed font-medium">
+    {children}
+  </p>
 );
 
 export const Hint = ({ children }: { children: ReactNode }) => (
@@ -83,7 +117,7 @@ export const Hint = ({ children }: { children: ReactNode }) => (
 );
 
 const fieldClass =
-  'border-border bg-surface rounded-field min-h-10 border px-3 py-1 text-base leading-tight outline-none focus:border-accent disabled:opacity-60';
+  'border-field-border bg-field-background rounded-field min-h-9 border px-3 py-1 text-base leading-tight outline-none transition-[border-color,box-shadow] hover:border-brand-navy/50 focus:border-brand-navy focus:ring-3 focus:ring-brand-navy/15 disabled:opacity-60';
 
 const keyOptions = (options: Option[], disabledKeys?: string[]) =>
   options.map((o) => (
@@ -106,8 +140,8 @@ export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
   const label = t('answerLabel', { n });
 
   return (
-    <span className="mx-0.5 inline-flex items-center gap-1.5 align-middle">
-      <QNum>{n}</QNum>
+    <span className="mx-0.5 my-0.5 inline-flex items-center gap-1.5 align-middle">
+      {withFlag ? <FlagNum n={n} /> : <QNum>{n}</QNum>}
       {options ? (
         <select
           id={anchorId(n)}
@@ -126,13 +160,13 @@ export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
           aria-label={label}
           autoComplete="off"
           spellCheck={false}
-          className={cn(fieldClass, 'w-32')}
+          size={Math.max(12, value.length + 2)}
+          className={cn(fieldClass, 'max-w-full min-w-32')}
           value={value}
           disabled={readOnly}
           onChange={(e) => setAnswer(n, e.target.value)}
         />
       )}
-      {withFlag && <FlagToggle n={n} />}
     </span>
   );
 };
@@ -169,7 +203,7 @@ export const TextAnswer = ({ n }: { n: number }) => {
     <input
       aria-label={t('answerLabel', { n })}
       autoComplete="off"
-      className="border-muted focus:border-accent min-h-10 w-full max-w-72 border-b-[1.5px] bg-transparent px-1 py-1 text-base outline-none disabled:opacity-60"
+      className="border-field-border focus:border-brand-navy min-h-10 w-full max-w-72 border-b-[1.5px] bg-transparent px-1 py-1 text-base transition-colors outline-none disabled:opacity-60"
       value={(answers[n] as string | undefined) ?? ''}
       disabled={readOnly}
       onChange={(e) => setAnswer(n, e.target.value)}
@@ -220,16 +254,19 @@ export const Choices = ({
             key={o.key}
             className={cn(
               'rounded-field relative flex cursor-pointer items-center gap-2',
-              variant !== 'list' &&
-                'has-[:focus-visible]:ring-accent has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2',
-              variant === 'list' && 'hover:bg-default min-h-10 px-2 py-1.5',
+              'has-[:focus-visible]:ring-brand-navy/40 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-offset-2',
+              variant === 'list' &&
+                'hover:bg-default min-h-10 rounded-xl px-2.5 py-1.5 transition-colors',
+              variant === 'list' &&
+                isChecked &&
+                'bg-brand-navy-soft/60 hover:bg-brand-navy-soft/60',
               variant === 'pills' &&
-                'border-border min-h-10 border px-4 py-1.5 text-sm font-semibold',
+                'border-border bg-surface hover:border-field-border min-h-9 rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
               variant === 'bubbles' &&
-                'border-border grid size-10 place-items-center rounded-full border font-bold',
+                'border-border bg-surface hover:border-field-border grid size-10 place-items-center rounded-full border font-semibold transition-colors',
               variant !== 'list' &&
                 isChecked &&
-                'border-accent bg-accent-soft text-accent-soft-foreground',
+                'border-brand-navy bg-brand-navy text-brand-navy-foreground hover:border-brand-navy',
               isDisabled && 'cursor-not-allowed opacity-50',
             )}
           >
@@ -240,11 +277,18 @@ export const Choices = ({
               checked={isChecked}
               disabled={isDisabled}
               onChange={() => toggle(o.key)}
-              className={cn('accent-accent', variant !== 'list' && 'sr-only')}
+              className="sr-only"
             />
             {variant === 'list' ? (
               <>
-                <span className="border-border grid size-6 shrink-0 place-items-center rounded-full border text-xs font-semibold">
+                <span
+                  className={cn(
+                    'grid size-7 shrink-0 place-items-center rounded-full border text-xs font-semibold transition-colors',
+                    isChecked
+                      ? 'border-brand-navy bg-brand-navy text-brand-navy-foreground'
+                      : 'border-border bg-surface',
+                  )}
+                >
                   {o.key}
                 </span>
                 {o.text && <span>{o.text}</span>}
@@ -266,12 +310,12 @@ export const OptionsBox = ({
   title?: string;
   options: Option[];
 }) => (
-  <div className="border-border bg-default/40 rounded-field mb-3 border p-3">
-    {title && <h5 className="mb-1.5 text-sm font-bold">{title}</h5>}
+  <div className="bg-surface-secondary mb-3 rounded-xl p-4">
+    {title && <h5 className="mb-2 text-sm font-semibold">{title}</h5>}
     <ol className="flex flex-col gap-0.5 text-sm">
       {options.map((o) => (
         <li key={o.key}>
-          <b className="text-accent mr-2 inline-block min-w-6">{o.key}</b>
+          <b className="text-brand-navy mr-2 inline-block min-w-6">{o.key}</b>
           {o.text}
         </li>
       ))}
@@ -288,19 +332,21 @@ export const PassagePane = ({
 }) => (
   <div
     className={cn(
-      'border-border max-h-[460px] overflow-y-auto border-b p-4 text-base leading-[1.65] md:border-r md:border-b-0',
+      'border-border max-h-[460px] overflow-y-auto border-b p-4 text-base leading-7 md:border-r md:border-b-0',
       className,
     )}
   >
-    <div>
-      <h4 className="mb-2 text-lg font-bold">{passage.title}</h4>
+    <div className="mx-auto max-w-[72ch]">
+      <h4 className="mb-3 text-xl font-semibold tracking-tight">
+        {passage.title}
+      </h4>
       {passage.subtitle && (
         <p className="text-muted mb-3">{passage.subtitle}</p>
       )}
       {passage.paragraphs.map((p, i) => (
-        <p key={i} className="mb-4 text-justify">
+        <p key={i} className="mb-4 text-pretty">
           {p.label && (
-            <span className="bg-accent-soft text-accent-soft-foreground mr-1.5 inline-grid size-5 place-items-center rounded text-justify text-xs font-bold">
+            <span className="bg-brand-navy-soft text-brand-navy mr-1.5 inline-grid size-5 place-items-center rounded text-xs font-semibold">
               {p.label}
             </span>
           )}
