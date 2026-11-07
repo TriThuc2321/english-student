@@ -33,12 +33,14 @@ import {
 } from '@/lib/exam/reducer';
 import { partSequence } from '@/lib/exam/structure';
 
+import { AttemptAudioContext } from './attemptAudio';
 import { ExamHeader } from './examHeader';
 import { PartView, type FocusRequest } from './partView';
 import { partGroups, QuestionNavigator } from './questionNavigator';
 import { SubmitModal } from './submitModal';
 import { TimeUpModal } from './timeUpModal';
 import { useAttemptAutosave } from './useAttemptAutosave';
+import { useAttemptRecordings } from './useAttemptRecordings';
 import { useExamPersistence } from './useExamPersistence';
 import { useExamTextSize } from './useExamTextSize';
 import { useSectionTimer } from './useSectionTimer';
@@ -195,6 +197,8 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
     attempt?.baseline ?? null,
   );
 
+  const recordings = useAttemptRecordings(attempt?.id ?? null);
+
   const sections = [...test.testSections].sort((a, b) => a.order - b.order);
   const section = sections.find((s) => s.id === state.sectionId) ?? sections[0];
   const parts = [...section.testParts].sort((a, b) => a.order - b.order);
@@ -245,6 +249,7 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
   // Resolves 'graded' once the whole attempt is closed and the result page is on its way.
   const closeSection = async (sectionId: number) => {
     if (!attempt) throw new Error('No attempt');
+    await recordings.settle();
     await flush();
     const isLast = sections.every(
       (s) => s.id === sectionId || isSectionLocked(state, s.id),
@@ -348,25 +353,27 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
         exitHref={exitHref}
       />
       <div className="flex min-h-0 flex-1 flex-col">
-        <PartView
-          key={`${section.id}-${part?.id ?? 'none'}`}
-          part={part}
-          index={Math.max(partIndex, 0)}
-          answers={sectionAnswers}
-          onAnswer={(n: number, value: Answer) =>
-            dispatch({ type: 'answer', n, value })
-          }
-          readOnly={locked}
-          flagged={sectionFlagged}
-          onToggleFlag={(n) => dispatch({ type: 'toggleFlag', n })}
-          focusRequest={
-            focus?.sectionId === section.id && focus.partId === state.partId
-              ? focus
-              : null
-          }
-          onActiveQuestion={(n) => setActive({ sectionId: section.id, n })}
-          textSize={textSize}
-        />
+        <AttemptAudioContext.Provider value={recordings}>
+          <PartView
+            key={`${section.id}-${part?.id ?? 'none'}`}
+            part={part}
+            index={Math.max(partIndex, 0)}
+            answers={sectionAnswers}
+            onAnswer={(n: number, value: Answer) =>
+              dispatch({ type: 'answer', n, value })
+            }
+            readOnly={locked}
+            flagged={sectionFlagged}
+            onToggleFlag={(n) => dispatch({ type: 'toggleFlag', n })}
+            focusRequest={
+              focus?.sectionId === section.id && focus.partId === state.partId
+                ? focus
+                : null
+            }
+            onActiveQuestion={(n) => setActive({ sectionId: section.id, n })}
+            textSize={textSize}
+          />
+        </AttemptAudioContext.Provider>
       </div>
       <QuestionNavigator
         section={section}
