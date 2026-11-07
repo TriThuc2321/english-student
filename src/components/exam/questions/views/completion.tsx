@@ -22,8 +22,14 @@ const Line = ({ children }: { children: ReactNode }) => (
 
 const BULLET = /^[-•*·–]\s+/;
 
-const isBareHeading = (line: string) =>
-  !line.includes('{{') && line.length <= 60 && !/[.:;,?!]$/.test(line);
+// A bare heading must also open a block (start, after a blank line or after another
+// heading) and have content under it, so a short sentence inside a note stays a line.
+const isBareHeading = (line: string, opensBlock: boolean, next?: string) =>
+  opensBlock &&
+  !!next?.trim() &&
+  !line.includes('{{') &&
+  line.length <= 60 &&
+  !/[.:;,?!]$/.test(line);
 
 // Form / note / flow-chart: one template, every {{n}} is a text box
 export const TemplateView = () => {
@@ -53,6 +59,7 @@ export const TemplateView = () => {
   const blocks: ReactNode[] = [];
   let bullets: ReactNode[] = [];
   let headings = 0;
+  let opensBlock = true;
   const flush = () => {
     if (!bullets.length) return;
     blocks.push(
@@ -90,18 +97,23 @@ export const TemplateView = () => {
   lines.forEach((raw, i) => {
     const line = raw.trim();
     const bullet = BULLET.exec(line);
+    const atBlockStart = opensBlock;
+    opensBlock = false;
     if (!line) {
       flush();
+      opensBlock = true;
     } else if (line.startsWith('# ')) {
       heading(line.slice(2));
+      opensBlock = true;
     } else if (bullet) {
       bullets.push(
         <li key={i} className="pl-1 leading-10">
           {fillTemplate(line.slice(bullet[0].length), textBlank)}
         </li>,
       );
-    } else if (isBareHeading(line)) {
+    } else if (isBareHeading(line, atBlockStart, lines[i + 1])) {
       heading(line);
+      opensBlock = true;
     } else {
       flush();
       blocks.push(

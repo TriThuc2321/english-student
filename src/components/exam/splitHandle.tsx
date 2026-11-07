@@ -8,7 +8,7 @@ import { SPLIT_MAX, SPLIT_MIN } from './useSplitRatio';
 type SplitHandleProps = {
   containerRef: RefObject<HTMLElement | null>;
   ratio: number;
-  onChange: (ratio: number) => void;
+  onChange: (ratio: number, persist?: boolean) => void;
 };
 
 const STEP = 5;
@@ -24,7 +24,15 @@ export function SplitHandle({
   const fromPointer = (clientX: number) => {
     const rect = containerRef.current?.getBoundingClientRect();
     if (!rect || rect.width === 0) return;
-    onChange(((clientX - rect.left) / rect.width) * 100);
+    onChange(((clientX - rect.left) / rect.width) * 100, false);
+  };
+
+  // Also runs on pointercancel / lostpointercapture, so a gesture the browser
+  // takes over can't leave the handle stuck in drag mode.
+  const endDrag = () => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    onChange(ratio);
   };
 
   return (
@@ -45,9 +53,11 @@ export function SplitHandle({
         if (dragging.current) fromPointer(e.clientX);
       }}
       onPointerUp={(e) => {
-        dragging.current = false;
+        endDrag();
         e.currentTarget.releasePointerCapture(e.pointerId);
       }}
+      onPointerCancel={endDrag}
+      onLostPointerCapture={endDrag}
       onDoubleClick={() => onChange(50)}
       onKeyDown={(e) => {
         if (e.key === 'ArrowLeft') onChange(ratio - STEP);

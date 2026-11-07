@@ -9,8 +9,9 @@ export const clampSplit = (value: number) =>
   Math.min(SPLIT_MAX, Math.max(SPLIT_MIN, Math.round(value)));
 
 const listeners = new Set<() => void>();
-// Fallback for blocked storage, so dragging still works for this visit.
-let memory = DEFAULT;
+// Source of truth for this visit; storage is only read once and written on commit,
+// so a drag doesn't hit localStorage on every pointermove.
+let memory: number | null = null;
 
 function subscribe(listener: () => void) {
   listeners.add(listener);
@@ -20,20 +21,25 @@ function subscribe(listener: () => void) {
 }
 
 function read(): number {
-  try {
-    const saved = Number(localStorage.getItem(KEY));
-    return saved ? clampSplit(saved) : memory;
-  } catch {
-    return memory;
+  if (memory === null) {
+    try {
+      const saved = Number(localStorage.getItem(KEY));
+      memory = saved ? clampSplit(saved) : DEFAULT;
+    } catch {
+      memory = DEFAULT;
+    }
   }
+  return memory;
 }
 
-function write(value: number) {
+function write(value: number, persist = true) {
   memory = clampSplit(value);
-  try {
-    localStorage.setItem(KEY, String(memory));
-  } catch {
-    // Blocked storage: memory still holds the ratio for this visit.
+  if (persist) {
+    try {
+      localStorage.setItem(KEY, String(memory));
+    } catch {
+      // Blocked storage: memory still holds the ratio for this visit.
+    }
   }
   listeners.forEach((listener) => listener());
 }
