@@ -311,11 +311,18 @@ function ReviewNavigator({
   const t = useTranslations();
   const drawer = useOverlayState();
   const current = parts.find((p) => p.id === partId) ?? parts[0];
-  const correctOf = (p: NavPart) =>
-    t('taking.groupCorrect', {
-      correct: p.slots.filter((s) => s.status === 'correct').length,
-      total: p.slots.length,
+  // Writing/Speaking slots are marked by a person and can never be "correct",
+  // so they stay out of the count, matching the group chip in groupView.
+  const correctOf = (p: NavPart) => {
+    const marked = p.slots.filter(
+      (s) => s.status !== 'pending' && s.status !== 'graded',
+    );
+    if (marked.length === 0) return null;
+    return t('taking.groupCorrect', {
+      correct: marked.filter((s) => s.status === 'correct').length,
+      total: marked.length,
     });
+  };
   const titleOf = (p: NavPart) =>
     p.title ?? t('taking.partFallback', { n: p.index + 1 });
 
@@ -409,7 +416,8 @@ function ReviewNavigator({
         className="min-w-0 flex-1 justify-start rounded-full md:hidden"
         onPress={drawer.open}
       >
-        {current && `${titleOf(current)} · ${correctOf(current)}`}
+        {current &&
+          [titleOf(current), correctOf(current)].filter(Boolean).join(' · ')}
       </Button>
       <button
         type="button"

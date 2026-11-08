@@ -16,7 +16,7 @@ test('shows the score and reviews answers', async ({ page }) => {
   ).toBeVisible();
   const score = page.getByRole('region', { name: 'Score' });
   await expect(score.getByText('Listening', { exact: true })).toBeVisible();
-  await expect(score.getByText('8 / 20 correct')).toBeVisible();
+  await expect(score.getByText('8 / 21 correct')).toBeVisible();
   await expect(
     page.getByRole('region', { name: 'Your answers · Listening' }),
   ).toBeVisible();
@@ -95,4 +95,17 @@ test('opens a single answer in the test from the result page', async ({
   await expect(page).toHaveURL(/\/review\?q=\d+$/);
   const id = new URL(page.url()).searchParams.get('q');
   await expect(page.locator(`#q-${id}`)).toBeFocused();
+});
+
+test('focuses an inline blank when opened from the result page', async ({
+  page,
+}) => {
+  await page.goto(`/attempts/${GRADED_ATTEMPT_ID}/result`);
+  await page.getByRole('button', { name: 'Question 21, Incorrect' }).click();
+  await page.getByRole('link', { name: 'View in test' }).click();
+
+  await expect(page).toHaveURL(/\/review\?q=\d+$/);
+  const id = new URL(page.url()).searchParams.get('q');
+  await expect(page.locator(`#q-${id}`)).toBeFocused();
+  await expect(page.locator(`#q-${id}`).getByText('nine')).toBeVisible();
 });

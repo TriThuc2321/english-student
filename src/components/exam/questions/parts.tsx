@@ -170,13 +170,20 @@ export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
   const label = t('answerLabel', { n });
   const item = review?.item(n);
   const tint = item && FIELD_CLASSES[item.status];
+  // In review the controls are disabled and can't take focus, so the wrapper
+  // carries the anchor instead, like QRow does.
+  const fieldId = review ? undefined : anchorId(n);
 
   return (
-    <span className="mx-0.5 my-0.5 inline-flex items-center gap-1.5 align-middle">
+    <span
+      id={review ? anchorId(n) : undefined}
+      tabIndex={review ? -1 : undefined}
+      className="mx-0.5 my-0.5 inline-flex scroll-mt-24 items-center gap-1.5 rounded-md align-middle outline-none"
+    >
       {withFlag ? <FlagNum n={n} /> : <QNum>{n}</QNum>}
       {options ? (
         <select
-          id={anchorId(n)}
+          id={fieldId}
           aria-label={label}
           className={cn(fieldClass, tint)}
           value={value}
@@ -188,7 +195,7 @@ export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
         </select>
       ) : (
         <input
-          id={anchorId(n)}
+          id={fieldId}
           aria-label={label}
           autoComplete="off"
           spellCheck={false}

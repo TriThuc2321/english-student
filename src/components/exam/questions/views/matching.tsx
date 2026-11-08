@@ -77,7 +77,13 @@ export const MapView = () => {
           </thead>
           <tbody>
             {group.questions.map((q) => (
-              <tr key={q.n} id={anchorId(q.n)}>
+              <tr
+                key={q.n}
+                id={anchorId(q.n)}
+                // Review radios are disabled, so the row itself takes focus.
+                tabIndex={review ? -1 : undefined}
+                className="outline-none"
+              >
                 <td className="border-border border p-2">
                   <div className="flex items-center gap-2">
                     <QNum status={review?.item(q.n)?.status}>{q.n}</QNum>
