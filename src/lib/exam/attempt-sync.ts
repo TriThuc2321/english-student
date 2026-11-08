@@ -120,7 +120,9 @@ export function responseFor(
   };
 }
 
-function answerFromResponse(response: AttemptResponse | null): Answer | null {
+export function answerFromResponse(
+  response: AttemptResponse | null,
+): Answer | null {
   if (!response) return null;
   if ('key' in response) return response.key;
   if ('keys' in response) return response.keys;

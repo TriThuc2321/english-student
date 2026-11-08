@@ -1,62 +1,36 @@
 'use client';
 
-import { Button, Disclosure, Tabs } from '@heroui/react';
+import { Button, buttonVariants, Disclosure, Tabs } from '@heroui/react';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { useId, useState } from 'react';
-import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+import {
+  LuChevronLeft,
+  LuChevronRight,
+  LuSquareArrowOutUpRight,
+} from 'react-icons/lu';
 
 import type {
-  AnswerPart,
   Breakdown,
   NumberStatus,
   ReviewItem,
   SectionResult,
 } from '@/lib/results/view';
 
+import { ROUTES } from '@/constants/routes';
+
 import { AssessmentPanel } from './assessmentPanel';
-
-const CELL_CLASSES: Record<NumberStatus, string> = {
-  correct: 'bg-success/15 text-success border border-success/40',
-  incorrect: 'bg-danger-soft text-foreground border-2 border-danger',
-  blank: 'text-muted border border-dashed border-field-border',
-  pending: 'bg-surface-secondary text-muted border border-separator',
-  graded: 'bg-brand-navy-soft text-brand-navy border border-brand-navy/40',
-};
-
-const BADGE_CLASSES: Record<NumberStatus, string> = {
-  correct: 'bg-success text-success-foreground',
-  incorrect: 'bg-danger text-danger-foreground',
-  blank: 'bg-surface-secondary text-muted',
-  pending: 'bg-surface-secondary text-muted',
-  graded: 'bg-brand-navy-soft text-brand-navy',
-};
-
-const GLYPHS: Record<NumberStatus, string> = {
-  correct: '✓',
-  incorrect: '✗',
-  blank: '–',
-  pending: '…',
-  graded: '✓',
-};
-
-const LEGEND_SWATCHES: Record<NumberStatus, string> = {
-  correct: 'bg-success',
-  incorrect: 'border-2 border-danger bg-danger-soft',
-  blank: 'border border-dashed border-field-border',
-  pending: 'border border-separator bg-surface-secondary',
-  graded: 'border border-brand-navy/40 bg-brand-navy-soft',
-};
+import { ExplanationBlock, formatPart } from './explanationBlock';
+import { BADGE_CLASSES, CELL_CLASSES, GLYPHS, LEGEND_SWATCHES } from './status';
 
 const card = 'bg-surface shadow-surface flex flex-col rounded-2xl p-6';
 
-const formatPart = ({ key, text }: AnswerPart) =>
-  key && text ? `${key} · ${text}` : (key ?? text ?? '');
-
 type ResultReviewProps = {
+  attemptId: string;
   sections: SectionResult[];
 };
 
-export function ResultReview({ sections }: ResultReviewProps) {
+export function ResultReview({ attemptId, sections }: ResultReviewProps) {
   const t = useTranslations();
   const [sectionId, setSectionId] = useState(sections[0]?.sectionId);
   const [selected, setSelected] = useState<Record<number, string>>({});
@@ -155,6 +129,9 @@ export function ResultReview({ sections }: ResultReviewProps) {
       {current && (
         <ReviewPanel
           item={current}
+          reviewHref={ROUTES.attemptReview(attemptId, {
+            questionId: current.questionId,
+          })}
           onPrev={index > 0 ? () => select(items[index - 1].key) : null}
           onNext={
             index < items.length - 1 ? () => select(items[index + 1].key) : null
@@ -298,10 +275,12 @@ function FocusBreakdown({ section }: { section: SectionResult }) {
 
 function ReviewPanel({
   item,
+  reviewHref,
   onPrev,
   onNext,
 }: {
   item: ReviewItem;
+  reviewHref: string;
   onPrev: (() => void) | null;
   onNext: (() => void) | null;
 }) {
@@ -385,23 +364,16 @@ function ReviewPanel({
         )}
       </div>
       <div className="border-border min-h-24 rounded-lg border border-dashed px-3.5 py-3">
-        <p className="text-muted text-xs">{t('results.explanation')}</p>
-        <p className={`mt-0.5 text-sm ${item.explanation ? '' : 'text-muted'}`}>
-          {item.explanation ?? t('results.noExplanation')}
-        </p>
-        {item.evidence && (
-          <blockquote className="border-brand-navy mt-3 border-l-2 pl-3 text-sm">
-            <p className="text-muted text-xs">
-              {t('results.evidence')}
-              {item.evidence.paragraph &&
-                ` · ${t('results.paragraph', { label: item.evidence.paragraph })}`}
-            </p>
-            {item.evidence.quote && (
-              <p className="mt-0.5 italic">“{item.evidence.quote}”</p>
-            )}
-          </blockquote>
-        )}
+        <p className="text-muted mb-0.5 text-xs">{t('results.explanation')}</p>
+        <ExplanationBlock item={item} />
       </div>
+      <Link
+        href={reviewHref}
+        className={buttonVariants({ variant: 'ghost', size: 'sm' })}
+      >
+        <LuSquareArrowOutUpRight aria-hidden className="size-4" />
+        {t('review.viewInTest')}
+      </Link>
       <div className="flex justify-between gap-2">
         <Button
           variant="secondary"

@@ -34,4 +34,13 @@ describe('ResultHeader', () => {
 
     expect(screen.queryByText('Being graded')).toBeNull();
   });
+
+  it('links to the detailed answer review', () => {
+    const { attempt } = makeAttemptResult();
+    renderWithIntl(<ResultHeader attempt={attempt} />);
+
+    expect(
+      screen.getByRole('link', { name: 'Review answers' }),
+    ).toHaveAttribute('href', `/attempts/${attempt.id}/review`);
+  });
 });

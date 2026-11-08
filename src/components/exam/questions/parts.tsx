@@ -5,9 +5,18 @@ import { useTranslations } from 'next-intl';
 import { Fragment, type ReactNode } from 'react';
 
 import type { PassageView, QuestionView } from '@/lib/exam/group-view';
+import type { NumberStatus } from '@/lib/results/view';
 import type { Option } from '@/types/student-test';
 
+import { formatParts } from '@/components/results/explanationBlock';
+import {
+  BADGE_CLASSES,
+  FIELD_CLASSES,
+  isMiss,
+} from '@/components/results/status';
+
 import { useExamGroup } from './context';
+import { ReviewNote } from './reviewNote';
 
 export const formatRange = (q: QuestionView) =>
   q.nTo && q.nTo !== q.n ? `${q.n}–${q.nTo}` : `${q.n}`;
@@ -29,8 +38,9 @@ type QRowProps = { n: number; label?: string; children: ReactNode };
 
 export const FlagToggle = ({ n }: { n: number }) => {
   const t = useTranslations('taking');
-  const { flagged, toggleFlag } = useExamGroup();
+  const { flagged, toggleFlag, review } = useExamGroup();
   const isFlagged = flagged.includes(n);
+  if (review) return null;
   return (
     <ToggleButton
       isIconOnly
@@ -58,14 +68,19 @@ export const FlagToggle = ({ n }: { n: number }) => {
 };
 
 export const QRow = ({ n, label, children }: QRowProps) => {
-  const { anchorId } = useExamGroup();
+  const { anchorId, review } = useExamGroup();
   return (
     <div
       id={anchorId(n)}
-      className="group/q focus-within:bg-surface-secondary mb-1 grid scroll-mt-24 grid-cols-[auto_1fr_auto] gap-3 rounded-xl p-2.5 transition-colors"
+      // Review rows take focus so the navigator can bring them into view; their inputs are disabled.
+      tabIndex={review ? -1 : undefined}
+      className="group/q focus-within:bg-surface-secondary mb-1 grid scroll-mt-24 grid-cols-[auto_1fr_auto] gap-3 rounded-xl p-2.5 transition-colors outline-none"
     >
-      <QNum>{label ?? n}</QNum>
-      <div className="min-w-0">{children}</div>
+      <QNum status={review?.item(n)?.status}>{label ?? n}</QNum>
+      <div className="min-w-0">
+        {children}
+        {review && <ReviewNote n={n} />}
+      </div>
       <FlagToggle n={n} />
     </div>
   );
@@ -74,15 +89,24 @@ export const QRow = ({ n, label, children }: QRowProps) => {
 const QNUM_CLASS =
   'bg-brand-navy-soft text-brand-navy inline-grid h-7 min-w-7 shrink-0 place-items-center rounded-lg px-1.5 align-middle text-[13px] leading-none font-semibold tabular-nums';
 
-export const QNum = ({ children }: { children: ReactNode }) => (
-  <span className={QNUM_CLASS}>{children}</span>
+export const QNum = ({
+  children,
+  status,
+}: {
+  children: ReactNode;
+  status?: NumberStatus;
+}) => (
+  <span className={cn(QNUM_CLASS, status && BADGE_CLASSES[status])}>
+    {children}
+  </span>
 );
 
 // Inline blanks flag from their number so a flag icon doesn't break the sentence after every gap.
 const FlagNum = ({ n }: { n: number }) => {
   const t = useTranslations('taking');
-  const { flagged, toggleFlag } = useExamGroup();
+  const { flagged, toggleFlag, review } = useExamGroup();
   const isFlagged = flagged.includes(n);
+  if (review) return <QNum status={review.item(n)?.status}>{n}</QNum>;
   return (
     <ToggleButton
       aria-label={t('flagN', { n })}
@@ -133,20 +157,35 @@ type BlankProps = {
   withFlag?: boolean;
 };
 
+const CorrectChip = ({ text }: { text: string }) => (
+  <span className="bg-success/15 text-success rounded-md px-2 py-0.5 text-sm font-semibold">
+    {text}
+  </span>
+);
+
 export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
   const t = useTranslations('taking');
-  const { answers, setAnswer, readOnly, anchorId } = useExamGroup();
+  const { answers, setAnswer, readOnly, anchorId, review } = useExamGroup();
   const value = (answers[n] as string | undefined) ?? '';
   const label = t('answerLabel', { n });
+  const item = review?.item(n);
+  const tint = item && FIELD_CLASSES[item.status];
+  // In review the controls are disabled and can't take focus, so the wrapper
+  // carries the anchor instead, like QRow does.
+  const fieldId = review ? undefined : anchorId(n);
 
   return (
-    <span className="mx-0.5 my-0.5 inline-flex items-center gap-1.5 align-middle">
+    <span
+      id={review ? anchorId(n) : undefined}
+      tabIndex={review ? -1 : undefined}
+      className="mx-0.5 my-0.5 inline-flex scroll-mt-24 items-center gap-1.5 rounded-md align-middle outline-none"
+    >
       {withFlag ? <FlagNum n={n} /> : <QNum>{n}</QNum>}
       {options ? (
         <select
-          id={anchorId(n)}
+          id={fieldId}
           aria-label={label}
-          className={fieldClass}
+          className={cn(fieldClass, tint)}
           value={value}
           disabled={readOnly}
           onChange={(e) => setAnswer(n, e.target.value)}
@@ -156,16 +195,19 @@ export const Blank = ({ n, options, withFlag = true }: BlankProps) => {
         </select>
       ) : (
         <input
-          id={anchorId(n)}
+          id={fieldId}
           aria-label={label}
           autoComplete="off"
           spellCheck={false}
           size={Math.max(12, value.length + 2)}
-          className={cn(fieldClass, 'max-w-full min-w-32')}
+          className={cn(fieldClass, 'max-w-full min-w-32', tint)}
           value={value}
           disabled={readOnly}
           onChange={(e) => setAnswer(n, e.target.value)}
         />
+      )}
+      {item?.correctAnswer && isMiss(item.status) && (
+        <CorrectChip text={formatParts(item.correctAnswer)} />
       )}
     </span>
   );
@@ -181,11 +223,12 @@ export const KeySelect = ({
   disabledKeys?: string[];
 }) => {
   const t = useTranslations('taking');
-  const { answers, setAnswer, readOnly } = useExamGroup();
+  const { answers, setAnswer, readOnly, review } = useExamGroup();
+  const item = review?.item(n);
   return (
     <select
       aria-label={t('answerLabel', { n })}
-      className={fieldClass}
+      className={cn(fieldClass, item && FIELD_CLASSES[item.status])}
       value={(answers[n] as string | undefined) ?? ''}
       disabled={readOnly}
       onChange={(e) => setAnswer(n, e.target.value)}
@@ -198,12 +241,16 @@ export const KeySelect = ({
 
 export const TextAnswer = ({ n }: { n: number }) => {
   const t = useTranslations('taking');
-  const { answers, setAnswer, readOnly } = useExamGroup();
+  const { answers, setAnswer, readOnly, review } = useExamGroup();
+  const item = review?.item(n);
   return (
     <input
       aria-label={t('answerLabel', { n })}
       autoComplete="off"
-      className="border-field-border focus:border-brand-navy min-h-10 w-full max-w-72 border-b-[1.5px] bg-transparent px-1 py-1 text-base transition-colors outline-none disabled:opacity-60"
+      className={cn(
+        'border-field-border focus:border-brand-navy min-h-10 w-full max-w-72 border-b-[1.5px] bg-transparent px-1 py-1 text-base transition-colors outline-none disabled:opacity-60',
+        item && FIELD_CLASSES[item.status],
+      )}
       value={(answers[n] as string | undefined) ?? ''}
       disabled={readOnly}
       onChange={(e) => setAnswer(n, e.target.value)}
@@ -226,9 +273,20 @@ export const Choices = ({
   limit,
   variant = 'list',
 }: ChoicesProps) => {
-  const { group, answers, setAnswer, readOnly } = useExamGroup();
+  const t = useTranslations('review');
+  const { group, answers, setAnswer, readOnly, review } = useExamGroup();
   const value = answers[n];
   const picked = Array.isArray(value) ? value : [];
+  const reviewed = review?.question(n)[0];
+  const correctKeys = reviewed?.correctAnswer?.flatMap((p) => p.key ?? []);
+  const verdict = (key: string, isChecked: boolean) =>
+    !correctKeys
+      ? null
+      : correctKeys.includes(key)
+        ? 'right'
+        : isChecked
+          ? 'wrong'
+          : null;
 
   const toggle = (key: string) => {
     if (!multi) return setAnswer(n, key);
@@ -249,6 +307,7 @@ export const Choices = ({
         const isDisabled =
           readOnly ||
           (multi && !isChecked && limit != null && picked.length >= limit);
+        const mark = verdict(o.key, isChecked);
         return (
           <label
             key={o.key}
@@ -267,7 +326,18 @@ export const Choices = ({
               variant !== 'list' &&
                 isChecked &&
                 'border-brand-navy bg-brand-navy text-brand-navy-foreground hover:border-brand-navy',
-              isDisabled && 'cursor-not-allowed opacity-50',
+              isDisabled && !review && 'cursor-not-allowed opacity-50',
+              review && 'cursor-default',
+              review && !mark && 'opacity-60',
+              mark === 'right' &&
+                'bg-success/15 text-foreground hover:bg-success/15 ring-success/50 ring-1',
+              mark === 'wrong' &&
+                'bg-danger-soft text-foreground hover:bg-danger-soft ring-danger/60 ring-1',
+              // Pills and bubbles have no room for a label, so the student's pick gets a stronger ring.
+              review &&
+                isChecked &&
+                variant !== 'list' &&
+                'ring-offset-surface ring-2 ring-offset-2',
             )}
           >
             <input
@@ -287,11 +357,20 @@ export const Choices = ({
                     isChecked
                       ? 'border-brand-navy bg-brand-navy text-brand-navy-foreground'
                       : 'border-border bg-surface',
+                    mark === 'right' &&
+                      'border-success bg-success text-success-foreground',
+                    mark === 'wrong' &&
+                      'border-danger bg-danger text-danger-foreground',
                   )}
                 >
                   {o.key}
                 </span>
                 {o.text && <span>{o.text}</span>}
+                {review && isChecked && (
+                  <span className="text-muted ml-auto text-xs font-medium">
+                    {t('yourChoice')}
+                  </span>
+                )}
               </>
             ) : (
               <span>{o.text && variant === 'pills' ? o.text : o.key}</span>

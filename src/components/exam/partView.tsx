@@ -1,12 +1,18 @@
 'use client';
 
-import { cn, Tabs } from '@heroui/react';
+import { Button, cn, Disclosure, Tabs } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 
 import type { Answer } from '@/lib/exam/structure';
+import type {
+  ReviewItem,
+  SectionAssessment,
+  SectionTranscript,
+} from '@/lib/results/view';
 import type { StudentTestPart } from '@/types/student-test';
 
+import { AssessmentPanel } from '@/components/results/assessmentPanel';
 import { toGroupView, toPassageView } from '@/lib/exam/group-view';
 
 import { PartAudioCard, PartHeading } from './partHeading';
@@ -29,6 +35,14 @@ type PartViewProps = {
   focusRequest?: FocusRequest | null;
   onActiveQuestion?: (questionId: number) => void;
   textSize?: TextSize;
+  review?: PartReview;
+};
+
+export type PartReview = {
+  // Keyed by question id.
+  items: Record<number, ReviewItem[]>;
+  transcripts: SectionTranscript[];
+  assessment: SectionAssessment | null;
 };
 
 export type FocusRequest = { questionId: number; seq: number };
@@ -46,6 +60,7 @@ export function PartView({
   focusRequest = null,
   onActiveQuestion,
   textSize = 'md',
+  review,
 }: PartViewProps) {
   const t = useTranslations('taking');
   const [tab, setTab] = useState<'passage' | 'questions'>('questions');
@@ -120,6 +135,34 @@ export function PartView({
         )}
       >
         <PartHeading part={part} index={index} />
+        {review && review.transcripts.length > 0 && (
+          <div className="bg-surface shadow-surface flex flex-col gap-2 rounded-2xl p-4">
+            {review.transcripts.map((tr, i) => (
+              <Disclosure key={tr.mediaId}>
+                <Disclosure.Heading>
+                  <Button
+                    slot="trigger"
+                    variant="secondary"
+                    className="w-full justify-between"
+                  >
+                    {review.transcripts.length > 1
+                      ? t('transcriptN', { n: i + 1 })
+                      : t('transcript')}
+                    <Disclosure.Indicator />
+                  </Button>
+                </Disclosure.Heading>
+                <Disclosure.Content>
+                  <Disclosure.Body className="max-h-96 overflow-y-auto pt-3 text-sm leading-6 whitespace-pre-line">
+                    {tr.transcript}
+                  </Disclosure.Body>
+                </Disclosure.Content>
+              </Disclosure>
+            ))}
+          </div>
+        )}
+        {review?.assessment && (
+          <AssessmentPanel assessment={review.assessment} />
+        )}
         {groups.length === 0 && (
           <p className="text-muted py-16 text-center text-sm">
             {t('emptyPart')}
@@ -134,6 +177,7 @@ export function PartView({
             readOnly={readOnly}
             flagged={flagged}
             toggleFlag={onToggleFlag}
+            review={review?.items}
           />
         ))}
       </div>

@@ -189,6 +189,20 @@ function toDetail(test: ListItem) {
                   ]),
                 ],
               },
+              {
+                id: section.id * 10 + 3,
+                ...PART_DEFAULTS,
+                order: 3,
+                title: 'Part 3',
+                questionGroups: [
+                  group(4, 'SENTENCE_COMPLETION', [
+                    {
+                      ...questions(section.id, 21, 21)[0],
+                      prompt: 'The library opens at {{21}} on weekdays.',
+                    },
+                  ]),
+                ],
+              },
             ]
           : [
               {
@@ -281,6 +295,7 @@ type MockQuestion = {
   sectionId: number;
   numberFrom: number;
   numberTo: number;
+  text: boolean;
 };
 
 function testQuestions(test: ListItem): MockQuestion[] {
@@ -292,15 +307,21 @@ function testQuestions(test: ListItem): MockQuestion[] {
           sectionId: section.id,
           numberFrom: q.numberFrom,
           numberTo: q.numberTo,
+          text: g.questionType.endsWith('_COMPLETION'),
         })),
       ),
     ),
   );
 }
 
-// Every mock question's key is A; the two-answer question wants A and B.
+// Every mock question's key is A; the two-answer question wants A and B,
+// and the completion question wants the word "nine".
 const answerOf = (q: MockQuestion) =>
-  q.numberTo > q.numberFrom ? { keys: ['A', 'B'] } : { key: 'A' };
+  q.text
+    ? { accepted: ['nine'] }
+    : q.numberTo > q.numberFrom
+      ? { keys: ['A', 'B'] }
+      : { key: 'A' };
 
 function grade(q: MockQuestion, response: Response | null) {
   const max = q.numberTo - q.numberFrom + 1;
@@ -308,6 +329,10 @@ function grade(q: MockQuestion, response: Response | null) {
   if ('keys' in response) {
     const score = response.keys.filter((k) => k === 'A' || k === 'B').length;
     return { isCorrect: score === max, score, max };
+  }
+  if ('text' in response) {
+    const ok = response.text.trim().toLowerCase() === 'nine';
+    return { isCorrect: ok, score: ok ? 1 : 0, max };
   }
   const ok = 'key' in response && response.key === 'A';
   return { isCorrect: ok, score: ok ? 1 : 0, max };
@@ -467,8 +492,9 @@ function seedAttempts() {
   for (const q of testQuestions(graded)) {
     // Right on odd numbers, wrong on most even ones, a few left blank.
     if (q.numberFrom % 5 === 0) continue;
-    const response =
-      q.numberTo > q.numberFrom
+    const response = q.text
+      ? { text: 'ten' }
+      : q.numberTo > q.numberFrom
         ? { keys: ['A', 'C'] }
         : { key: q.numberFrom % 2 ? 'A' : 'B' };
     attempt.answers.set(q.id, { response, flagged: false });

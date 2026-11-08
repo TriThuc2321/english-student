@@ -1,3 +1,4 @@
+import { cn } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 
 import { useExamGroup } from '../context';
@@ -46,8 +47,15 @@ export const MatchingView = () => {
 // Map / plan labelling: one row per place, one radio column per letter
 export const MapView = () => {
   const t = useTranslations('taking');
-  const { group, answers, setAnswer, readOnly, anchorId } = useExamGroup();
+  const { group, answers, setAnswer, readOnly, anchorId, review } =
+    useExamGroup();
   const options = group.content?.options ?? [];
+  const cellTint = (n: number, key: string) => {
+    const correct = review?.item(n)?.correctAnswer;
+    if (!correct) return undefined;
+    if (correct.some((p) => p.key === key)) return 'bg-success/15';
+    return answers[n] === key ? 'bg-danger-soft' : undefined;
+  };
   const optionLabel = (n: number, key: string) =>
     t('answerLabel', { n: `${n} ${key}` });
 
@@ -69,10 +77,16 @@ export const MapView = () => {
           </thead>
           <tbody>
             {group.questions.map((q) => (
-              <tr key={q.n} id={anchorId(q.n)}>
+              <tr
+                key={q.n}
+                id={anchorId(q.n)}
+                // Review radios are disabled, so the row itself takes focus.
+                tabIndex={review ? -1 : undefined}
+                className="outline-none"
+              >
                 <td className="border-border border p-2">
                   <div className="flex items-center gap-2">
-                    <QNum>{q.n}</QNum>
+                    <QNum status={review?.item(q.n)?.status}>{q.n}</QNum>
                     <span className="min-w-0 flex-1">{q.prompt}</span>
                     <FlagToggle n={q.n} />
                   </div>
@@ -80,7 +94,10 @@ export const MapView = () => {
                 {options.map((o) => (
                   <td
                     key={o.key}
-                    className="border-border border p-2 text-center"
+                    className={cn(
+                      'border-border border p-2 text-center',
+                      cellTint(q.n, o.key),
+                    )}
                   >
                     <input
                       type="radio"

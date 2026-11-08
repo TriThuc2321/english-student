@@ -287,7 +287,11 @@
     "micUnsupported": "This browser can't record audio.",
     "sectionClosed": "This section is closed; the recording can't be saved.",
     "uploadFailed": "Couldn't save the recording.",
-    "audioTooLarge": "Recording is over 20 MB."
+    "audioTooLarge": "Recording is over 20 MB.",
+    "groupCorrect": "{correct}/{total} correct",
+    "groupReview": "Answers and explanations",
+    "transcript": "Transcript",
+    "transcriptN": "Transcript {n}"
   },
   "results": {
     "fullTest": "Full test",
@@ -360,5 +364,15 @@
       "FC": "Fluency and Coherence",
       "P": "Pronunciation"
     }
+  },
+  "review": {
+    "title": "Answer review",
+    "viewDetails": "Review answers",
+    "viewInTest": "View in test",
+    "backToResult": "Back to result",
+    "yourChoice": "Your choice",
+    "nextMiss": "Next mistake",
+    "prevPart": "Previous part",
+    "nextPart": "Next part"
   }
 }
