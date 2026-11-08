@@ -37,6 +37,8 @@ jobs:
           plugin_marketplaces: 'https://github.com/anthropics/claude-plugins-official.git'
           plugins: 'code-review@claude-plugins-official'
           prompt: '/code-review:code-review --comment ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
-          # The action starts the inline-comment MCP server only when it is named here;
-          # every other tool comes from the skill's allowed-tools frontmatter.
-          claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment"'
+          # The action starts the inline-comment MCP server only when it is named here.
+          # Agent is needed because the skill fans out to haiku/sonnet/opus review agents
+          # and its allowed-tools frontmatter does not list it; without it the main
+          # session silently reviews the diff alone.
+          claude_args: '--allowedTools "Agent,mcp__github_inline_comment__create_inline_comment"'
