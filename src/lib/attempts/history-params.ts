@@ -24,7 +24,7 @@ const first = (value: string | string[] | undefined) =>
 
 function parsePage(value: string | undefined) {
   if (!value || !/^\d+$/.test(value)) return 1;
-  return Math.max(Number(value), 1);
+  return Math.min(Number(value), 1);
 }
 
 export function parseHistoryParams(sp: SearchParams): HistoryParams {
