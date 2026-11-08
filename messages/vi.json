@@ -8,6 +8,7 @@
     "welcome": "Chào mừng trở lại",
     "nav": {
       "tests": "Đề thi",
+      "attempts": "Bài làm của tôi",
       "openMenu": "Mở menu"
     },
     "userMenu": "Menu tài khoản",
@@ -77,6 +78,30 @@
       "description": "Đề mới được thêm hằng tháng. Hãy quay lại sau."
     },
     "sections": "Các phần thi"
+  },
+  "attempts": {
+    "title": "Bài làm của tôi",
+    "subtitle": "Tất cả bài thi bạn đã bắt đầu, mới nhất trước.",
+    "statusFilter": "Trạng thái bài làm",
+    "all": "Tất cả",
+    "status": {
+      "IN_PROGRESS": "Đang làm",
+      "SUBMITTED": "Chờ chấm",
+      "GRADED": "Đã chấm",
+      "EXPIRED": "Hết giờ"
+    },
+    "startedOn": "Bắt đầu {date}",
+    "continue": "Làm tiếp",
+    "viewResult": "Xem kết quả",
+    "empty": {
+      "title": "Chưa có bài làm nào",
+      "description": "Hãy bắt đầu một đề trong thư viện, bài làm sẽ hiện ở đây.",
+      "browse": "Xem đề thi",
+      "filteredTitle": "Không có bài làm ở trạng thái này",
+      "filteredDescription": "Thử trạng thái khác hoặc xem tất cả bài làm.",
+      "clear": "Xem tất cả bài làm"
+    },
+    "overall": "Tổng điểm"
   },
   "taking": {
     "flag": "Đánh dấu xem lại",
@@ -269,7 +294,7 @@
     "practice": "Luyện tập",
     "expired": "Hết giờ, đã tự nộp",
     "submittedMeta": "Nộp lúc {date} · làm trong {duration}",
-    "backToLibrary": "Về thư viện đề",
+    "backToAttempts": "Tất cả bài làm",
     "retake": "Làm lại",
     "scoreLabel": "Điểm",
     "totalToeic": "Tổng điểm",

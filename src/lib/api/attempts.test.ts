@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { makeAttempt, makeAttemptResult } from '@/test/fixtures/attempt';
 
-import { getAttemptResult } from './attempts';
+import { getAttemptResult, getMyAttempts } from './attempts';
 import { ApiError } from './client';
 
 vi.mock('next/headers', () => ({
@@ -25,6 +25,17 @@ const respond = (status: number, body: unknown) =>
 beforeEach(() => {
   vi.clearAllMocks();
   vi.stubGlobal('fetch', fetchMock);
+});
+
+describe('getMyAttempts', () => {
+  it('sends only defined params', async () => {
+    respond(200, { data: [], meta: { page: 2, take: 10, totalCount: 0 } });
+
+    await getMyAttempts({ status: 'GRADED', page: 2, take: 10 });
+    expect(String(fetchMock.mock.calls[0][0])).toMatch(
+      /\/api\/student\/attempts\?status=GRADED&page=2&take=10$/,
+    );
+  });
 });
 
 describe('getAttemptResult', () => {

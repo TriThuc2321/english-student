@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { IoBookOutline } from 'react-icons/io5';
 
+import PagePagination from '@/components/shared/pagePagination';
 import TestCard from '@/components/tests/testCard';
-import TestPagination from '@/components/tests/testPagination';
 import TestSearch from '@/components/tests/testSearch';
 import { EXAM_TYPES } from '@/constants/exam';
 import { ROUTES } from '@/constants/routes';
@@ -111,10 +111,14 @@ export default async function Home({ searchParams }: PageProps<'/'>) {
               </li>
             ))}
           </ul>
-          <TestPagination
+          <PagePagination
             page={params.page}
             totalPages={totalPages}
-            params={params}
+            pathname={ROUTES.HOME}
+            query={{
+              ...(params.exam && { exam: params.exam }),
+              ...(params.q && { q: params.q }),
+            }}
           />
         </>
       )}

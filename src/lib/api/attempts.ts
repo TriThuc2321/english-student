@@ -1,9 +1,31 @@
 import { cache } from 'react';
 
-import type { Attempt, AttemptResult } from '@/types/attempt';
+import type {
+  Attempt,
+  AttemptListItem,
+  AttemptResult,
+  AttemptStatus,
+} from '@/types/attempt';
+import type { Paginated } from '@/types/student-test';
 
 import { ApiError, apiErrorCode } from './client';
 import { apiGet } from './server';
+
+export const ATTEMPTS_PAGE_SIZE = 10;
+
+type MyAttemptsParams = {
+  status?: AttemptStatus;
+  page?: number;
+  take?: number;
+};
+
+export function getMyAttempts({ status, page, take }: MyAttemptsParams) {
+  const query = new URLSearchParams();
+  if (status) query.set('status', status);
+  if (page) query.set('page', String(page));
+  if (take) query.set('take', String(take));
+  return apiGet<Paginated<AttemptListItem>>(`/student/attempts?${query}`);
+}
 
 export type AttemptResultLookup =
   | { status: 'ok'; result: AttemptResult }
