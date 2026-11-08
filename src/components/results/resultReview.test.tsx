@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import { buildResultView } from '@/lib/results/view';
 import {
+  ATTEMPT_ID,
   attemptSection,
   makeAttemptResult,
   resultQuestion,
@@ -16,6 +17,7 @@ import { ResultReview } from './resultReview';
 const renderReview = () =>
   renderWithIntl(
     <ResultReview
+      attemptId={ATTEMPT_ID}
       sections={buildResultView(makeAttemptResult(), makeTest()).sections}
     />,
   );
@@ -132,7 +134,10 @@ const renderGraded = (skill: 'WRITING' | 'SPEAKING') => {
     },
   );
   return renderWithIntl(
-    <ResultReview sections={buildResultView(result, makeTest()).sections} />,
+    <ResultReview
+      attemptId={ATTEMPT_ID}
+      sections={buildResultView(result, makeTest()).sections}
+    />,
   );
 };
 
@@ -195,7 +200,10 @@ describe('ResultReview repeated numbers', () => {
       },
     );
     renderWithIntl(
-      <ResultReview sections={buildResultView(result, makeTest()).sections} />,
+      <ResultReview
+        attemptId={ATTEMPT_ID}
+        sections={buildResultView(result, makeTest()).sections}
+      />,
     );
 
     const cells = screen.getAllByRole('button', { name: 'Question 1, Graded' });

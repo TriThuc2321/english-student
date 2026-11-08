@@ -287,7 +287,11 @@
     "micUnsupported": "Trình duyệt này không hỗ trợ ghi âm.",
     "sectionClosed": "Phần thi đã đóng, không thể lưu bản ghi.",
     "uploadFailed": "Lưu bản ghi thất bại.",
-    "audioTooLarge": "Bản ghi vượt quá 20 MB."
+    "audioTooLarge": "Bản ghi vượt quá 20 MB.",
+    "groupCorrect": "Đúng {correct}/{total}",
+    "groupReview": "Đáp án và giải thích",
+    "transcript": "Transcript",
+    "transcriptN": "Transcript {n}"
   },
   "results": {
     "fullTest": "Toàn bộ đề",
@@ -360,5 +364,15 @@
       "FC": "Fluency and Coherence",
       "P": "Pronunciation"
     }
+  },
+  "review": {
+    "title": "Chi tiết bài làm",
+    "viewDetails": "Xem chi tiết bài làm",
+    "viewInTest": "Xem trong đề",
+    "backToResult": "Về trang kết quả",
+    "yourChoice": "Bạn chọn",
+    "nextMiss": "Câu sai tiếp theo",
+    "prevPart": "Phần trước",
+    "nextPart": "Phần sau"
   }
 }

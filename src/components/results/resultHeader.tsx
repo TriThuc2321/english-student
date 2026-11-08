@@ -1,7 +1,12 @@
 import { buttonVariants, Chip } from '@heroui/react';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { LuClock, LuHourglass, LuRotateCcw } from 'react-icons/lu';
+import {
+  LuClock,
+  LuFileSearch,
+  LuHourglass,
+  LuRotateCcw,
+} from 'react-icons/lu';
 
 import type { Locale } from '@/i18n';
 import type { AttemptListItem } from '@/types/attempt';
@@ -81,6 +86,13 @@ export function ResultHeader({ attempt }: ResultHeaderProps) {
           className={buttonVariants({ variant: 'secondary' })}
         >
           {t('results.backToAttempts')}
+        </Link>
+        <Link
+          href={ROUTES.attemptReview(attempt.id)}
+          className={buttonVariants({ variant: 'secondary' })}
+        >
+          <LuFileSearch aria-hidden className="size-4" />
+          {t('review.viewDetails')}
         </Link>
         <Link
           href={ROUTES.test(test.slug)}

@@ -5,19 +5,33 @@ import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { LuCheck } from 'react-icons/lu';
 
+import type { ViewKind } from '@/lib/exam/question-views';
 import type { Answer } from '@/lib/exam/structure';
+import type { ReviewItem } from '@/lib/results/view';
 import type { StudentQuestionGroup } from '@/types/student-test';
 
-import { toGroupView } from '@/lib/exam/group-view';
+import { toGroupView, type GroupViewModel } from '@/lib/exam/group-view';
 import { isAnswered } from '@/lib/exam/structure';
 
 import {
   ExamGroupContext,
   questionAnchorId,
   type ExamGroupContextValue,
+  type GroupReview,
 } from './context';
 import { PassagePane } from './parts';
+import { ReviewNote } from './reviewNote';
 import { VIEWS } from './views';
+
+// Views that place their answers inline in text or tables, with no row to hang a review note on.
+const INLINE_VIEWS = new Set<ViewKind>([
+  'template',
+  'sentence',
+  'summary',
+  'table',
+  'diagram',
+  'map',
+]);
 
 const KEYWORDS =
   /\b(ONE|TWO|THREE|NO MORE THAN|AND\/OR A NUMBER|ONLY|TRUE|FALSE|NOT GIVEN|YES|NO)\b/;
@@ -44,6 +58,8 @@ type GroupViewProps = {
   readOnly: boolean;
   flagged: number[];
   toggleFlag: (questionId: number) => void;
+  // Set to show a graded attempt back; keyed by question id.
+  review?: Record<number, ReviewItem[]>;
 };
 
 export function GroupView({
@@ -53,6 +69,7 @@ export function GroupView({
   readOnly,
   flagged,
   toggleFlag,
+  review,
 }: GroupViewProps) {
   const t = useTranslations('taking');
   const view = useMemo(() => toGroupView(group), [group]);
@@ -96,12 +113,22 @@ export function GroupView({
           ? `blank-${view.id}-${n}`
           : questionAnchorId(id);
       },
+      review: review && groupReview(view.questions, review),
     };
-  }, [view, answers, setAnswer, readOnly, flagged, toggleFlag]);
+  }, [view, answers, setAnswer, readOnly, flagged, toggleFlag, review]);
 
   let total = 0;
   let done = 0;
   for (const q of view.questions) {
+    if (review) {
+      // In review the chip counts right answers among the auto-marked numbers.
+      for (const item of review[q.id] ?? []) {
+        if (item.status === 'pending' || item.status === 'graded') continue;
+        total += 1;
+        if (item.status === 'correct') done += 1;
+      }
+      continue;
+    }
     const size = Math.max(q.nTo, q.n) - q.n + 1;
     total += size;
     if (isAnswered(answers[q.id], size)) done += size;
@@ -147,7 +174,9 @@ export function GroupView({
                 )}
               >
                 {done === total && <LuCheck aria-hidden className="size-3" />}
-                {t('groupAnswered', { answered: done, total })}
+                {review
+                  ? t('groupCorrect', { correct: done, total })
+                  : t('groupAnswered', { answered: done, total })}
               </span>
             )}
           </div>
@@ -171,7 +200,36 @@ export function GroupView({
         <div className="min-w-0 px-2 sm:px-3">
           <View />
         </div>
+        {review && INLINE_VIEWS.has(view.view) && (
+          <ul
+            aria-label={t('groupReview')}
+            className="border-separator divide-separator mx-3 flex flex-col divide-y border-t sm:mx-4"
+          >
+            {view.questions.map((q) => (
+              <li key={q.n} className="pb-3">
+                <ReviewNote n={q.n} numbered />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </ExamGroupContext.Provider>
   );
+}
+
+function groupReview(
+  questions: GroupViewModel['questions'],
+  review: Record<number, ReviewItem[]>,
+): GroupReview {
+  const byNumber = new Map<number, ReviewItem>();
+  for (const q of questions) {
+    for (const item of review[q.id] ?? []) byNumber.set(item.n, item);
+  }
+  return {
+    item: (n) => byNumber.get(n),
+    question: (n) => {
+      const id = byNumber.get(n)?.questionId;
+      return id === undefined ? [] : (review[id] ?? []);
+    },
+  };
 }

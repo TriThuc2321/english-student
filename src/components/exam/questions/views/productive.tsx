@@ -43,7 +43,7 @@ const Recorder = ({ q }: { q: QuestionView }) => {
 
 export const SpeakView = () => {
   const t = useTranslations('taking');
-  const { group } = useExamGroup();
+  const { group, review } = useExamGroup();
   const audio = useAttemptAudio();
   const recordable = audio !== null && isRecordedQuestion(group.type);
   const info = group.content?.info;
@@ -87,7 +87,7 @@ export const SpeakView = () => {
                   </Prompt>
                 )
               )}
-              {recordable ? (
+              {review ? null : recordable ? (
                 <IeltsRecorder q={q} audio={audio} />
               ) : (
                 <Recorder q={q} />
@@ -138,7 +138,7 @@ const WritePrompt = ({ q }: { q: QuestionView }) => {
 
 export const WriteView = () => {
   const t = useTranslations('taking');
-  const { group, answers, setAnswer, readOnly } = useExamGroup();
+  const { group, answers, setAnswer, readOnly, review } = useExamGroup();
   const single = group.questions.length === 1;
 
   return group.questions.map((q) => {
@@ -165,7 +165,10 @@ export const WriteView = () => {
               rows={Math.max(group.rows ?? 4, 12)}
               aria-label={t('answerLabel', { n: q.n })}
               placeholder={t('typeAnswer')}
-              className="min-h-64 w-full resize-y bg-transparent px-4 py-3 text-base leading-7 outline-none disabled:opacity-60"
+              className={cn(
+                'min-h-64 w-full resize-y bg-transparent px-4 py-3 text-base leading-7 outline-none disabled:opacity-60',
+                review && 'disabled:opacity-100',
+              )}
               value={value}
               disabled={readOnly}
               onChange={(e) => setAnswer(q.n, e.target.value)}

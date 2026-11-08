@@ -56,3 +56,43 @@ test('shows not found for an unknown attempt', async ({ page }) => {
 
   await expect(page.getByText('This page could not be found.')).toBeVisible();
 });
+
+test('reviews every answer inside the test', async ({ page }) => {
+  await page.goto(`/attempts/${GRADED_ATTEMPT_ID}/result`);
+  await page.getByRole('link', { name: 'Review answers' }).click();
+
+  await expect(page).toHaveURL(
+    new RegExp(`/attempts/${GRADED_ATTEMPT_ID}/review$`),
+  );
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Academic Test 14' }),
+  ).toBeVisible();
+
+  const rows = page.locator('[id^="q-"]');
+  const first = rows.nth(0);
+  await expect(first.getByText(/Correct$/)).toBeVisible();
+  await first.getByRole('button', { name: 'Explanation' }).click();
+  await expect(first.getByText('Option A is stated directly.')).toBeVisible();
+
+  const second = rows.nth(1);
+  await expect(second.getByText(/Incorrect$/)).toBeVisible();
+  await expect(second.getByText('A · Option A')).toBeVisible();
+  await expect(second.getByText('Your choice')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Reading' }).click();
+  await expect(
+    page.getByRole('button', { name: 'Reading', pressed: true }),
+  ).toBeVisible();
+});
+
+test('opens a single answer in the test from the result page', async ({
+  page,
+}) => {
+  await page.goto(`/attempts/${GRADED_ATTEMPT_ID}/result`);
+  await page.getByRole('button', { name: 'Question 2, Incorrect' }).click();
+  await page.getByRole('link', { name: 'View in test' }).click();
+
+  await expect(page).toHaveURL(/\/review\?q=\d+$/);
+  const id = new URL(page.url()).searchParams.get('q');
+  await expect(page.locator(`#q-${id}`)).toBeFocused();
+});

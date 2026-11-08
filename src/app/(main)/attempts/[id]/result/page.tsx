@@ -42,7 +42,7 @@ export default async function AttemptResultPage({
     <div className="flex flex-col gap-6">
       <ResultHeader attempt={result.attempt} />
       <ScoreSummary view={view} />
-      <ResultReview sections={view.sections} />
+      <ResultReview attemptId={result.attempt.id} sections={view.sections} />
     </div>
   );
 }
