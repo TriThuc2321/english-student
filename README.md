@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# english-student
 
-## Getting Started
+The MyEnglish student app is where students browse IELTS and TOEIC tests, take timed exams, and review their results with answer explanations. It is a Next.js app that also acts as the backend-for-frontend (BFF) between the browser and the API.
 
-First, run the development server:
+## The MyEnglish system
+
+| Repo                                                  | Role                                                                     | Stack                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------ |
+| [english-service](../english-service/README.md)       | REST API, database, scoring, file storage                                | NestJS 12, TypeORM, PostgreSQL |
+| [english-backoffice](../english-backoffice/README.md) | Staff CMS: content, users and roles, grading, student results            | React Router 7 SPA, Vite       |
+| **english-student** (this repo)                       | Student app: test library, exams, results. Also acts as the BFF for auth | Next.js 16                     |
+
+## Screenshots
+
+| Test library                                       | Test detail                                      |
+| -------------------------------------------------- | ------------------------------------------------ |
+| ![Test library](docs/screenshots/test-library.jpg) | ![Test detail](docs/screenshots/test-detail.jpg) |
+
+| My attempts                                      | Result                                 |
+| ------------------------------------------------ | -------------------------------------- |
+| ![My attempts](docs/screenshots/my-attempts.jpg) | ![Result](docs/screenshots/result.jpg) |
+
+**Answer review.** The passage and questions appear side by side, the same layout as the exam, with each answer marked right or wrong.
+
+![Answer review](docs/screenshots/answer-review.jpg)
+
+**Dark mode.**
+
+| Result                                            | Answer review                                                   |
+| ------------------------------------------------- | --------------------------------------------------------------- |
+| ![Result, dark](docs/screenshots/result-dark.jpg) | ![Answer review, dark](docs/screenshots/answer-review-dark.jpg) |
+
+## Features
+
+- **Test library**: published IELTS Academic/General and TOEIC tests, filterable by exam type and searchable.
+- **Exams**: take a full test (all sections in order) or practise selected sections. Each section has its own timer, and answers autosave so a student can leave and resume. Questions can be flagged for later.
+- **Skills**: Listening (audio), Reading (split passage view), Writing (essay editor) and Speaking (in-browser recording, uploaded directly to storage).
+- **Results**: band or scaled scores, a per-question answer grid, breakdowns by part and by question type, and bilingual EN/VI explanations with passage evidence. IELTS Writing and Speaking show teacher assessments once graded.
+- **History**: every attempt, filterable by status (in progress, awaiting grading, graded, expired).
+- English and Vietnamese UI (next-intl), plus light and dark themes.
+
+## How auth works (BFF)
+
+Students sign in with Google. The API redirects back with a short-lived code that the Next.js server exchanges for tokens (`src/app/api/session`). Tokens are kept in `httpOnly` cookies that the browser's JavaScript cannot read. `src/proxy.ts` forwards `/api/bff/*` calls to the API with the access token attached, refreshes the session when needed, and passes on the client IP for rate limiting. For the full flow, see [english-service/docs/auth-flow.md](../english-service/docs/auth-flow.md).
+
+## Tech stack
+
+Next.js 16 (App Router) · React 19 · HeroUI v3 + Tailwind CSS v4 · TanStack Query · next-intl · next-themes · react-hook-form + yup · CASL · Vitest + Testing Library · Playwright
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.example .env.local    # point NEXT_PUBLIC_API_URL at your english-service
+pnpm dev                      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Google login needs the app on a domain the API redirects to. For local HTTPS on `https://student.myenglish.com`, generate `student.myenglish.com.pem` and `student.myenglish.com-key.pem` with mkcert at the repo root, map the host to `127.0.0.1`, and run `pnpm dev-ssl`. This starts Next on port 3400 behind `local-ssl-proxy` on 443.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable                    | Purpose                                                              |
+| --------------------------- | -------------------------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`       | API origin                                                           |
+| `ACCESS_TOKEN_COOKIE_NAME`  | Access token cookie name (default `st_access_token`)                 |
+| `REFRESH_TOKEN_COOKIE_NAME` | Refresh token cookie name (default `st_refresh_token`)               |
+| `CLIENT_IP_HEADER`          | Header holding the real client IP when behind a proxy (optional)     |
+| `TRUSTED_PROXY_HOPS`        | Number of trusted proxies in `X-Forwarded-For` (optional, default 0) |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command                                        | Description                                       |
+| ---------------------------------------------- | ------------------------------------------------- |
+| `pnpm dev` / `pnpm dev-ssl`                    | Dev server / dev server behind local HTTPS        |
+| `pnpm build` / `pnpm start` / `pnpm start-ssl` | Production build and serve                        |
+| `pnpm typecheck`                               | `next typegen` + `tsc --noEmit`                   |
+| `pnpm lint` / `pnpm lint:fix`                  | oxlint                                            |
+| `pnpm format` / `pnpm format:check`            | oxfmt                                             |
+| `pnpm test`                                    | Unit tests (Vitest)                               |
+| `pnpm test:e2e` / `pnpm test:e2e:ui`           | Playwright against the mock API in `e2e/mock-api` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+  app/
+    (auth)/login             sign-in
+    (main)/                  test library, test detail, attempt history, results
+    (exam)/                  exam player (tests/[slug]/take) and answer review
+    api/session              BFF session endpoints (Google code exchange, expiry)
+  proxy.ts                   BFF proxy: forwards /api/bff/*, refreshes tokens
+  components/                exam, results, review, tests, attempts, layouts, shared
+  lib/                       api client, auth/session, exam and results logic
+  i18n/  providers/  configs/  constants/  types/
+messages/                    en.json, vi.json
+e2e/                         Playwright specs + mock API server
+```
 
-## Deploy on Vercel
+## CI
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+On pull requests, CI runs `format:check` → `lint` → `typecheck` → `test` → `build`, then the Playwright suite against the production build and the mock API.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Conventions
+
+- Linting and formatting use oxlint and oxfmt. Husky runs lint-staged on commit.
+- Commits follow [Conventional Commits](https://www.conventionalcommits.org/) (commitlint).
+- This Next.js version changes some APIs; see [AGENTS.md](AGENTS.md) and `node_modules/next/dist/docs/` before relying on older patterns.
+- The result view logic in `lib/results/view.ts` is mirrored in the backoffice (`src/utils/attemptResult.ts`); keep the two in sync.
+
+## Further reading
+
+- [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md): notes for coding agents
+- [docs/design/](docs/design/): HTML design mockups for each screen
