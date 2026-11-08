@@ -1,6 +1,7 @@
 export const ROUTES = {
   HOME: '/',
   TESTS: '/tests',
+  ATTEMPTS: '/attempts',
   test: (slug: string) => `/tests/${slug}`,
   takeTest: (slug: string, sectionIds?: number[] | null) =>
     sectionIds?.length

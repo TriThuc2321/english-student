@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { renderWithIntl } from '@/test/render';
 
-import TestPagination from './testPagination';
+import PagePagination from './pagePagination';
 
 vi.mock('next/navigation', () => ({ useRouter: vi.fn() }));
 
@@ -16,10 +16,10 @@ beforeEach(() => {
   vi.mocked(useRouter).mockReturnValue({ push } as never);
 });
 
-describe('TestPagination', () => {
+describe('PagePagination', () => {
   it('renders nothing for one page', () => {
     const { container } = renderWithIntl(
-      <TestPagination page={1} totalPages={1} params={{ q: '', page: 1 }} />,
+      <PagePagination page={1} totalPages={1} pathname="/" />,
     );
 
     expect(container).toBeEmptyDOMElement();
@@ -27,14 +27,29 @@ describe('TestPagination', () => {
 
   it('pushes the selected page with filters', async () => {
     renderWithIntl(
-      <TestPagination
+      <PagePagination
         page={1}
         totalPages={3}
-        params={{ exam: 'TOEIC_LR', q: 'x', page: 1 }}
+        pathname="/"
+        query={{ exam: 'TOEIC_LR', q: 'x' }}
       />,
     );
 
     await userEvent.click(screen.getByRole('button', { name: '2' }));
     expect(push).toHaveBeenCalledWith('/?exam=TOEIC_LR&q=x&page=2');
+  });
+
+  it('drops the page param when going back to page 1', async () => {
+    renderWithIntl(
+      <PagePagination
+        page={2}
+        totalPages={3}
+        pathname="/attempts"
+        query={{ status: 'GRADED' }}
+      />,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: '1' }));
+    expect(push).toHaveBeenCalledWith('/attempts?status=GRADED');
   });
 });

@@ -77,10 +77,10 @@ export function ResultHeader({ attempt }: ResultHeaderProps) {
       </div>
       <div className="flex flex-wrap gap-2">
         <Link
-          href={ROUTES.TESTS}
+          href={ROUTES.ATTEMPTS}
           className={buttonVariants({ variant: 'secondary' })}
         >
-          {t('results.backToLibrary')}
+          {t('results.backToAttempts')}
         </Link>
         <Link
           href={ROUTES.test(test.slug)}

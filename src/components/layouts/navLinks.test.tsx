@@ -44,6 +44,18 @@ describe('NavLinks', () => {
     );
   });
 
+  it('marks My attempts active on an attempt result page', () => {
+    onPath('/attempts/abc/result');
+    renderWithIntl(<NavLinks orientation="horizontal" />);
+
+    const link = screen.getByRole('link', { name: 'My attempts' });
+    expect(link).toHaveAttribute('href', '/attempts');
+    expect(link).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('link', { name: 'Tests' })).not.toHaveAttribute(
+      'aria-current',
+    );
+  });
+
   it('calls onNavigate when a link is clicked', async () => {
     const onNavigate = vi.fn();
     renderWithIntl(<NavLinks orientation="vertical" onNavigate={onNavigate} />);

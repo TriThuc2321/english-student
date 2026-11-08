@@ -8,6 +8,7 @@
     "welcome": "Welcome back",
     "nav": {
       "tests": "Tests",
+      "attempts": "My attempts",
       "openMenu": "Open menu"
     },
     "userMenu": "Account menu",
@@ -77,6 +78,30 @@
       "description": "New tests are added every month. Check back soon."
     },
     "sections": "Sections"
+  },
+  "attempts": {
+    "title": "My attempts",
+    "subtitle": "Every test you have started, newest first.",
+    "statusFilter": "Attempt status",
+    "all": "All",
+    "status": {
+      "IN_PROGRESS": "In progress",
+      "SUBMITTED": "Awaiting grading",
+      "GRADED": "Graded",
+      "EXPIRED": "Expired"
+    },
+    "startedOn": "Started {date}",
+    "continue": "Continue",
+    "viewResult": "View result",
+    "empty": {
+      "title": "No attempts yet",
+      "description": "Start a test from the library and it will show up here.",
+      "browse": "Browse tests",
+      "filteredTitle": "No attempts with this status",
+      "filteredDescription": "Try another status or show all attempts.",
+      "clear": "Show all attempts"
+    },
+    "overall": "Overall"
   },
   "taking": {
     "flag": "Flag for review",
@@ -269,7 +294,7 @@
     "practice": "Practice",
     "expired": "Expired, auto-submitted",
     "submittedMeta": "Submitted {date} · took {duration}",
-    "backToLibrary": "Back to library",
+    "backToAttempts": "All attempts",
     "retake": "Retake test",
     "scoreLabel": "Score",
     "totalToeic": "Total score",

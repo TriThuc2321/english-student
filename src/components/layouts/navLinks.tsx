@@ -15,6 +15,7 @@ type NavLinksProps = {
 // The library lives at `/`, but test pages under /tests belong to it too.
 const LINKS = [
   { href: ROUTES.HOME, label: 'tests', match: [ROUTES.TESTS] },
+  { href: ROUTES.ATTEMPTS, label: 'attempts', match: [ROUTES.ATTEMPTS] },
 ] as const;
 
 const isActive = (pathname: string, href: string, match: readonly string[]) =>

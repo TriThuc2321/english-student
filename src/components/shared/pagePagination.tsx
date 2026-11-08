@@ -4,15 +4,12 @@ import { Pagination } from '@heroui/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 
-import {
-  buildTestsHref,
-  type CatalogueParams,
-} from '@/lib/tests/catalogue-params';
-
-type TestPaginationProps = {
+type PagePaginationProps = {
   page: number;
   totalPages: number;
-  params: CatalogueParams;
+  pathname: string;
+  // Other params to keep (filters); `page` is added on top.
+  query?: Record<string, string>;
 };
 
 function pageNumbers(page: number, totalPages: number) {
@@ -30,18 +27,23 @@ function pageNumbers(page: number, totalPages: number) {
   return pages;
 }
 
-export default function TestPagination({
+export default function PagePagination({
   page,
   totalPages,
-  params,
-}: TestPaginationProps) {
+  pathname,
+  query = {},
+}: PagePaginationProps) {
   const t = useTranslations('tests');
   const router = useRouter();
 
   if (totalPages <= 1) return null;
 
-  const goTo = (target: number) =>
-    router.push(buildTestsHref({ ...params, page: target }));
+  const goTo = (target: number) => {
+    const params = new URLSearchParams(query);
+    if (target > 1) params.set('page', String(target));
+    const search = params.toString();
+    router.push(search ? `${pathname}?${search}` : pathname);
+  };
 
   return (
     <Pagination aria-label={t('pagination')} className="justify-center">
