@@ -25,6 +25,28 @@
   }
 }
 
+/* InputOTP slots — the theme's field border width is 0, so match the inputs above */
+.input-otp__slot {
+  @apply border-field-border border bg-transparent shadow-none;
+
+  &:hover,
+  &[data-hovered='true'] {
+    @apply border-accent! bg-transparent!;
+  }
+
+  &[data-active='true'] {
+    @apply ring-accent! border-accent! ring-1! ring-inset!;
+  }
+
+  &[data-filled='true'] {
+    @apply bg-transparent;
+  }
+
+  &[data-invalid='true'] {
+    @apply border-danger! bg-transparent!;
+  }
+}
+
 /* Button component — match field radius */
 .button {
   @apply rounded-field;

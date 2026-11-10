@@ -39,6 +39,60 @@
         "title": "Google sign-in failed",
         "description": "Try again, or sign in with your email."
       }
+    },
+    "passwordHint": "8 to 72 characters.",
+    "notices": {
+      "password_reset": {
+        "title": "Password updated",
+        "description": "Sign in with your new password."
+      }
+    },
+    "formErrors": {
+      "title": "Something went wrong",
+      "invalidCredentials": "Incorrect email or password.",
+      "invalidCode": "The code is wrong or has expired. Check your email or request a new one.",
+      "invalid": "Please check the details you entered.",
+      "passwordMismatch": "Passwords don't match.",
+      "passwordLength": "Use {minLength} to {maxLength} characters.",
+      "tooManyRequests": "Too many attempts. Wait a minute and try again.",
+      "unavailable": "We couldn't reach the server. Try again shortly."
+    },
+    "register": {
+      "title": "Create your account",
+      "subtitle": "Start practising IELTS and TOEIC for free.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "optional": "optional",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "verify": {
+      "title": "Check your email",
+      "subtitle": "Enter the 6-digit code we sent to {email}.",
+      "code": "Verification code",
+      "submit": "Verify email",
+      "changeEmail": "Use a different email"
+    },
+    "resend": {
+      "prompt": "Didn't get the code?",
+      "action": "Resend code",
+      "wait": "Resend in {seconds}s",
+      "sent": "A new code is on its way."
+    },
+    "forgot": {
+      "title": "Forgot your password?",
+      "subtitle": "Enter your email and we'll send you a reset code.",
+      "submit": "Send reset code",
+      "backToLogin": "Back to sign in"
+    },
+    "reset": {
+      "title": "Set a new password",
+      "subtitle": "Enter the 6-digit code we sent to {email} and choose a new password.",
+      "code": "Reset code",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Update password"
     }
   },
   "exam": {

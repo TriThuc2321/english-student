@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import ENV from '@/configs/env';
 import { getClientIp, withClientIp } from '@/lib/auth/client-ip';
-import { LOGIN_PATH } from '@/lib/auth/constants';
+import { LOGIN_PATH, PUBLIC_AUTH_PATHS } from '@/lib/auth/constants';
 import {
   applySession,
   clearSession,
@@ -61,11 +61,11 @@ export async function proxy(request: NextRequest) {
     return finish(NextResponse.rewrite(target, { request: { headers } }));
   }
 
-  const isLoginPage = pathname === LOGIN_PATH;
-  if (!accessToken && !isLoginPage) {
+  const isAuthPage = PUBLIC_AUTH_PATHS.includes(pathname);
+  if (!accessToken && !isAuthPage) {
     return finish(NextResponse.redirect(new URL(LOGIN_PATH, request.url)));
   }
-  if (accessToken && isLoginPage) {
+  if (accessToken && isAuthPage) {
     return finish(NextResponse.redirect(new URL('/', request.url)));
   }
 

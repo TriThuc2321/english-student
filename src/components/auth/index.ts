@@ -1,1 +1,9 @@
+export { default as AuthCard } from './authCard';
+export { default as AuthLink } from './authLink';
 export { default as EmailLoginForm } from './emailLoginForm';
+export { default as ForgotPasswordForm } from './forgotPasswordForm';
+export { default as GoogleButton } from './googleButton';
+export { default as RegisterForm } from './registerForm';
+export { default as ResendCodeForm } from './resendCodeForm';
+export { default as ResetPasswordForm } from './resetPasswordForm';
+export { default as VerifyEmailForm } from './verifyEmailForm';
