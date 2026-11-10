@@ -39,6 +39,60 @@
         "title": "Đăng nhập Google thất bại",
         "description": "Hãy thử lại, hoặc đăng nhập bằng email."
       }
+    },
+    "passwordHint": "Từ 8 đến 72 ký tự.",
+    "notices": {
+      "password_reset": {
+        "title": "Đã đổi mật khẩu",
+        "description": "Hãy đăng nhập bằng mật khẩu mới."
+      }
+    },
+    "formErrors": {
+      "title": "Đã có lỗi xảy ra",
+      "invalidCredentials": "Email hoặc mật khẩu không đúng.",
+      "invalidCode": "Mã không đúng hoặc đã hết hạn. Hãy kiểm tra email hoặc yêu cầu mã mới.",
+      "invalid": "Vui lòng kiểm tra lại thông tin đã nhập.",
+      "passwordMismatch": "Mật khẩu không khớp.",
+      "passwordLength": "Mật khẩu cần từ {minLength} đến {maxLength} ký tự.",
+      "tooManyRequests": "Bạn thử quá nhiều lần. Hãy đợi một phút rồi thử lại.",
+      "unavailable": "Không kết nối được máy chủ. Hãy thử lại sau ít phút."
+    },
+    "register": {
+      "title": "Tạo tài khoản",
+      "subtitle": "Bắt đầu luyện IELTS và TOEIC miễn phí.",
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "optional": "không bắt buộc",
+      "submit": "Tạo tài khoản",
+      "haveAccount": "Đã có tài khoản?",
+      "signIn": "Đăng nhập"
+    },
+    "verify": {
+      "title": "Kiểm tra email",
+      "subtitle": "Nhập mã 6 số chúng tôi đã gửi tới {email}.",
+      "code": "Mã xác thực",
+      "submit": "Xác thực email",
+      "changeEmail": "Dùng email khác"
+    },
+    "resend": {
+      "prompt": "Chưa nhận được mã?",
+      "action": "Gửi lại mã",
+      "wait": "Gửi lại sau {seconds}s",
+      "sent": "Mã mới đang được gửi tới bạn."
+    },
+    "forgot": {
+      "title": "Quên mật khẩu?",
+      "subtitle": "Nhập email, chúng tôi sẽ gửi mã đặt lại mật khẩu.",
+      "submit": "Gửi mã đặt lại",
+      "backToLogin": "Quay lại đăng nhập"
+    },
+    "reset": {
+      "title": "Đặt mật khẩu mới",
+      "subtitle": "Nhập mã 6 số đã gửi tới {email} và chọn mật khẩu mới.",
+      "code": "Mã đặt lại",
+      "newPassword": "Mật khẩu mới",
+      "confirmPassword": "Nhập lại mật khẩu mới",
+      "submit": "Cập nhật mật khẩu"
     }
   },
   "exam": {

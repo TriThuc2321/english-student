@@ -22,3 +22,8 @@ Object.assign(globalThis, {
 if (typeof Element !== 'undefined' && !Element.prototype.getAnimations) {
   Element.prototype.getAnimations = () => [];
 }
+
+// jsdom has no layout; input-otp polls elementFromPoint to detect password-manager badges.
+if (typeof document !== 'undefined' && !document.elementFromPoint) {
+  document.elementFromPoint = () => null;
+}

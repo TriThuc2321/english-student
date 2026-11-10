@@ -1,89 +1,62 @@
 import type { Metadata } from 'next';
 
-import {
-  Alert,
-  buttonVariants,
-  Link as HeroLink,
-  Separator,
-} from '@heroui/react';
+import { Alert } from '@heroui/react';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
-import { FaGoogle } from 'react-icons/fa';
 
-import { LogoIcon } from '@/assets/icons';
-import { EmailLoginForm } from '@/components/auth';
-import { SwitchLocale, ThemeSwitch } from '@/components/layouts';
-import { GOOGLE_LOGIN_START_PATH, isLoginError } from '@/lib/auth/constants';
+import {
+  AuthCard,
+  AuthLink,
+  EmailLoginForm,
+  GoogleButton,
+} from '@/components/auth';
+import {
+  isLoginError,
+  isLoginNotice,
+  REGISTER_PATH,
+} from '@/lib/auth/constants';
 
 export default async function Page({ searchParams }: PageProps<'/login'>) {
   const t = await getTranslations('auth');
-  const { error } = await searchParams;
+  const { error, notice } = await searchParams;
 
   return (
-    <>
-      <div className="absolute top-4 right-4 flex items-center gap-0.5">
-        <SwitchLocale />
-        <ThemeSwitch />
-      </div>
-
-      <div className="flex flex-col items-center gap-2">
-        <LogoIcon className="h-8 w-auto" />
-        <span className="text-muted text-sm">{t('tagline')}</span>
-      </div>
-
-      <main className="bg-surface shadow-overlay flex w-full max-w-[400px] flex-col gap-5 rounded-3xl p-8">
-        <div className="text-center">
-          <h1 className="text-foreground text-2xl font-semibold tracking-tight">
-            {t('signInTitle')}
-          </h1>
-          <p className="text-muted mt-1 text-sm">{t('signInSubtitle')}</p>
-        </div>
-
-        {isLoginError(error) && (
-          <Alert
-            status="danger"
-            className="bg-danger-soft border-danger border"
-          >
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Title>{t(`errors.${error}.title`)}</Alert.Title>
-              <Alert.Description>
-                {t(`errors.${error}.description`)}
-              </Alert.Description>
-            </Alert.Content>
-          </Alert>
-        )}
-
-        <Link
-          href={GOOGLE_LOGIN_START_PATH}
-          prefetch={false}
-          className={buttonVariants({
-            variant: 'outline',
-            size: 'lg',
-            fullWidth: true,
-          })}
-        >
-          <FaGoogle className="size-4" />
-          {t('continueWithGoogle')}
-        </Link>
-
-        <div className="text-muted flex items-center gap-3 text-xs">
-          <Separator className="flex-1" />
-          {t('orWithEmail')}
-          <Separator className="flex-1" />
-        </div>
-
-        <EmailLoginForm />
-
-        {/* Sign-up isn't built yet, so the link has no destination. */}
-        <p className="text-muted text-center text-sm">
+    <AuthCard
+      title={t('signInTitle')}
+      subtitle={t('signInSubtitle')}
+      footer={
+        <>
           {t('newHere')}{' '}
-          <HeroLink className="text-accent font-semibold">
-            {t('createAccount')}
-          </HeroLink>
-        </p>
-      </main>
-    </>
+          <AuthLink href={REGISTER_PATH}>{t('createAccount')}</AuthLink>
+        </>
+      }
+    >
+      {isLoginError(error) && (
+        <Alert status="danger" className="bg-danger-soft border-danger border">
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title>{t(`errors.${error}.title`)}</Alert.Title>
+            <Alert.Description>
+              {t(`errors.${error}.description`)}
+            </Alert.Description>
+          </Alert.Content>
+        </Alert>
+      )}
+
+      {isLoginNotice(notice) && (
+        <Alert status="success">
+          <Alert.Indicator />
+          <Alert.Content>
+            <Alert.Title>{t(`notices.${notice}.title`)}</Alert.Title>
+            <Alert.Description>
+              {t(`notices.${notice}.description`)}
+            </Alert.Description>
+          </Alert.Content>
+        </Alert>
+      )}
+
+      <GoogleButton />
+      <EmailLoginForm />
+    </AuthCard>
   );
 }
 

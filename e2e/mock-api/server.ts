@@ -607,6 +607,69 @@ async function handleAttempts(
 
 seedAttempts();
 
+// Fixed e2e accounts: a verified student, an unverified one, and the only valid email code.
+const AUTH = {
+  email: 'student@example.com',
+  password: 'secret123',
+  unverifiedEmail: 'unverified@example.com',
+  code: '123456',
+};
+
+function sessionTokens() {
+  const encode = (value: unknown) =>
+    Buffer.from(JSON.stringify(value)).toString('base64url');
+  const exp = Math.floor(Date.now() / 1000) + 3600;
+  return {
+    access_token: `${encode({ alg: 'none' })}.${encode({ sub: 'e2e', exp })}.`,
+    refresh_token: 'e2e-refresh',
+    refresh_token_expires_at: new Date(Date.now() + 86_400_000).toISOString(),
+  };
+}
+
+const CHECK_EMAIL = {
+  message: 'If the email can receive a code, one has been sent',
+};
+
+async function handleAuth(
+  req: IncomingMessage,
+  res: ServerResponse,
+  pathname: string,
+) {
+  const body = ((await readJson(req)) ?? {}) as Record<string, string>;
+  const badCode = () =>
+    send(res, 400, {
+      message: 'Invalid or expired code',
+      statusCode: 400,
+      code: 'INVALID_CODE',
+    });
+
+  switch (pathname) {
+    case '/api/auth/login':
+      if (body.email === AUTH.unverifiedEmail) {
+        return send(res, 403, {
+          message: 'Email not verified',
+          statusCode: 403,
+          code: 'EMAIL_NOT_VERIFIED',
+        });
+      }
+      if (body.email === AUTH.email && body.password === AUTH.password) {
+        return send(res, 201, sessionTokens());
+      }
+      return error(res, 401, 'Invalid credentials');
+    case '/api/auth/register':
+    case '/api/auth/verify-email/resend':
+    case '/api/auth/forgot-password':
+      return send(res, 201, CHECK_EMAIL);
+    case '/api/auth/verify-email':
+      return body.code === AUTH.code
+        ? send(res, 201, sessionTokens())
+        : badCode();
+    case '/api/auth/reset-password':
+      return body.code === AUTH.code ? send(res, 201) : badCode();
+  }
+  return error(res, 404, 'Not found');
+}
+
 const server = createServer((req, res) => {
   const url = new URL(req.url ?? '/', `http://localhost:${PORT}`);
   const { pathname, searchParams } = url;
@@ -614,6 +677,14 @@ const server = createServer((req, res) => {
   if (pathname === '/health') return send(res, 200, { ok: true });
   if (req.method === 'POST' && pathname === '/api/auth/logout') {
     return send(res, 201);
+  }
+  if (
+    req.method === 'POST' &&
+    pathname.startsWith('/api/auth/') &&
+    pathname !== '/api/auth/refresh'
+  ) {
+    void handleAuth(req, res, pathname);
+    return;
   }
 
   const token = req.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
