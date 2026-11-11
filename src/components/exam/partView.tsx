@@ -118,6 +118,15 @@ export function PartView({
 
   const writing =
     groups.length > 0 && groups.every((g) => toGroupView(g).view === 'write');
+  const illustrated = groups.some(
+    (g) => g.image !== null || g.questions.some((q) => q.image !== null),
+  );
+  // A lone writing task is already titled and briefed by the part heading.
+  const headless = (group: (typeof groups)[number]) =>
+    writing &&
+    groups.length === 1 &&
+    (!group.instruction?.trim() ||
+      (part.instruction ?? '').includes(group.instruction.trim()));
 
   const sharedPassage =
     part.passage && groups.some((g) => g.passages.length === 0)
@@ -130,7 +139,7 @@ export function PartView({
       <div
         className={cn(
           'mx-auto flex w-full flex-col gap-6 px-4 pt-6 pb-20 sm:px-6',
-          writing ? 'max-w-[1280px]' : 'max-w-[920px]',
+          writing && illustrated ? 'max-w-[1280px]' : 'max-w-[920px]',
           TEXT_ZOOM[textSize],
         )}
       >
@@ -178,6 +187,7 @@ export function PartView({
             flagged={flagged}
             toggleFlag={onToggleFlag}
             review={review?.items}
+            headless={headless(group)}
           />
         ))}
       </div>

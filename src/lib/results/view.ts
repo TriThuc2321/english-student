@@ -13,6 +13,7 @@ import type {
   StudentTestSectionDetail,
   QuestionType,
   SkillType,
+  StudentMedia,
   StudentPassage,
   StudentQuestion,
   StudentQuestionGroup,
@@ -47,6 +48,8 @@ export type ReviewItem = {
   evidence: { quote: string | null; paragraph: string | null } | null;
   audioUrl: string | null;
   sample: string | null;
+  part: { id: number; title: string | null; order: number } | null;
+  image: StudentMedia | null;
 };
 
 export type AssessmentEntryView = {
@@ -372,6 +375,10 @@ function sectionResult(
         evidence,
         audioUrl: q.audioUrl,
         sample: sampleOf(q),
+        part: ctx
+          ? { id: ctx.part.id, title: ctx.part.title, order: ctx.part.order }
+          : null,
+        image: ctx ? (ctx.question.image ?? ctx.group.image) : null,
       });
     }
 

@@ -2,12 +2,14 @@
 
 import { Button, cn, Drawer, useOverlayState } from '@heroui/react';
 import { useTranslations } from 'next-intl';
-import { LuChevronLeft, LuChevronRight } from 'react-icons/lu';
+import { LuCheck, LuChevronLeft, LuChevronRight } from 'react-icons/lu';
 
 import type { Answer } from '@/lib/exam/structure';
 import type { StudentTestSectionDetail } from '@/types/student-test';
 
+import { QUESTION_VIEWS } from '@/lib/exam/question-views';
 import { isAnswered, questionSlots } from '@/lib/exam/structure';
+import { wordCount } from '@/lib/exam/word-count';
 
 type QuestionNavigatorProps = {
   section: StudentTestSectionDetail;
@@ -57,6 +59,102 @@ export function partGroups(
           ),
         })),
     }));
+}
+
+type WritingTask = {
+  partId: number;
+  questionId: number;
+  title: string | null;
+  index: number;
+  words: number;
+  min: number | null;
+};
+
+// Null unless every part is a single essay, where a grid of one number per part says nothing.
+export function writingTasks(
+  section: StudentTestSectionDetail,
+  answers: Record<number, Answer>,
+): WritingTask[] | null {
+  const parts = [...section.testParts].sort((a, b) => a.order - b.order);
+  const tasks: WritingTask[] = [];
+  for (const [index, part] of parts.entries()) {
+    const questions = part.questionGroups.flatMap((g) =>
+      g.questions.map((q) => ({ q, hints: QUESTION_VIEWS[g.questionType] })),
+    );
+    if (questions.length !== 1 || questions[0].hints.view !== 'write') {
+      return null;
+    }
+    const { q, hints } = questions[0];
+    const answer = answers[q.id];
+    tasks.push({
+      partId: part.id,
+      questionId: q.id,
+      title: part.title,
+      index,
+      words: typeof answer === 'string' ? wordCount(answer) : 0,
+      min: hints.minWords ?? null,
+    });
+  }
+  return tasks.length > 0 ? tasks : null;
+}
+
+function TaskTabs({
+  tasks,
+  partId,
+  flagged,
+  onSelect,
+}: {
+  tasks: WritingTask[];
+  partId: number | null;
+  flagged: number[];
+  onSelect: (partId: number, questionId: number) => void;
+}) {
+  const t = useTranslations('taking');
+  return (
+    <ul className="bg-default mx-auto flex w-full max-w-xl gap-1 rounded-full p-1">
+      {tasks.map((task) => {
+        const current = task.partId === partId;
+        const reached = task.min !== null && task.words >= task.min;
+        const isFlagged = flagged.includes(task.questionId);
+        return (
+          <li key={task.partId} className="min-w-0 flex-1">
+            <button
+              type="button"
+              aria-current={current || undefined}
+              onClick={() => onSelect(task.partId, task.questionId)}
+              className={cn(
+                'relative flex h-10 w-full min-w-0 items-center justify-center gap-2 rounded-full px-3 text-sm transition-colors',
+                current
+                  ? 'bg-surface shadow-surface font-semibold'
+                  : 'text-muted hover:text-foreground font-medium',
+              )}
+            >
+              <span className="truncate">
+                {task.title ?? t('partFallback', { n: task.index + 1 })}
+              </span>
+              <span
+                className={cn(
+                  'flex flex-none items-center gap-1 text-xs font-normal tabular-nums',
+                  reached ? 'text-success' : 'text-muted',
+                )}
+              >
+                {reached && <LuCheck aria-hidden className="size-3.5" />}
+                {task.min === null
+                  ? t('wordCount', { count: task.words })
+                  : t('taskWords', { count: task.words, min: task.min })}
+              </span>
+              {isFlagged && (
+                <span
+                  aria-label={t('flagged')}
+                  className="bg-warning ring-surface absolute top-1 right-2 size-2 rounded-full ring-2"
+                />
+              )}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
 }
 
 export function NavNumber({
@@ -224,6 +322,23 @@ export function QuestionNavigator({
     drawer.close();
     onSelect(id, questionId);
   };
+
+  const tasks = writingTasks(section, answers);
+  if (tasks) {
+    return (
+      <nav
+        aria-label={t('tasks')}
+        className="border-separator bg-surface flex flex-none items-center border-t px-4 py-2 md:px-5"
+      >
+        <TaskTabs
+          tasks={tasks}
+          partId={partId}
+          flagged={flagged}
+          onSelect={onSelect}
+        />
+      </nav>
+    );
+  }
 
   return (
     <nav

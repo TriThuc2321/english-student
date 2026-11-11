@@ -34,7 +34,13 @@ export const fillTemplate = (
       <Fragment key={i}>{i % 2 ? blank(Number(part)) : part}</Fragment>
     ));
 
-type QRowProps = { n: number; label?: string; children: ReactNode };
+type QRowProps = {
+  n: number;
+  label?: string;
+  // For a task that fills the card: no number badge or focus tint competing with the editor.
+  bare?: boolean;
+  children: ReactNode;
+};
 
 export const FlagToggle = ({ n }: { n: number }) => {
   const t = useTranslations('taking');
@@ -67,16 +73,21 @@ export const FlagToggle = ({ n }: { n: number }) => {
   );
 };
 
-export const QRow = ({ n, label, children }: QRowProps) => {
+export const QRow = ({ n, label, bare = false, children }: QRowProps) => {
   const { anchorId, review } = useExamGroup();
   return (
     <div
       id={anchorId(n)}
       // Review rows take focus so the navigator can bring them into view; their inputs are disabled.
       tabIndex={review ? -1 : undefined}
-      className="group/q focus-within:bg-surface-secondary mb-1 grid scroll-mt-24 grid-cols-[auto_1fr_auto] gap-3 rounded-xl p-2.5 transition-colors outline-none"
+      className={cn(
+        'group/q mb-1 grid scroll-mt-24 gap-3 rounded-xl p-2.5 transition-colors outline-none',
+        bare
+          ? 'grid-cols-[1fr_auto]'
+          : 'focus-within:bg-surface-secondary grid-cols-[auto_1fr_auto]',
+      )}
     >
-      <QNum status={review?.item(n)?.status}>{label ?? n}</QNum>
+      {!bare && <QNum status={review?.item(n)?.status}>{label ?? n}</QNum>}
       <div className="min-w-0">
         {children}
         {review && <ReviewNote n={n} />}

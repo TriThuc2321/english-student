@@ -60,6 +60,8 @@ type GroupViewProps = {
   toggleFlag: (questionId: number) => void;
   // Set to show a graded attempt back; keyed by question id.
   review?: Record<number, ReviewItem[]>;
+  // The part heading already names and instructs this group.
+  headless?: boolean;
 };
 
 export function GroupView({
@@ -70,6 +72,7 @@ export function GroupView({
   flagged,
   toggleFlag,
   review,
+  headless = false,
 }: GroupViewProps) {
   const t = useTranslations('taking');
   const view = useMemo(() => toGroupView(group), [group]);
@@ -149,47 +152,53 @@ export function GroupView({
   return (
     <ExamGroupContext.Provider value={context}>
       <section
-        aria-labelledby={title ? headingId : undefined}
-        className="bg-surface shadow-surface flex min-w-0 flex-col gap-3 overflow-hidden rounded-2xl pb-4"
+        aria-labelledby={title && !headless ? headingId : undefined}
+        // clip, not hidden: hidden would make this the scroller and break the sticky editor footer.
+        className={cn(
+          'bg-surface shadow-surface flex min-w-0 flex-col gap-3 overflow-clip rounded-2xl pb-4',
+          headless && 'pt-4',
+        )}
       >
-        <header className="border-separator flex flex-col gap-1.5 border-b px-5 pt-4 pb-4">
-          <div className="flex items-center justify-between gap-3">
-            {taskLike ? (
+        {!headless && (
+          <header className="border-separator flex flex-col gap-1.5 border-b px-5 pt-4 pb-4">
+            <div className="flex items-center justify-between gap-3">
+              {taskLike ? (
+                <h3
+                  id={headingId}
+                  className="text-lg leading-snug font-semibold tracking-tight"
+                >
+                  {title}
+                </h3>
+              ) : (
+                <span className="eyebrow">{typeLabel}</span>
+              )}
+              {total > 0 && view.view !== 'write' && (
+                <span
+                  className={cn(
+                    'ml-auto flex flex-none items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium tabular-nums',
+                    done === total
+                      ? 'bg-success/15 text-success'
+                      : 'bg-default text-muted',
+                  )}
+                >
+                  {done === total && <LuCheck aria-hidden className="size-3" />}
+                  {review
+                    ? t('groupCorrect', { correct: done, total })
+                    : t('groupAnswered', { answered: done, total })}
+                </span>
+              )}
+            </div>
+            {title && !taskLike && (
               <h3
                 id={headingId}
                 className="text-lg leading-snug font-semibold tracking-tight"
               >
                 {title}
               </h3>
-            ) : (
-              <span className="eyebrow">{typeLabel}</span>
             )}
-            {total > 0 && (
-              <span
-                className={cn(
-                  'ml-auto flex flex-none items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium tabular-nums',
-                  done === total
-                    ? 'bg-success/15 text-success'
-                    : 'bg-default text-muted',
-                )}
-              >
-                {done === total && <LuCheck aria-hidden className="size-3" />}
-                {review
-                  ? t('groupCorrect', { correct: done, total })
-                  : t('groupAnswered', { answered: done, total })}
-              </span>
-            )}
-          </div>
-          {title && !taskLike && (
-            <h3
-              id={headingId}
-              className="text-lg leading-snug font-semibold tracking-tight"
-            >
-              {title}
-            </h3>
-          )}
-          {view.instruction && <Instruction text={view.instruction} />}
-        </header>
+            {view.instruction && <Instruction text={view.instruction} />}
+          </header>
+        )}
         {view.passages.map((passage, i) => (
           <PassagePane
             key={i}

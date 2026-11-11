@@ -142,49 +142,54 @@ const renderGraded = (skill: 'WRITING' | 'SPEAKING') => {
 };
 
 describe('ResultReview teacher grading', () => {
-  it('shows criteria and feedback for a graded Writing section', () => {
+  it('shows the task grade beside the essay', () => {
     renderGraded('WRITING');
 
     const grade = within(
-      screen.getByRole('region', { name: "Teacher's grade · Band 6.5" }),
+      screen.getByRole('region', { name: "Teacher's grade" }),
     );
-    expect(grade.getByText('Part 1 · Band 6.5')).toBeVisible();
+    expect(grade.getByText('6.5')).toBeVisible();
     expect(grade.getByText('Task Response')).toBeVisible();
     expect(grade.getByText('Grammatical Range and Accuracy')).toBeVisible();
     expect(grade.getAllByText('7.0')).toHaveLength(2);
     expect(grade.getByText('Clear position throughout.')).toBeVisible();
   });
 
-  it('shows the full essay and the sample', () => {
+  it('shows the full essay with its word count, without the number grid', async () => {
+    const user = userEvent.setup();
     renderGraded('WRITING');
 
     expect(
-      screen.getByRole('button', { name: 'Question 1, Graded' }),
-    ).toBeInTheDocument();
-    expect(
-      panel().getByText((_, el) => el?.textContent === essay, {
+      screen.getByText((_, el) => el?.textContent === essay, {
         selector: 'p',
       }),
     ).toBeVisible();
-    expect(panel().getByText('Sample answer')).toBeVisible();
-    expect(panel().getByText('A model answer.')).toBeVisible();
+    expect(screen.getByText('65 words')).toBeVisible();
+    expect(
+      screen.queryByRole('button', { name: 'Question 1, Graded' }),
+    ).toBeNull();
+
+    await user.click(screen.getByRole('button', { name: 'Sample answer' }));
+    expect(screen.getByText('A model answer.')).toBeVisible();
   });
 
-  it('plays the recording', () => {
+  it('plays the recording under a section-wide grade', () => {
     const { container } = renderGraded('SPEAKING');
 
     expect(container.querySelector('audio')).toHaveAttribute(
       'src',
       'https://signed.test/a.webm',
     );
-    expect(panel().getByText('Your recording')).toBeVisible();
-    expect(panel().queryByText('Not answered')).toBeNull();
+    expect(screen.getByText('Your recording')).toBeVisible();
+    expect(
+      screen.getByRole('region', { name: "Teacher's grade · Band 6.5" }),
+    ).toBeInTheDocument();
     expect(screen.getByText('Pronunciation')).toBeVisible();
   });
 });
 
 describe('ResultReview repeated numbers', () => {
-  it('reviews each question when two share a number', async () => {
+  it('puts each task in its own tab when two share a number', async () => {
     const user = userEvent.setup();
     const task = (questionId: number, text: string) =>
       resultQuestion(questionId, 30, 1, {
@@ -206,13 +211,10 @@ describe('ResultReview repeated numbers', () => {
       />,
     );
 
-    const cells = screen.getAllByRole('button', { name: 'Question 1, Graded' });
-    expect(cells).toHaveLength(2);
-    await user.click(cells[1]);
+    expect(screen.getByText('Task one essay')).toBeVisible();
+    await user.click(screen.getByRole('tab', { name: 'Part 2' }));
 
-    expect(cells[1]).toHaveAttribute('aria-pressed', 'true');
-    expect(cells[0]).toHaveAttribute('aria-pressed', 'false');
-    expect(panel().getByText('Task two essay')).toBeVisible();
-    expect(panel().getByText('Where will the tour start?')).toBeVisible();
+    expect(screen.getByText('Task two essay')).toBeVisible();
+    expect(screen.getByText('Where will the tour start?')).toBeVisible();
   });
 });

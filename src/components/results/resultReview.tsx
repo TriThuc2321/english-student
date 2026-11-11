@@ -21,6 +21,7 @@ import { ROUTES } from '@/constants/routes';
 
 import { AssessmentPanel } from './assessmentPanel';
 import { ExplanationBlock, formatPart } from './explanationBlock';
+import { ProductiveReview } from './productiveReview';
 import { BADGE_CLASSES, CELL_CLASSES, GLYPHS, LEGEND_SWATCHES } from './status';
 
 const card = 'bg-surface shadow-surface flex flex-col rounded-2xl p-6';
@@ -48,8 +49,15 @@ export function ResultReview({ attemptId, sections }: ResultReviewProps) {
     setSelected((prev) => ({ ...prev, [section.sectionId]: key }));
 
   const sectionName = (s: SectionResult) => t(`exam.skill.${s.skill}`);
+  const productive = isProductive(section);
 
-  const content = (
+  const content = productive ? (
+    <ProductiveReview
+      key={section.sectionId}
+      attemptId={attemptId}
+      section={section}
+    />
+  ) : (
     <>
       {section.assessment && (
         <AssessmentPanel assessment={section.assessment} />
@@ -126,7 +134,7 @@ export function ResultReview({ attemptId, sections }: ResultReviewProps) {
           content
         )}
       </div>
-      {current && (
+      {current && !productive && (
         <ReviewPanel
           item={current}
           reviewHref={ROUTES.attemptReview(attemptId, {
@@ -141,6 +149,9 @@ export function ResultReview({ attemptId, sections }: ResultReviewProps) {
     </div>
   );
 }
+
+const isProductive = (section: SectionResult) =>
+  section.skill === 'WRITING' || section.skill === 'SPEAKING';
 
 function AnswerGrid({
   title,

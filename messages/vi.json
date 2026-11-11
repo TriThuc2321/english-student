@@ -345,7 +345,10 @@
     "groupCorrect": "Đúng {correct}/{total}",
     "groupReview": "Đáp án và giải thích",
     "transcript": "Transcript",
-    "transcriptN": "Transcript {n}"
+    "transcriptN": "Transcript {n}",
+    "taskWords": "{count}/{min} từ",
+    "tasks": "Các bài",
+    "flagged": "Đã đánh dấu"
   },
   "results": {
     "fullTest": "Toàn bộ đề",
@@ -417,7 +420,11 @@
       "GRA": "Grammatical Range and Accuracy",
       "FC": "Fluency and Coherence",
       "P": "Pronunciation"
-    }
+    },
+    "teacherGrade": "Điểm giáo viên chấm",
+    "bandLabel": "Band",
+    "tasksLabel": "Các bài",
+    "notGraded": "Bài này chưa có điểm."
   },
   "review": {
     "title": "Chi tiết bài làm",

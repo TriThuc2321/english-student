@@ -93,3 +93,66 @@ describe('QuestionNavigator', () => {
     expect(button(4)).toHaveAttribute('aria-current', 'true');
   });
 });
+
+describe('QuestionNavigator writing tasks', () => {
+  const writingSection = {
+    ...section,
+    skill: 'WRITING' as const,
+    testParts: section.testParts.map((part, i) => ({
+      ...part,
+      title: `Writing Task ${i + 1}`,
+      questionGroups: [
+        {
+          ...part.questionGroups[0],
+          questionType:
+            i === 0
+              ? ('IELTS_WRITING_TASK_1' as const)
+              : ('IELTS_WRITING_TASK_2' as const),
+          questions: [part.questionGroups[0].questions[0]],
+        },
+      ],
+    })),
+  };
+  const [task1, task2] = writingSection.testParts;
+  const q1 = task1.questionGroups[0].questions[0].id;
+  const q2 = task2.questionGroups[0].questions[0].id;
+
+  const render = (answers: Record<number, Answer>) => {
+    const onSelect = vi.fn();
+    renderWithIntl(
+      <QuestionNavigator
+        section={writingSection}
+        partId={task1.id}
+        activeQuestion={null}
+        answers={answers}
+        flagged={[]}
+        onSelect={onSelect}
+        onStep={vi.fn()}
+        canPrev={false}
+        canNext
+      />,
+    );
+    return { onSelect };
+  };
+
+  it('shows one tab per task with its word count instead of numbers', () => {
+    render({ [q1]: 'one two three', [q2]: 'word '.repeat(260) });
+
+    expect(
+      screen.getByRole('button', { name: /Writing Task 1.*3 \/ 150 words/ }),
+    ).toHaveAttribute('aria-current', 'true');
+    expect(
+      screen.getByRole('button', { name: /Writing Task 2.*260 \/ 250 words/ }),
+    ).not.toHaveAttribute('aria-current');
+    expect(screen.queryByRole('button', { name: /^Question 1,/ })).toBeNull();
+  });
+
+  it('switches to the picked task', async () => {
+    const user = userEvent.setup();
+    const { onSelect } = render({});
+
+    await user.click(screen.getByRole('button', { name: /Writing Task 2/ }));
+
+    expect(onSelect).toHaveBeenCalledWith(task2.id, q2);
+  });
+});

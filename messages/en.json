@@ -345,7 +345,10 @@
     "groupCorrect": "{correct}/{total} correct",
     "groupReview": "Answers and explanations",
     "transcript": "Transcript",
-    "transcriptN": "Transcript {n}"
+    "transcriptN": "Transcript {n}",
+    "taskWords": "{count} / {min} words",
+    "tasks": "Tasks",
+    "flagged": "Flagged"
   },
   "results": {
     "fullTest": "Full test",
@@ -417,7 +420,11 @@
       "GRA": "Grammatical Range and Accuracy",
       "FC": "Fluency and Coherence",
       "P": "Pronunciation"
-    }
+    },
+    "teacherGrade": "Teacher's grade",
+    "bandLabel": "Band",
+    "tasksLabel": "Tasks",
+    "notGraded": "No grade for this task."
   },
   "review": {
     "title": "Answer review",
