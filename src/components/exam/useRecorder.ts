@@ -4,6 +4,11 @@ const MIME_TYPES = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4'];
 
 export type RecorderError = 'permission' | 'unsupported';
 
+export const pickMimeType = () =>
+  typeof MediaRecorder === 'undefined' || !navigator.mediaDevices
+    ? undefined
+    : MIME_TYPES.find((type) => MediaRecorder.isTypeSupported(type));
+
 type Session = {
   recorder: MediaRecorder;
   stream: MediaStream;
@@ -35,10 +40,7 @@ export function useRecorder() {
   );
 
   const start = useCallback(async (): Promise<boolean> => {
-    const mimeType =
-      typeof MediaRecorder === 'undefined' || !navigator.mediaDevices
-        ? undefined
-        : MIME_TYPES.find((type) => MediaRecorder.isTypeSupported(type));
+    const mimeType = pickMimeType();
     if (!mimeType) {
       setError('unsupported');
       setState('error');

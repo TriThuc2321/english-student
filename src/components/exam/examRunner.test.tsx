@@ -481,6 +481,8 @@ describe('ExamRunner with Writing and Speaking', () => {
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     localStorage.clear();
+    sessionStorage.clear();
+    sessionStorage.setItem(`mic-check:${ATTEMPT_ID}`, '1');
     vi.clearAllMocks();
     vi.mocked(saveAttemptAnswers).mockResolvedValue({
       savedAt: SERVER_NOW,
@@ -513,6 +515,42 @@ describe('ExamRunner with Writing and Speaking', () => {
       ],
       { keepalive: false },
     );
+  });
+
+  it('asks for a microphone check once on entering a Speaking section', async () => {
+    sessionStorage.clear();
+    serve({ sections: [productiveSection('SPEAKING')] });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const { unmount } = await renderRunner(
+      <ExamRunner test={productiveTest('SPEAKING')} />,
+    );
+
+    const dialog = await screen.findByRole('alertdialog');
+    expect(
+      within(dialog).getByRole('heading', { name: 'Check your microphone' }),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('button', { name: 'Microphone works — start' }),
+    ).toBeDisabled();
+
+    await user.click(within(dialog).getByRole('button', { name: 'Skip' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument(),
+    );
+    expect(sessionStorage.getItem(`mic-check:${ATTEMPT_ID}`)).toBe('1');
+
+    unmount();
+    await renderRunner(<ExamRunner test={productiveTest('SPEAKING')} />);
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+  });
+
+  it('skips the microphone check outside Speaking', async () => {
+    sessionStorage.clear();
+    serve({ sections: [productiveSection('WRITING')] });
+    await renderRunner(<ExamRunner test={productiveTest('WRITING')} />);
+
+    expect(screen.getByLabelText('Answer 1')).toBeInTheDocument();
+    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
 
   it('waits for an in-flight recording before submitting', async () => {

@@ -348,7 +348,25 @@
     "transcriptN": "Transcript {n}",
     "taskWords": "{count}/{min} từ",
     "tasks": "Các bài",
-    "flagged": "Đã đánh dấu"
+    "flagged": "Đã đánh dấu",
+    "micCheck": {
+      "title": "Kiểm tra micro",
+      "body": "Hãy đảm bảo micro thu được giọng bạn trước phần Speaking. Đồng hồ của phần thi vẫn tiếp tục chạy.",
+      "allow": "Kiểm tra micro",
+      "requesting": "Đang chờ cấp quyền micro…",
+      "denied": "Quyền truy cập micro đang bị chặn. Hãy cho phép trong cài đặt trang web của trình duyệt rồi thử lại.",
+      "retry": "Thử lại",
+      "speakPrompt": "Hãy nói vài câu — thanh âm lượng sẽ chuyển động khi bạn nói.",
+      "level": "Mức âm lượng micro",
+      "heard": "Đã nghe thấy giọng bạn",
+      "sampleHint": "Ghi thử {seconds} giây rồi nghe lại để kiểm tra chất lượng.",
+      "recordSample": "Ghi thử",
+      "sampling": "Đang ghi…",
+      "recordAgain": "Ghi lại",
+      "playback": "Nghe lại bản ghi thử",
+      "confirm": "Micro hoạt động — bắt đầu",
+      "skip": "Bỏ qua"
+    }
   },
   "results": {
     "fullTest": "Toàn bộ đề",

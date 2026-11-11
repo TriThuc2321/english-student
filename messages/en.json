@@ -348,7 +348,25 @@
     "transcriptN": "Transcript {n}",
     "taskWords": "{count} / {min} words",
     "tasks": "Tasks",
-    "flagged": "Flagged"
+    "flagged": "Flagged",
+    "micCheck": {
+      "title": "Check your microphone",
+      "body": "Make sure we can hear you before the Speaking section. The section timer keeps running.",
+      "allow": "Test microphone",
+      "requesting": "Waiting for microphone permission…",
+      "denied": "Microphone access is blocked. Allow it in your browser's site settings, then try again.",
+      "retry": "Try again",
+      "speakPrompt": "Say a few words — the bar should move as you speak.",
+      "level": "Microphone level",
+      "heard": "We can hear you",
+      "sampleHint": "Record a {seconds}-second sample and play it back to check how you sound.",
+      "recordSample": "Record a sample",
+      "sampling": "Recording…",
+      "recordAgain": "Record again",
+      "playback": "Sample playback",
+      "confirm": "Microphone works — start",
+      "skip": "Skip"
+    }
   },
   "results": {
     "fullTest": "Full test",

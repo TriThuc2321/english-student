@@ -32,6 +32,7 @@ import {
   type ServerExamState,
 } from '@/lib/exam/attempt-sync';
 import { draftMatchesSections, loadExamDraft } from '@/lib/exam/draft';
+import { hasCheckedMic, rememberMicCheck } from '@/lib/exam/mic-check';
 import {
   createInitialState,
   examReducer,
@@ -43,6 +44,7 @@ import { partSequence } from '@/lib/exam/structure';
 
 import { AttemptAudioContext } from './attemptAudio';
 import { ExamHeader } from './examHeader';
+import { MicCheckModal } from './micCheckModal';
 import { PartView, type FocusRequest } from './partView';
 import { partGroups, QuestionNavigator } from './questionNavigator';
 import { SubmitModal } from './submitModal';
@@ -143,6 +145,7 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
   const [attempt, setAttempt] = useState<LoadedAttempt | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [loadSeq, setLoadSeq] = useState(0);
+  const [micChecked, setMicChecked] = useState(false);
   // The time-up dialog can continue twice (button and countdown); only the first closes the section.
   const closingRef = useRef(false);
   const [textSize, setTextSize] = useExamTextSize();
@@ -176,6 +179,7 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
           return;
         }
         const server = stateFromAttempt(test, opened);
+        setMicChecked(hasCheckedMic(opened.id));
         setAttempt({
           id: opened.id,
           baseline: { answers: server.answers, flagged: server.flagged },
@@ -447,6 +451,15 @@ export function ExamRunner({ test, sectionIds = null }: ExamRunnerProps) {
         }}
         onConfirm={() => void submitSection()}
         onGoTo={goToQuestion}
+      />
+      <MicCheckModal
+        isOpen={
+          section.skill === 'SPEAKING' && !locked && !micChecked && !timeUpOpen
+        }
+        onDone={() => {
+          if (attempt) rememberMicCheck(attempt.id);
+          setMicChecked(true);
+        }}
       />
       <TimeUpModal
         isOpen={timeUpOpen}
